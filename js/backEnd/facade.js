@@ -1,9 +1,11 @@
-// facade.js
-// InVi Project
+/** 
+ * facade.js
+ * InVi Project
+ */
 
 /**
- * This module provides a facade to interact with
- * the backend. 
+ * This namespace provides a facade to
+ * interact with the backend. 
  */
 var backEnd = {}
 
@@ -35,7 +37,12 @@ backEnd.Locations = {
  *		The location to retrieve data for.
  */
 backEnd.getTrending = function(type, location){
-	return "Shit's on fire yo"
+	return [
+		types.Popularity('Hipster Trash', 'New York', 0.9, type),
+		types.Popularity('Hipster Trash', 'Brussels', 0.9, type),
+		types.Popularity('Hipster Trash', 'London', 0.9, type),
+		types.Popularity('Hipster Trash', 'Dworp', 0.9, type),
+	]
 },
 
 /**
@@ -50,5 +57,4 @@ backEnd.getTrending = function(type, location){
  *		The identifier of the resource you want to request.
  */
 backEnd.getPopularity = function (type, location, searchTerm){
-	return "top kek"
 }
