@@ -49,6 +49,6 @@ backEnd.getTrending = function(type, location){
  * \param identifier
  *		The identifier of the resource you want to request.
  */
-backEnd.getPopularity = function (type, location, identifier){
+backEnd.getPopularity = function (type, location, searchTerm){
 	return "top kek"
 }
