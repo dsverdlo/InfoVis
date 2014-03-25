@@ -5,12 +5,25 @@
  * This module provides a facade to interact with
  * the backend. 
  */
+var backEnd = {}
 
-var Artist = 0;
-var Album  = 1;
-var Track  = 2;
+/**
+ * Defines the different types
+ * of data that you can request.
+ */
+backEnd.Type = {
+	ARTIST : 0,
+	ALBUM  : 1,
+	TRACK  : 2
+};
 
-var World  = 'WORLD';
+/**
+ * Defines the "world" location
+ * to get global information.
+ */
+backEnd.Locations = {
+	WORLD : 'World'
+};
 
 /**
  * Get the currently trending objects
@@ -21,8 +34,9 @@ var World  = 'WORLD';
  * \param location
  *		The location to retrieve data for.
  */
-function getTrending(type, location){
-}
+backEnd.getTrending = function(type, location){
+	return "Shit's on fire yo"
+},
 
 /**
  * Get the popularity of a given
@@ -35,5 +49,6 @@ function getTrending(type, location){
  * \param identifier
  *		The identifier of the resource you want to request.
  */
-function getPopularity(type, location, identifier){
+backEnd.getPopularity = function (type, location, identifier){
+	return "top kek"
 }
