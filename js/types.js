@@ -10,13 +10,15 @@
 var types = {}
 
 /**
- * Defines a popularity object.
- * A popularity object contains the data
- * about an element, like it's location and popularity
+ * Defines a data object.
+ * A data object contains the data
+ * about an element at a given location,
+ * like it's location and popularity
  * at that location.
  */
-types.Popularity = function(name, location, rating, type) {
+types.DataElement = function(name, location, country, rating, type) {
 	this.location = location
+	this.country  = country
 	this.rating   = rating
 	this.type     = type
 	this.name     = name
@@ -27,6 +29,6 @@ types.Popularity = function(name, location, rating, type) {
  * A global location is added to objects
  * which have information about the entire world.
  */
-types.Popularity.prototype.isGlobal() {
+types.DataElement.prototype.isGlobal = function() {
 	return this.location == backEnd.Locations.WORLD
 }

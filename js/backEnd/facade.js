@@ -20,11 +20,16 @@ backEnd.Type = {
 };
 
 /**
- * Defines the "world" location
- * to get global information.
+ * Defines some aggregate locations.
+ * These are locations that combine the results
+ * of multiple metro's.
  */
 backEnd.Locations = {
-	WORLD : 'World'
+	WORLD : 0,
+
+	ASIA : 1, AFRICA : 2, EUROPE : 3,
+	SOUTH_AMERICA : 4, NORTH_AMERICA : 5,
+	AUSTRALIA : 6, Antarctica : 7, OTHER : 8
 };
 
 /**
@@ -38,10 +43,9 @@ backEnd.Locations = {
  */
 backEnd.getTrending = function(type, location){
 	return [
-		types.Popularity('Hipster Trash', 'New York', 0.9, type),
-		types.Popularity('Hipster Trash', 'Brussels', 0.9, type),
-		types.Popularity('Hipster Trash', 'London', 0.9, type),
-		types.Popularity('Hipster Trash', 'Dworp', 0.9, type),
+		types.Popularity('Hipster Trash', 'New York', 'MURRICA', 0.9, type),
+		types.Popularity('Hipster Trash', 'Brussels', 'Belgium', 0.9, type),
+		types.Popularity('Hipster Trash', 'London', 'UK', 0.9, type)
 	]
 },
 
