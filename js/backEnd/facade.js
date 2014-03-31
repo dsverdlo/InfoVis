@@ -10,42 +10,28 @@
 var backEnd = {}
 
 /**
- * Defines the different types
- * of data that you can request.
- */
-backEnd.Type = {
-	ARTIST : 0,
-	ALBUM  : 1,
-	TRACK  : 2
-};
-
-/**
- * Defines some aggregate locations.
- * These are locations that combine the results
- * of multiple metro's.
- */
-backEnd.Locations = {
-	WORLD : 0,
-
-	ASIA : 1, AFRICA : 2, EUROPE : 3,
-	SOUTH_AMERICA : 4, NORTH_AMERICA : 5,
-	AUSTRALIA : 6, Antarctica : 7, OTHER : 8
-};
-
-/**
  * Get the currently trending objects
  * of type at the location.
  *
  * \param type
- * 		The type of the data you want to request
+ * 		The type of the data you want to request.
+ *		A types.Information.Type element.
  * \param location
  *		The location to retrieve data for.
+ *		Should be a types.Loc instance, 
+ *		or a types.Loc.Continents element.
+ *		Use types.Loc.Continents.UNKNOWN to request 
+ *		global information.
  */
 backEnd.getTrending = function(type, location){
+	var loc1 = new types.Loc("Brussels", "Belgium", types.Loc.Continents.EUROPE, 50, 4);
+	var loc2 = new types.Loc("London", "United Kingdom", types.Loc.Continents.EUROPE, 51, 0);
+	var loc3 = new types.Loc("New York", "USA", types.Loc.Continents.NORTH_AMERICA, 40, 74);
+
 	return [
-		types.Popularity('Hipster Trash', 'New York', 'MURRICA', 0.9, type),
-		types.Popularity('Hipster Trash', 'Brussels', 'Belgium', 0.9, type),
-		types.Popularity('Hipster Trash', 'London', 'UK', 0.9, type)
+		new types.Information("Parov Stelar", types.Information.Types.ARTIST, 0.9, loc1),
+		new types.Information("At The Flamingo Bar", types.Information.Types.TRACK, 0.7, loc2),
+		new types.Information("The Invisible Girl", types.Information.Types.ALBUM, 0.6, loc3)
 	]
 },
 
@@ -55,6 +41,7 @@ backEnd.getTrending = function(type, location){
  *
  * \param type
  *		The type of data you want to request.
+ *		A types.Information.Type element.
  * \param location
  *		The location you want to request data from.
  * \param identifier
