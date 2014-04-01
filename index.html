@@ -45,6 +45,10 @@ text {
 	
 		var width = 1100, height = 600;
 		
+		var scale = d3.scale.sqrt()
+		    .domain([0, 100])
+		    .range([0, 20]);
+		
 		var projection = d3.geo.mercator().translate([ 0, 0 ]).scale(
 				width / 2 / Math.PI);  
 		
@@ -93,13 +97,13 @@ text {
 				 .enter().append("circle")
 				            .attr("cx", function (d) { return d.x_axis })
 				            .attr("cy", function (d) { return d.y_axis })
-				            .attr("r", function(d) { return d.radius });
+				            .attr("r", function(d) { return scale(d.radius); });
 
 				g.selectAll("text")
 				 .data(data)
 				 .enter().append("text")
 				            .text(function (d) { return d.name })
-				            .attr("x", function (d) { return (d.x_axis + d.radius + 1) })
+				            .attr("x", function (d) { return (d.x_axis + scale(d.radius) + 1) })
 				            .attr("y", function (d) { return (d.y_axis + 2) });
 			});
 		};
