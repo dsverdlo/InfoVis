@@ -73,6 +73,8 @@ text {
 							function(a, b) {
 								return a !== b;
 							})).attr("class", "boundary").attr("d", path);
+							
+			zoomLevel(jsonGeneralCircles);
 			
 		});
 
@@ -101,8 +103,6 @@ text {
 				            .attr("y", function (d) { return (d.y_axis + 2) });
 			});
 		};
-
-		zoomLevel(jsonGeneralCircles);
 			
 		function move() {
 			var t = d3.event.translate, s = d3.event.scale;
