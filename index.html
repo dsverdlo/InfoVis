@@ -21,6 +21,12 @@
 	stroke-linecap: round;
 }
 
+circle {
+  fill: #4682b4;
+  stroke: #fff;
+  stroke-width: 0.75px;
+}
+
 text {
   font: 10px sans-serif;
   pointer-events: none;
@@ -32,6 +38,10 @@ text {
 </head>
 <body>
 	<script>
+
+		var jsonTopology = "data/countries.topo.json",
+		    jsonGeneralCircles = "data/circles.general.json",
+		    jsonZoomCircles = "data/circles.zoom.json"
 	
 		var width = 1100, height = 600;
 		
@@ -50,7 +60,8 @@ text {
 
 		svg.append("rect").attr("class", "overlay").attr("x", -width / 2).attr(
 				"y", -height / 2).attr("width", width).attr("height", height);
-		d3.json("countries.topo.json", function(error, world) {
+
+		d3.json(jsonTopology, function(error, world) {
 			g.selectAll("path")
 				.data(topojson.feature(world, world.objects.countries).features)
 				.enter().append("path")
@@ -63,25 +74,35 @@ text {
 								return a !== b;
 							})).attr("class", "boundary").attr("d", path);
 			
-		}); 
-
-		d3.json("circles.test.json", function(data) {
-			g.selectAll("circle")
-			 .data(data)
-			 .enter().append("circle")
-			            .attr("cx", function (d) { return d.x_axis })
-			            .attr("cy", function (d) { return d.y_axis })
-			            .attr("r", function(d) { return d.radius })
-			            .style("stroke", "white")
-			            .style("fill", "steelblue");
-
-			g.selectAll("text")
-			 .data(data)
-			 .enter().append("text")
-			            .text(function (d) { return d.name })
-			            .attr("x", function (d) { return (d.x_axis + d.radius + 1) })
-			            .attr("y", function (d) { return (d.y_axis + 2) });
 		});
+
+		function zoomLevel(jsonfile) {
+			d3.json(jsonfile, function(data) {
+				g.selectAll("circle")
+				 .data([])
+				 .exit().remove();
+
+				g.selectAll("text")
+				 .data([])
+				 .exit().remove();
+
+				g.selectAll("circle")
+				 .data(data)
+				 .enter().append("circle")
+				            .attr("cx", function (d) { return d.x_axis })
+				            .attr("cy", function (d) { return d.y_axis })
+				            .attr("r", function(d) { return d.radius });
+
+				g.selectAll("text")
+				 .data(data)
+				 .enter().append("text")
+				            .text(function (d) { return d.name })
+				            .attr("x", function (d) { return (d.x_axis + d.radius + 1) })
+				            .attr("y", function (d) { return (d.y_axis + 2) });
+			});
+		};
+
+		zoomLevel(jsonGeneralCircles);
 			
 		function move() {
 			var t = d3.event.translate, s = d3.event.scale;
@@ -91,7 +112,10 @@ text {
 					* (1 - s) - 230 * s, t[1]));
 			zoom.translate(t);
 			g.style("stroke-width", 1 / s).attr("transform",
-					"translate(" + t + ")scale(" + s + ")"); 
+					"translate(" + t + ")scale(" + s + ")");
+
+			if (s > 3) { zoomLevel(jsonZoomCircles) }
+			else { zoomLevel(jsonGeneralCircles) }
 		};
 
 	</script>
