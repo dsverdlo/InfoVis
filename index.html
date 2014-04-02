@@ -45,6 +45,20 @@ div.tooltip {
   border-radius: 8px;           
   pointer-events: none;         
 }
+
+#states {
+  fill: #C3C9D0;
+  stroke: #fff;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+#states .active {
+  fill: #768697;
+  stroke: #fff;
+  stroke-width: 0.5px;
+}
+
 </style>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
@@ -147,8 +161,30 @@ div.tooltip {
 			g.style("stroke-width", 1 / s).attr("transform",
 					"translate(" + t + ")scale(" + s + ")");
 
-			if (s > 3) { zoomLevel(jsonZoomCircles) }
-			else { zoomLevel(jsonGeneralCircles) }
+			if (s > 3) { 
+				stateZoomIn();
+				zoomLevel(jsonZoomCircles) }
+			else { 
+				stateZoomOut();
+				zoomLevel(jsonGeneralCircles) }
+		};
+		
+		function stateZoomIn() {
+			d3.json("data/states_usa.topo.json", function(data){
+				 g.append("g")
+	              .attr("id", "states")
+	              .selectAll("path")
+	              .data(topojson.feature(data, data.objects.states).features)
+	              .enter()
+		              .append("path")
+		              .attr("id", function(d) { return d.id; })
+		              .attr("class", "active")
+		              .attr("d", path);
+			});
+		};
+		
+		function stateZoomOut(){
+			g.selectAll("#states").remove();
 		};
 
 	</script>
