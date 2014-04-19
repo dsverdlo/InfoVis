@@ -1,0 +1,54 @@
+.overlay {
+	fill: none;
+	pointer-events: all;
+}
+
+.feature {
+  fill: #8C8C8C;
+  cursor: pointer;
+}
+
+.boundary {
+	fill: none;
+	stroke: #fff;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+
+circle {
+  fill: #4682b4;
+  stroke: #fff;
+  stroke-width: 0.75px;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+div.tooltip {   
+  position: absolute;           
+  text-align: center;           
+  width: 60px;                  
+  height: 28px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: lightsteelblue;   
+  border: 0px;      
+  border-radius: 8px;           
+  pointer-events: none;         
+}
+
+#states {
+  fill: #C3C9D0;
+  stroke: #fff;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+#states .active {
+  fill: #768697;
+  stroke: #fff;
+  stroke-width: 0.5px;
+}
