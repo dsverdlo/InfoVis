@@ -7,7 +7,21 @@
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="http://d3js.org/topojson.v1.min.js"></script>
 </head>
-<body>
-	<script type="text/JavaScript" src="scripts/mapvisualizer.js"></script>
+<body id="body">
+	<script type="text/javascript" src="scripts/mapvisualizer.js"></script>
+	<div id="searchbar">
+		<div id="searchfield">
+			<!-- TODO: Change to input form  -->
+			<p id="searchtext1">SEARCH</p>
+			<p id="searchtext2">by artist, track or album</p>
+		</div>
+		<img id="searchimage" src="images/magnifier.png">
+	</div>
+	<div id="barchart">
+		<script type="text/javascript" src="scripts/barchart.js"></script>
+	</div>
+	<div id="linechart">
+		<script type="text/javascript" src="scripts/linechart.js"></script>
+	</div>
 </body>
 </html>
