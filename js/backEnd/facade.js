@@ -49,3 +49,15 @@ backEnd.getTrending = function(type, location){
  */
 backEnd.getPopularity = function (type, location, searchTerm){
 }
+
+
+/*
+Trending:
+	- getHypedArtists
+	- getHypedTracks
+
+Popularity:
+	- getPopularityForArtist
+	- getPopularityForAlbum
+	- getPopularityForTrack
+*/

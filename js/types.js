@@ -16,7 +16,7 @@ var types = {}
 /**
  * Defines a location.
  */
-types.Loc = function(name, country, continent, lat, lon) {
+types.Loc = function(name, country, continent) {
 	this.lat = lat; /**< latitude of the location */
 	this.lon = lon; /**< longitude of the location */
 

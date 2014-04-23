@@ -26,7 +26,6 @@ function createUrl(method, optionList) {
 	return url;
 }
 
-
 /*
  * getHttp - Sends the HTTP GET request.
  * @param url - Url for the request
