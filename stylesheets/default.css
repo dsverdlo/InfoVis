@@ -1,0 +1,187 @@
+/* * * * * * * * * * * * * * * * * * *
+ * * * * COLOR REFERENCE CHART * * * *
+ * * * * * * * * * * * * * * * * * * *
+ *  COLOR NAME   *   TAG   *   HEX   *
+ * * * * * * * * * * * * * * * * * * *
+ *  Black Olive  *    LD   * 3B3C36  *
+ *     Dirt      *    LM   * 9B7653  *
+ *    Beaver     *    LL   * 9F8170  *
+ *Cadmium Orange *    MD   * ED872D  *
+ *Dark Tangerine *    ML   * FFA812  *
+ *  Deep Peach   *    HD   * FFCBA4  *
+ * Floral White  *    HL   * FFFAF0  *
+ * * * * * * * * * * * * * * * * * * */
+
+/* == DEFAULT STYLE ============================================================ */
+* { position: absolute; margin: 0; padding: 0; width: 100%; height: 100%; font: 12px sans-serif; }
+
+
+/* == IDENTIFIERS ============================================================== */
+body#body {
+	width: 100%;
+	height: 100%;
+	background-color: /*HL*/ #FFFAF0;
+}
+
+div#searchbar {
+	float: left;
+	border-radius: 10px;
+	height: 40px;
+	background-color: /*LD*/ #3B3C36;
+	width: 30%;
+	top: 0;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+div#searchfield {
+	float: left;
+	background-color: /*HL*/ #FFFAF0;
+	border-radius: 7px;
+	margin: 5px;
+	width: 85%;
+	height: 30px;
+	top: 0;
+}
+
+img#searchimage {
+	float: right;
+	margin-top: 5px;
+	margin-right: 10px;
+	top: 0;
+	right: 0;
+	width: 30px;
+	height: 30px;
+}
+
+div#linechart {
+	float: left;
+	border-radius: 10px;
+	height: 150px;
+	background-color: /*LD*/ #3B3C36;
+	width: 20%;
+	bottom: 0;
+	margin-left: 20px;
+	margin-bottom: 20px;
+	padding: 10px;
+}
+
+div#barchart {
+	float: left;
+	border-radius: 10px;
+	height: 150px;
+	background-color: /*LD*/ #3B3C36;
+	width: 20%;
+	bottom: 0;
+	right: 0;
+	margin-right: 20px;
+	margin-bottom: 20px;
+	padding: 10px;
+}
+
+#states {
+	fill: /*LL*/ #9F8170;
+	stroke: /*HL*/ #FFFAF0;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+
+#states .active {
+	fill: /*LL*/ #9B7653;
+	stroke: /*HL*/ #FFFAF0;
+	stroke-width: 0.5px;
+}
+
+
+/* == CLASSES ================================================================== */
+.overlay {
+	fill: none;
+	pointer-events: all;
+}
+
+.feature {
+	fill: /*LL*/ #9F8170;
+	cursor: pointer;
+}
+
+.boundary {
+	fill: none;
+	stroke: /*HL*/ #FFFAF0;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+
+.bar {
+  fill: #ED872D;
+  width: 20px;
+}
+
+.bar:hover {
+  fill: #FFA812;
+}
+
+.axis path,
+.axis line {
+  stroke-width: 1px;
+  fill: none;
+  stroke: #FFFAF0;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: #FFFAF0;
+}
+
+.line {
+  fill: none;
+  stroke: #ED872D;
+  stroke-width: 5px;
+}
+
+div.tooltip {   
+	position: absolute;           
+	text-align: center;           
+	width: 60px;                  
+	height: 28px;                 
+	padding: 2px;             
+	font: 12px sans-serif;        
+	background: #9B7653;   
+	border: 0px;      
+	border-radius: 8px;           
+	pointer-events: none;         
+}
+
+
+/* == EH.. THINGS ============================================================== */
+circle {
+	fill: /*HL*/ #ED872D;
+	stroke: /*HL*/ #FFFAF0;
+	stroke-width: 0.75px;
+}
+
+text {
+	font: 10px sans-serif;
+	pointer-events: none;
+	fill: /*LD*/ #3B3C36;
+}
+
+
+/* == DEPRECATED =============================================================== */
+p#searchtext1 {
+	font-family: "Calibri", Arial, sans-serif;
+	font-weight: bold;
+	margin-left: 15px;
+	color: /*LD*/ #3B3C36;
+	margin-top: 2px;
+	font-size: 1.75em;
+}
+
+p#searchtext2 {
+	font-family: "Calibri", Arial, sans-serif;
+	font-weight: bold;
+	font-style: italic;
+	color: /*LD*/ #3B3C36;
+	margin-left: 100px;
+	margin-top: 7px;
+	font-size: 1.25em;
+}
