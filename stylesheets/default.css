@@ -104,6 +104,12 @@ div#barchart {
 	cursor: pointer;
 }
 
+.feature {
+	fill: orange;
+	stroke: #fff;
+	stoke-width: 0.75px;
+}
+
 .boundary {
 	fill: none;
 	stroke: /*HL*/ #FFFAF0;
