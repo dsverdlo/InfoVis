@@ -3,7 +3,8 @@ var json_topology = "data/countries.topo.json",
     json_zoom_circles = "data/circles.zoom.json"
 
 var width = parseInt(window.getComputedStyle(body).width, 10),
-    height = parseInt(window.getComputedStyle(body).height, 10);
+    height = parseInt(window.getComputedStyle(body).height, 10),
+    active = d3.select(null);
 
 var scale = d3.scale.sqrt()
     .domain([0, 100])
@@ -17,19 +18,25 @@ var path = d3.geo.path().projection(projection);
 
 var svg = d3.select("body").append("svg").attr("width", width).attr(
              "height", height).append("g").attr("transform",
-             "translate(" + width / 2 + "," + height / 2 + ")").call(zoom);
+             "translate(" + width / 2 + "," + height / 2 + ")")
+             .on("click", stopped, true);
 
 svg.append("rect").attr("class", "overlay").attr("x", -width / 2).attr(
-   "y", -height / 2).attr("width", width).attr("height", height);
+   "y", -height / 2).attr("width", width).attr("height", height)
+   .on("click", reset);
 
-var g = svg.append("g").style("stroke-width", 1).attr("transform", "translate(0, 100)scale(1)");
+var g = svg.append("g").style("stroke-width", 1)
+    .attr("transform", "translate(0, 100)scale(1)");
+    
+svg.call(zoom).call(zoom.event);
 
 d3.json(json_topology, function(error, world) {
     g.selectAll("path")
         .data(topojson.feature(world, world.objects.countries).features)
         .enter().append("path")
               .attr("d", path)
-              .attr("class", "feature");
+              .attr("class", "feature")
+              .on("click", clicked);
 
     g.append("path").datum(
             topojson.mesh(world, world.objects.countries,
@@ -116,4 +123,66 @@ function stateZoomIn() {
 
 function stateZoomOut(){
     g.selectAll("#states").remove();
+};
+
+function clicked(d) {
+	  if (active.node() === this) return reset();
+	  active.classed("active", false);
+	  active = d3.select(this).classed("active", true);
+
+	  g.selectAll("#country").remove();
+			  
+	  country = "data/" + d.id + ".json";
+
+	  d3.json(country, function(error, world) {
+		  g.append("g")
+		  	.attr("id","country")
+		  	.on("click", reset)
+		  		.selectAll("path")
+				.data(topojson.feature(world, world.objects.layer1).features)
+				.enter().append("path")
+				      .attr("d", path)
+				      .style("fill", "orange");
+						      
+		  g.append("g")
+		  	.attr("id","country")
+		  	.on("click", reset)
+		  		.append("path").datum(
+					topojson.mesh(world, world.objects.layer1,
+							function(a, b) {
+								return a !== b;
+							})).attr("class", "boundary")
+							.attr("d", path).style("fill","orange");
+
+			}); 
+			  
+	  var bounds = path.bounds(d),
+	      dx = bounds[1][0] - bounds[0][0],
+	      dy = bounds[1][1] - bounds[0][1],
+	      x = (bounds[0][0] + bounds[1][0]) / 2,
+	      y = (bounds[0][1] + bounds[1][1]) / 2,
+	      scale = .9 / Math.max(dx / width, dy / height),
+	      translate = [width / 2 - scale * x - 500, height / 2 - scale * y - 300];
+
+	  svg.transition()
+          .duration(750)
+          .call(zoom.translate(translate).scale(scale).event);
+};
+			
+function reset() {
+	  active.classed("active", false);
+	  active = d3.select(null);
+
+	  g.selectAll("#country").remove();
+			  
+	  svg.transition()
+	      .duration(750)
+	      .call(zoom.translate([0, 0]).scale(1).event);
+
+};
+		
+// If the drag behavior prevents the default click,
+// also stop propagation so we don’t click-to-zoom.
+function stopped() {
+  if (d3.event.defaultPrevented) d3.event.stopPropagation();
 };
