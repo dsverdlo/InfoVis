@@ -104,7 +104,7 @@ div#barchart {
 	cursor: pointer;
 }
 
-.feature {
+.feature.active {
 	fill: orange;
 	stroke: #fff;
 	stoke-width: 0.75px;
