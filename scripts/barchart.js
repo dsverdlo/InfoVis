@@ -8,16 +8,16 @@ var calculatedWidth = parseInt(window.getComputedStyle(container).width, 10),
 var offset = 20;
 
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
-    width = calculatedWidth - margin.left - margin.right - offset,
-    height = calculatedHeight - margin.top - margin.bottom;
+    widthBarChart = calculatedWidth - margin.left - margin.right - offset,
+    heightBarChart = calculatedHeight - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%d-%b-%y").parse;
 
 var x = d3.time.scale()
-    .range([0, width]);
+    .range([0, widthBarChart]);
 
 var y = d3.scale.linear()
-    .range([0, height]);
+    .range([0, heightBarChart]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -32,9 +32,9 @@ var line = d3.svg.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.position); });
 
-var svg = d3.select("#barchart").append("svg")
-    .attr("width", width + margin.left + margin.right + offset)
-    .attr("height", height + margin.top + margin.bottom)
+var svgBarChart = d3.select("#barchart").append("svg")
+    .attr("width", widthBarChart + margin.left + margin.right + offset)
+    .attr("height", heightBarChart + margin.top + margin.bottom)
   .append("g")
     .attr("id", "barchartcontainer")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -47,7 +47,7 @@ d3.tsv(tsv_data, convert, function(error, data) {
 
   container.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(" + offset / 2 + "," + height + ")")
+      .attr("transform", "translate(" + offset / 2 + "," + heightBarChart + ")")
       .call(xAxis)
     .selectAll("text")
       .attr("y", 0)
@@ -75,7 +75,7 @@ d3.tsv(tsv_data, convert, function(error, data) {
   //    .attr("x", function(d) { return x(d.date) + (offset / 4) + 0.5; })
   //    .attr("width", offset - 1)
   //    .attr("y", 0)
-  //    .attr("height", function(d) { return height; });
+  //    .attr("height", function(d) { return heightBarChart; });
 
   container.selectAll(".bar")
        .data(data)
@@ -86,7 +86,7 @@ d3.tsv(tsv_data, convert, function(error, data) {
       .attr("x", function(d) { return x(d.date) + offset / 4; })
       .attr("width", offset)
       .attr("y", function(d) { return y(d.position); })
-      .attr("height", function(d) { return height - y(d.position); });
+      .attr("height", function(d) { return heightBarChart - y(d.position); });
 
 });
 

@@ -6,16 +6,16 @@ var calculatedWidth = parseInt(window.getComputedStyle(container).width, 10),
     calculatedHeight = parseInt(window.getComputedStyle(container).height, 10);
 
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
-    width = calculatedWidth - margin.left - margin.right,
-    height = calculatedHeight - margin.top - margin.bottom;
+    widthLineChart = calculatedWidth - margin.left - margin.right,
+    heightLineChart = calculatedHeight - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%d-%b-%y").parse;
 
 var x = d3.time.scale()
-    .range([0, width]);
+    .range([0, widthLineChart]);
 
 var y = d3.scale.linear()
-    .range([0, height]);
+    .range([0, heightLineChart]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -30,9 +30,9 @@ var line = d3.svg.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.position); });
 
-var svg = d3.select("#linechart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+var svgLineChart = d3.select("#linechart").append("svg")
+    .attr("width", widthLineChart + margin.left + margin.right)
+    .attr("height", heightLineChart + margin.top + margin.bottom)
        .append("g")
           .attr("id", "linechartcontainer")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -50,7 +50,7 @@ d3.tsv(tsv_data, function(error, data) {
 
   container.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate(0," + heightLineChart + ")")
       .call(xAxis);
 
   container.append("g")
