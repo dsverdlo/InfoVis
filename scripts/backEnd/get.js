@@ -1,12 +1,53 @@
-
-/*
- * Some variables to construct the Last.FM API urls
+/* get.js
+ * InfoVis Project
  */
-URL_BASE = "http://ws.audioscrobbler.com/2.0/";
-URL_METHOD = "?method=";
-URL_FORMAT_JSON = "&format=json";
-URL_API_KEY = "&api_key=46d561a6de9e5daa380db343d40ffbab";
 
+/**
+ * This namespace provides the various requests
+ * that fetch data from the last.fm api.
+ */
+
+// --------- //
+// Constants //
+// --------- //
+
+backEnd.URL_BASE = "http://ws.audioscrobbler.com/2.0/";
+backEnd.URL_METHOD = "?method=";
+backEnd.URL_FORMAT_JSON = "&format=json";
+backEnd.URL_API_KEY = "&api_key=46d561a6de9e5daa380db343d40ffbab";
+
+// ----- //
+// Cache //
+// ----- //
+
+backEnd.cache = {};
+
+/**
+ * See if a key is a part of the cache.
+ * \param key
+ *		The key to look for.
+ * \return
+ *		The value for key, if it is present
+ *		null if it is not.
+ */
+backEnd.checkCache = function(key) {
+	if (key in backEnd.cache) {
+		return backEnd.cache[key];
+	} else {
+		return null;
+	}
+}
+
+/**
+ * Add a value to the cache.
+ */
+backEnd.addToCache = function(key, value) {
+	backEnd.cache[key] = value;
+}
+
+// ----------- //
+// Convenience //
+// ----------- //
 
 /* 
  * createUrl - Creates the url for the GET request.
@@ -14,9 +55,8 @@ URL_API_KEY = "&api_key=46d561a6de9e5daa380db343d40ffbab";
  * @param optionList - A list of parameter-value tuples
  * @return url - The composited url for the request
  */
-function createUrl(method, optionList) {
-	
-	var url = URL_BASE + URL_METHOD + method + URL_FORMAT_JSON + URL_API_KEY;
+backEnd.createUrl = function(method, optionList) {
+	var url = backEnd.URL_BASE + backEnd.URL_METHOD + method + backEnd.URL_FORMAT_JSON + backEnd.URL_API_KEY;
 	
 	for(var i = 0; i < optionList.length; i++) {
 		var tuple = optionList[i];
@@ -31,18 +71,19 @@ function createUrl(method, optionList) {
  * @param url - Url for the request
  * @return response - The http response (null if failed)
  */
-function getHttp(url) {
-    var xmlHttp = null;
-	
-    xmlHttp = new XMLHttpRequest();
+backEnd.getHttp = function(url) {
+	var cacheRes = backEnd.checkCache(url);
+	if (cacheRes) return cacheRes;
+
+    var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", url, false );
     xmlHttp.send( null );
 	
 	try {
-		return xmlHttp.responseText;
-	}
-	
-	catch(e) {
+		var res = xmlHttp.responseText;
+		backEnd.addToCache(url, res);
+		return res;
+	} catch(e) {
 		return null;
 	}
 }
@@ -52,7 +93,7 @@ function getHttp(url) {
  * @param object - Object to be checked
  * @return bool - Boolean indicating to containing error or not
  */
-function containsError(object) {
+backEnd.containsError = function(object) {
 	if ( typeof(object) === "undefined" ) return true;
 	if ( typeof(object.error) === "number") return true;
 	return false;
@@ -63,7 +104,7 @@ function containsError(object) {
  * @param object - The error object
  * @return list of error number and message
  */
-function handleError(object) {
+backEnd.handleError = function(object) {
 	var errorno = object.error;
 	var errormsg = object.message;
 	
@@ -71,34 +112,35 @@ function handleError(object) {
 	return [errorno, errormsg];
 }
 
+// -------- //
+// Requests //
+// -------- //
+
 /*
  * getMetrosFor - Sends a GET request to retrieve list of available metros
  * @param location - Country for which to search on
  * @return metros - List of metros
  *
  */
-function getMetrosFor(location)
-{
-	var url = createUrl("geo.getMetros", [["country", location]]);
+function getMetrosFor(location) {
+	var url = backEnd.createUrl("geo.getMetros", [["country", location]]);
+	var obj = JSON.parse(backEnd.getHttp(url));
 	
-	var obj = JSON.parse(getHttp(url));
-	
-	if(containsError(obj)) {
-		return handleError(obj)
+	if(backEnd.containsError(obj)) {
+		return backEnd.handleError(obj)
 	}
 	
-	/* // Uncomment for debug
-	if(obj.metros.total == 0) {
-		return document.writeln("<br>No results found");
-	}
-	metros = obj.metros.metro;
-	for(var i = 0; i < metros.length; i++) {
-		var metro = metros[i];
-		document.writeln("<br/>" + metro.name);
-	} 
-	*/
+	 // Uncomment for debug
+	// if(obj.metros.total == 0) {
+	// 	return document.writeln("<br>No results found");
+	// }
+	// metros = obj.metros.metro;
+	// for(var i = 0; i < metros.length; i++) {
+	// 	var metro = metros[i];
+	// 	document.writeln("<br/>" + metro.name);
+	// } 
 	
-	return obj.metros;
+	return obj.metros.metro;
 }
 
 /*
@@ -108,12 +150,12 @@ function getMetrosFor(location)
  */
 function getArtistTopTracks(artist)
 {
-	var url = createUrl("artist.getTopTracks", [["artist",artist]]);
+	var url = backEnd.createUrl("artist.getTopTracks", [["artist",artist]]);
 	
-	var obj = JSON.parse(getHttp(url));
+	var obj = JSON.parse(backEnd.getHttp(url));
 	
-	if(containsError(obj)) {
-		return handleError(obj);
+	if(backEnd.containsError(obj)) {
+		return backEnd.handleError(obj);
 	}
 	
 	/*
@@ -138,12 +180,12 @@ function getArtistTopTracks(artist)
  */
 function getMetroHypeTracks(country, metro) 
 {
-	var url = createUrl("geo.getMetroHypeTrackChart", [["country",country], ["metro", metro]]);
+	var url = backEnd.createUrl("geo.getMetroHypeTrackChart", [["country",country], ["metro", metro]]);
 	
-	var obj = JSON.parse(getHttp(url));
+	var obj = JSON.parse(backEnd.getHttp(url));
 	
-	if(containsError(obj)) {
-		return handleError(obj);
+	if(backEnd.containsError(obj)) {
+		return backEnd.handleError(obj);
 	}
 	
 	/*
@@ -169,12 +211,12 @@ function getMetroHypeTracks(country, metro)
  */
 function getTimeTrackChart(from, to, country, metro) 
 {
-	var url = createUrl("geo.getMetroHypeTrackChart", [["country",country], ["metro", metro], ["start", from],["end", to]]);
+	var url = backEnd.createUrl("geo.getMetroHypeTrackChart", [["country",country], ["metro", metro], ["start", from],["end", to]]);
 	
-	var obj = JSON.parse(getHttp(url));
+	var obj = JSON.parse(backEnd.getHttp(url));
 	
-	if(containsError(obj)) {
-		return handleError(obj);
+	if(backEnd.containsError(obj)) {
+		return backEnd.handleError(obj);
 	}
 	
 	/*
@@ -190,3 +232,80 @@ function getTimeTrackChart(from, to, country, metro)
 	return obj.toptracks;
 }
 
+/**
+ * Get the top artists for a country.
+ *
+ * \param country 
+ *		The country for which you want to fetch results
+ * \param limit
+ *		The amount of artists you want to fetch.
+ * \return
+ *		An array with Last FM artist objects
+ */
+function getCountryTopArtists(country, limit) {
+	var url = backEnd.createUrl("geo.getTopArtists", [["country", country],["limit", limit]]);
+	var obj = JSON.parse(backEnd.getHttp(url));
+
+	if(backEnd.containsError(obj)) return backEnd.handleError(obj);
+	return obj.topartists.artist
+}
+
+/**
+ * Get the top tracks for a country.
+ *
+ * \param country 
+ *		The country for which you want to fetch results
+ * \param limit
+ *		The amount of tracks you want to fetch.
+ * \return
+ *		An array with Last FM track objects
+ */
+function getCountryTopTracks(country, limit) {
+	var url = backEnd.createUrl("geo.getTopTracks", [["country", country],["limit", limit]]);
+	var obj = JSON.parse(backEnd.getHttp(url));
+
+	if(backEnd.containsError(obj)) return backEnd.handleError(obj);
+	return obj.toptracks.track
+}
+
+/**
+ * Fetches the top track list for 
+ * every country that we have data about.
+ */
+function getGlobalTopTracks() {
+	var cacheRes = backEnd.checkCache("globTopTracks");
+	if (cacheRes) return cacheRes;
+
+	var result = [];
+	var countries = backEnd.countryList;
+
+	for (var i = 0; i < countries.length; i++) {
+		var country = countries[i];
+		var res = getCountryTopTracks(country.name, 1);
+		result.push({'country' : country, 'track': res});
+	};
+
+	backEnd.addToCache("globTopTracks", result)
+	return result;
+}
+
+/**
+ * Fetches the top track list for 
+ * every country that we have data about.
+ */
+function getGlobalTopArtists() {
+	var cacheRes = backEnd.checkCache("globTopArtists");
+	if (cacheRes) return cacheRes;
+
+	var result = [];
+	var countries = backEnd.countryList;
+
+	for (var i = 0; i < countries.length; i++) {
+		var country = countries[i];
+		var res = getCountryTopArtists(country.name, 1);
+		result.push({'country' : country, 'artist': res});
+	};
+
+	backEnd.addToCache("globTopArtists", result)
+	return result;
+}

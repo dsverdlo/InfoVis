@@ -1,6 +1,6 @@
-/** 
+/*
  * facade.js
- * InVi Project
+ * InfoVis Project
  */
 
 /**
@@ -10,7 +10,7 @@
 var backEnd = {}
 
 /**
- * Get the currently trending objects
+ * Get the current top objects
  * of type at the location.
  *
  * \param type
@@ -23,7 +23,7 @@ var backEnd = {}
  *		Use types.Loc.Continents.UNKNOWN to request 
  *		global information.
  */
-backEnd.getTrending = function(type, location){
+backEnd.getTop = function(type, location){
 	var loc1 = new types.Loc("Brussels", "Belgium", types.Loc.Continents.EUROPE, 50, 4);
 	var loc2 = new types.Loc("London", "United Kingdom", types.Loc.Continents.EUROPE, 51, 0);
 	var loc3 = new types.Loc("New York", "USA", types.Loc.Continents.NORTH_AMERICA, 40, 74);
