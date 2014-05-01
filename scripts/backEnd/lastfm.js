@@ -1,4 +1,5 @@
-/* get.js
+/* 
+ * lastfm.js
  * InfoVis Project
  */
 
@@ -7,43 +8,26 @@
  * that fetch data from the last.fm api.
  */
 
+var backEnd = backEnd || {};
+backEnd.lastFm = backEnd.lastFm || {};
+
 // --------- //
 // Constants //
 // --------- //
 
-backEnd.URL_BASE = "http://ws.audioscrobbler.com/2.0/";
-backEnd.URL_METHOD = "?method=";
-backEnd.URL_FORMAT_JSON = "&format=json";
-backEnd.URL_API_KEY = "&api_key=46d561a6de9e5daa380db343d40ffbab";
+backEnd.lastFm.URL_BASE = "http://ws.audioscrobbler.com/2.0/";
+backEnd.lastFm.URL_METHOD = "?method=";
+backEnd.lastFm.URL_FORMAT_JSON = "&format=json";
+backEnd.lastFm.URL_API_KEY = "&api_key=46d561a6de9e5daa380db343d40ffbab";
 
-// ----- //
-// Cache //
-// ----- //
+// -------------- //
+// Namespace Data //
+// -------------- //
 
-backEnd.cache = {};
-
-/**
- * See if a key is a part of the cache.
- * \param key
- *		The key to look for.
- * \return
- *		The value for key, if it is present
- *		null if it is not.
- */
-backEnd.checkCache = function(key) {
-	if (key in backEnd.cache) {
-		return backEnd.cache[key];
-	} else {
-		return null;
-	}
-}
-
-/**
- * Add a value to the cache.
- */
-backEnd.addToCache = function(key, value) {
-	backEnd.cache[key] = value;
-}
+var ns = backEnd.lastFm;
+ns.cache = new backEnd.Cache();
+ns.URL_PRE = ns.URL_BASE + ns.URL_METHOD;
+ns.URL_POST = ns.URL_FORMAT_JSON + ns.URL_API_KEY;
 
 // ----------- //
 // Convenience //
@@ -55,14 +39,13 @@ backEnd.addToCache = function(key, value) {
  * @param optionList - A list of parameter-value tuples
  * @return url - The composited url for the request
  */
-backEnd.createUrl = function(method, optionList) {
-	var url = backEnd.URL_BASE + backEnd.URL_METHOD + method + backEnd.URL_FORMAT_JSON + backEnd.URL_API_KEY;
+ns.createUrl = function(method, optionList) {
+	var url = ns.URL_PRE + method + ns.URL_POST;
 	
 	for(var i = 0; i < optionList.length; i++) {
-		var tuple = optionList[i];
-		url += "&" + tuple[0] + "=" + tuple[1];
-	}
-	
+		var pair = optionList[i];
+		url += "&" + pair[0] + "=" + pair[1];
+	}	
 	return url;
 }
 
@@ -71,17 +54,17 @@ backEnd.createUrl = function(method, optionList) {
  * @param url - Url for the request
  * @return response - The http response (null if failed)
  */
-backEnd.getHttp = function(url) {
-	var cacheRes = backEnd.checkCache(url);
+ns.getHttp = function(url) {
+	var cacheRes = ns.cache.get(url);
 	if (cacheRes) return cacheRes;
 
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", url, false );
-    xmlHttp.send( null );
+    var request = new XMLHttpRequest();
+    request.open("GET", url, false);
+    request.send(null);
 	
 	try {
-		var res = xmlHttp.responseText;
-		backEnd.addToCache(url, res);
+		var res = request.responseText;
+		ns.cache.put(url, res);
 		return res;
 	} catch(e) {
 		return null;
@@ -93,10 +76,9 @@ backEnd.getHttp = function(url) {
  * @param object - Object to be checked
  * @return bool - Boolean indicating to containing error or not
  */
-backEnd.containsError = function(object) {
-	if ( typeof(object) === "undefined" ) return true;
-	if ( typeof(object.error) === "number") return true;
-	return false;
+ns.containsError = function(object) {
+	return (typeof(object) === "undefined") ||
+	       (typeof(object.error) === "number");
 }	
 
 /*
@@ -104,11 +86,11 @@ backEnd.containsError = function(object) {
  * @param object - The error object
  * @return list of error number and message
  */
-backEnd.handleError = function(object) {
+ns.handleError = function(object) {
 	var errorno = object.error;
 	var errormsg = object.message;
 	
-	alert("Error " + errorno + ": " + errormsg);
+	console.warn("Error %s: %s", errorno, errormsg);
 	return [errorno, errormsg];
 }
 
@@ -123,11 +105,11 @@ backEnd.handleError = function(object) {
  *
  */
 function getMetrosFor(location) {
-	var url = backEnd.createUrl("geo.getMetros", [["country", location]]);
-	var obj = JSON.parse(backEnd.getHttp(url));
+	var url = ns.createUrl("geo.getMetros", [["country", location]]);
+	var obj = JSON.parse(ns.getHttp(url));
 	
-	if(backEnd.containsError(obj)) {
-		return backEnd.handleError(obj)
+	if(ns.containsError(obj)) {
+		return ns.handleError(obj)
 	}
 	
 	 // Uncomment for debug
@@ -150,12 +132,12 @@ function getMetrosFor(location) {
  */
 function getArtistTopTracks(artist)
 {
-	var url = backEnd.createUrl("artist.getTopTracks", [["artist",artist]]);
+	var url = ns.createUrl("artist.getTopTracks", [["artist",artist]]);
 	
-	var obj = JSON.parse(backEnd.getHttp(url));
+	var obj = JSON.parse(ns.getHttp(url));
 	
-	if(backEnd.containsError(obj)) {
-		return backEnd.handleError(obj);
+	if(ns.containsError(obj)) {
+		return ns.handleError(obj);
 	}
 	
 	/*
@@ -180,12 +162,12 @@ function getArtistTopTracks(artist)
  */
 function getMetroHypeTracks(country, metro) 
 {
-	var url = backEnd.createUrl("geo.getMetroHypeTrackChart", [["country",country], ["metro", metro]]);
+	var url = ns.createUrl("geo.getMetroHypeTrackChart", [["country",country], ["metro", metro]]);
 	
-	var obj = JSON.parse(backEnd.getHttp(url));
+	var obj = JSON.parse(ns.getHttp(url));
 	
-	if(backEnd.containsError(obj)) {
-		return backEnd.handleError(obj);
+	if(ns.containsError(obj)) {
+		return ns.handleError(obj);
 	}
 	
 	/*
@@ -211,12 +193,12 @@ function getMetroHypeTracks(country, metro)
  */
 function getTimeTrackChart(from, to, country, metro) 
 {
-	var url = backEnd.createUrl("geo.getMetroHypeTrackChart", [["country",country], ["metro", metro], ["start", from],["end", to]]);
+	var url = ns.createUrl("geo.getMetroHypeTrackChart", [["country",country], ["metro", metro], ["start", from],["end", to]]);
 	
-	var obj = JSON.parse(backEnd.getHttp(url));
+	var obj = JSON.parse(ns.getHttp(url));
 	
-	if(backEnd.containsError(obj)) {
-		return backEnd.handleError(obj);
+	if(ns.containsError(obj)) {
+		return ns.handleError(obj);
 	}
 	
 	/*
@@ -243,10 +225,10 @@ function getTimeTrackChart(from, to, country, metro)
  *		An array with Last FM artist objects
  */
 function getCountryTopArtists(country, limit) {
-	var url = backEnd.createUrl("geo.getTopArtists", [["country", country],["limit", limit]]);
-	var obj = JSON.parse(backEnd.getHttp(url));
+	var url = ns.createUrl("geo.getTopArtists", [["country", country],["limit", limit]]);
+	var obj = JSON.parse(ns.getHttp(url));
 
-	if(backEnd.containsError(obj)) return backEnd.handleError(obj);
+	if(ns.containsError(obj)) return ns.handleError(obj);
 	return obj.topartists.artist
 }
 
@@ -261,10 +243,10 @@ function getCountryTopArtists(country, limit) {
  *		An array with Last FM track objects
  */
 function getCountryTopTracks(country, limit) {
-	var url = backEnd.createUrl("geo.getTopTracks", [["country", country],["limit", limit]]);
-	var obj = JSON.parse(backEnd.getHttp(url));
+	var url = ns.createUrl("geo.getTopTracks", [["country", country],["limit", limit]]);
+	var obj = JSON.parse(ns.getHttp(url));
 
-	if(backEnd.containsError(obj)) return backEnd.handleError(obj);
+	if(ns.containsError(obj)) return ns.handleError(obj);
 	return obj.toptracks.track
 }
 
@@ -273,7 +255,7 @@ function getCountryTopTracks(country, limit) {
  * every country that we have data about.
  */
 function getGlobalTopTracks() {
-	var cacheRes = backEnd.checkCache("globTopTracks");
+	var cacheRes = ns.cache.get("globTopTracks");
 	if (cacheRes) return cacheRes;
 
 	var result = [];
@@ -285,7 +267,7 @@ function getGlobalTopTracks() {
 		result.push({'country' : country, 'track': res});
 	};
 
-	backEnd.addToCache("globTopTracks", result)
+	ns.cache.put("globTopTracks", result)
 	return result;
 }
 
@@ -294,7 +276,7 @@ function getGlobalTopTracks() {
  * every country that we have data about.
  */
 function getGlobalTopArtists() {
-	var cacheRes = backEnd.checkCache("globTopArtists");
+	var cacheRes = ns.cache.get("globTopArtists");
 	if (cacheRes) return cacheRes;
 
 	var result = [];
@@ -306,6 +288,6 @@ function getGlobalTopArtists() {
 		result.push({'country' : country, 'artist': res});
 	};
 
-	backEnd.addToCache("globTopArtists", result)
+	ns.cache.put("globTopArtists", result)
 	return result;
 }

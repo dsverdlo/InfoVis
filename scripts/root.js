@@ -1,1 +1,3 @@
 var test = getGlobalTopArtists();
+getGlobalTopArtists();
+

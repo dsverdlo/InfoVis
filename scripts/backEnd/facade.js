@@ -7,7 +7,7 @@
  * This namespace provides a facade to
  * interact with the backend. 
  */
-var backEnd = {}
+var backEnd = backEnd || {};
 
 /**
  * Get the current top objects

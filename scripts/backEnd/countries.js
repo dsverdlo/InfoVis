@@ -1,8 +1,10 @@
 /* Countries.js
  * This list simply provides a json
  * list of countries along with their
- * alpha-3 code (as defined inISO-3166)
+ * alpha-3 code (as defined in ISO-3166)
  */
+
+var backEnd = backEnd || {};
 
 backEnd.countryList = [
 	{
