@@ -1,1 +1,0 @@
-b = backEnd.getCountryByName("Belgium");
