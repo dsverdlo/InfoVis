@@ -14,27 +14,28 @@ var types = {}
 // --------- //
 
 /**
- * Defines a location.
+ * Create a country object.
+ * The name and alpha code should follow
+ * ISO-3166
+ *
+ * \param name
+ *		The name of the country.
+ * \param apha
+ *		The alpha-3 code of the country.
  */
-types.Loc = function(name, country, continent) {
-	this.lat = lat; /**< latitude of the location */
-	this.lon = lon; /**< longitude of the location */
-
-	this.name      = name;      /**< Name of the location */
-	this.country   = country;   /**< Country of the location */
-	this.continent = continent; /**< Continent of the location */
+types.Country = function(name, alpha) {
+	this.name  = name;
+	this.alpha = alpha;
 };
 
 /**
- * Enum that contains the
- * various continents.
+ * Define a metro.
+ * A metro simply contains 
+ * it's name and country.
  */
-types.Loc.Continents = {
-	UNKNOWN : 0,
-
-	ASIA : 1, AFRICA : 2, EUROPE : 3,
-	SOUTH_AMERICA : 4, NORTH_AMERICA : 5,
-	AUSTRALIA : 6, Antarctica : 7
+types.Metro = function(name, country) {
+	this.name = name;
+	this.country = country;
 };
 
 // ----------- //

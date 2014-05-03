@@ -7,752 +7,253 @@
 var backEnd = backEnd || {};
 
 backEnd.countryList = [
-	{
-		"name":"Afghanistan",
-		"alpha-3":"AFG"
-	},{
-		"name":"Åland Islands",
-		"alpha-3":"ALA"
-	},{
-		"name":"Albania",
-		"alpha-3":"ALB"
-	},{
-		"name":"Algeria",
-		"alpha-3":"DZA"
-	},{
-		"name":"American Samoa",
-		"alpha-3":"ASM"
-	},{
-		"name":"Andorra",
-		"alpha-3":"AND"
-	},{
-		"name":"Angola",
-		"alpha-3":"AGO"
-	},{
-		"name":"Anguilla",
-		"alpha-3":"AIA"
-	},{
-		"name":"Antarctica",
-		"alpha-3":"ATA"
-	},{
-		"name":"Antigua and Barbuda",
-		"alpha-3":"ATG"
-	},{
-		"name":"Argentina",
-		"alpha-3":"ARG"
-	},{
-		"name":"Armenia",
-		"alpha-3":"ARM"
-	},{
-		"name":"Aruba",
-		"alpha-3":"ABW"
-	},{
-		"name":"Australia",
-		"alpha-3":"AUS"
-	},{
-		"name":"Austria",
-		"alpha-3":"AUT"
-	},{
-		"name":"Azerbaijan",
-		"alpha-3":"AZE"
-	},{
-		"name":"Bahamas",
-		"alpha-3":"BHS"
-	},{
-		"name":"Bahrain",
-		"alpha-3":"BHR"
-	},{
-		"name":"Bangladesh",
-		"alpha-3":"BGD"
-	},{
-		"name":"Barbados",
-		"alpha-3":"BRB"
-	},{
-		"name":"Belarus",
-		"alpha-3":"BLR"
-	},{
-		"name":"Belgium",
-		"alpha-3":"BEL"
-	},{
-		"name":"Belize",
-		"alpha-3":"BLZ"
-	},{
-		"name":"Benin",
-		"alpha-3":"BEN"
-	},{
-		"name":"Bermuda",
-		"alpha-3":"BMU"
-	},{
-		"name":"Bhutan",
-		"alpha-3":"BTN"
-	},{
-		"name":"Bolivia",
-		"alpha-3":"BOL"
-	},{
-		"name":"Bonaire, Sint Eustatius and Saba",
-		"alpha-3":"BES"
-	},{
-		"name":"Bosnia and Herzegovina",
-		"alpha-3":"BIH"
-	},{
-		"name":"Botswana",
-		"alpha-3":"BWA"
-	},{
-		"name":"Bouvet Island",
-		"alpha-3":"BVT"
-	},{
-		"name":"Brazil",
-		"alpha-3":"BRA"
-	},{
-		"name":"British Indian Ocean Territory",
-		"alpha-3":"IOT"
-	},{
-		"name":"Brunei Darussalam",
-		"alpha-3":"BRN"
-	},{
-		"name":"Bulgaria",
-		"alpha-3":"BGR"
-	},{
-		"name":"Burkina Faso",
-		"alpha-3":"BFA"
-	},{
-		"name":"Burundi",
-		"alpha-3":"BDI"
-	},{
-		"name":"Cambodia",
-		"alpha-3":"KHM"
-	},{
-		"name":"Cameroon",
-		"alpha-3":"CMR"
-	},{
-		"name":"Canada",
-		"alpha-3":"CAN"
-	},{
-		"name":"Cape Verde",
-		"alpha-3":"CPV"
-	},{
-		"name":"Cayman Islands",
-		"alpha-3":"CYM"
-	},{
-		"name":"Central African Republic",
-		"alpha-3":"CAF"
-	},{
-		"name":"Chad",
-		"alpha-3":"TCD"
-	},{
-		"name":"Chile",
-		"alpha-3":"CHL"
-	},{
-		"name":"China",
-		"alpha-3":"CHN"
-	},{
-		"name":"Christmas Island",
-		"alpha-3":"CXR"
-	},{
-		"name":"Cocos (Keeling) Islands",
-		"alpha-3":"CCK"
-	},{
-		"name":"Colombia",
-		"alpha-3":"COL"
-	},{
-		"name":"Comoros",
-		"alpha-3":"COM"
-	},{
-		"name":"Congo",
-		"alpha-3":"COG"
-	},{
-		"name":"Congo, the Democratic Republic of the",
-		"alpha-3":"COD"
-	},{
-		"name":"Cook Islands",
-		"alpha-3":"COK"
-	},{
-		"name":"Costa Rica",
-		"alpha-3":"CRI"
-	},{
-		"name":"Côte d'Ivoire",
-		"alpha-3":"CIV"
-	},{
-		"name":"Croatia",
-		"alpha-3":"HRV"
-	},{
-		"name":"Cuba",
-		"alpha-3":"CUB"
-	},{
-		"name":"Curaçao",
-		"alpha-3":"CUW"
-	},{
-		"name":"Cyprus",
-		"alpha-3":"CYP"
-	},{
-		"name":"Czech Republic",
-		"alpha-3":"CZE"
-	},{
-		"name":"Denmark",
-		"alpha-3":"DNK"
-	},{
-		"name":"Djibouti",
-		"alpha-3":"DJI"
-	},{
-		"name":"Dominica",
-		"alpha-3":"DMA"
-	},{
-		"name":"Dominican Republic",
-		"alpha-3":"DOM"
-	},{
-		"name":"Ecuador",
-		"alpha-3":"ECU"
-	},{
-		"name":"Egypt",
-		"alpha-3":"EGY"
-	},{
-		"name":"El Salvador",
-		"alpha-3":"SLV"
-	},{
-		"name":"Equatorial Guinea",
-		"alpha-3":"GNQ"
-	},{
-		"name":"Eritrea",
-		"alpha-3":"ERI"
-	},{
-		"name":"Estonia",
-		"alpha-3":"EST"
-	},{
-		"name":"Ethiopia",
-		"alpha-3":"ETH"
-	},{
-		"name":"Falkland Islands (Malvinas)",
-		"alpha-3":"FLK"
-	},{
-		"name":"Faroe Islands",
-		"alpha-3":"FRO"
-	},{
-		"name":"Fiji",
-		"alpha-3":"FJI"
-	},{
-		"name":"Finland",
-		"alpha-3":"FIN"
-	},{
-		"name":"France",
-		"alpha-3":"FRA"
-	},{
-		"name":"French Guiana",
-		"alpha-3":"GUF"
-	},{
-		"name":"French Polynesia",
-		"alpha-3":"PYF"
-	},{
-		"name":"French Southern Territories",
-		"alpha-3":"ATF"
-	},{
-		"name":"Gabon",
-		"alpha-3":"GAB"
-	},{
-		"name":"Gambia",
-		"alpha-3":"GMB"
-	},{
-		"name":"Georgia",
-		"alpha-3":"GEO"
-	},{
-		"name":"Germany",
-		"alpha-3":"DEU"
-	},{
-		"name":"Ghana",
-		"alpha-3":"GHA"
-	},{
-		"name":"Gibraltar",
-		"alpha-3":"GIB"
-	},{
-		"name":"Greece",
-		"alpha-3":"GRC"
-	},{
-		"name":"Greenland",
-		"alpha-3":"GRL"
-	},{
-		"name":"Grenada",
-		"alpha-3":"GRD"
-	},{
-		"name":"Guadeloupe",
-		"alpha-3":"GLP"
-	},{
-		"name":"Guam",
-		"alpha-3":"GUM"
-	},{
-		"name":"Guatemala",
-		"alpha-3":"GTM"
-	},{
-		"name":"Guernsey",
-		"alpha-3":"GGY"
-	},{
-		"name":"Guinea",
-		"alpha-3":"GIN"
-	},{
-		"name":"Guinea-Bissau",
-		"alpha-3":"GNB"
-	},{
-		"name":"Guyana",
-		"alpha-3":"GUY"
-	},{
-		"name":"Haiti",
-		"alpha-3":"HTI"
-	},{
-		"name":"Heard Island and McDonald Islands",
-		"alpha-3":"HMD"
-	},{
-		"name":"Holy See (Vatican City State)",
-		"alpha-3":"VAT"
-	},{
-		"name":"Honduras",
-		"alpha-3":"HND"
-	},{
-		"name":"Hong Kong",
-		"alpha-3":"HKG"
-	},{
-		"name":"Hungary",
-		"alpha-3":"HUN"
-	},{
-		"name":"Iceland",
-		"alpha-3":"ISL"
-	},{
-		"name":"India",
-		"alpha-3":"IND"
-	},{
-		"name":"Indonesia",
-		"alpha-3":"IDN"
-	},{
-		"name":"Iran, Islamic Republic of",
-		"alpha-3":"IRN"
-	},{
-		"name":"Iraq",
-		"alpha-3":"IRQ"
-	},{
-		"name":"Ireland",
-		"alpha-3":"IRL"
-	},{
-		"name":"Isle of Man",
-		"alpha-3":"IMN"
-	},{
-		"name":"Israel",
-		"alpha-3":"ISR"
-	},{
-		"name":"Italy",
-		"alpha-3":"ITA"
-	},{
-		"name":"Jamaica",
-		"alpha-3":"JAM"
-	},{
-		"name":"Japan",
-		"alpha-3":"JPN"
-	},{
-		"name":"Jersey",
-		"alpha-3":"JEY"
-	},{
-		"name":"Jordan",
-		"alpha-3":"JOR"
-	},{
-		"name":"Kazakhstan",
-		"alpha-3":"KAZ"
-	},{
-		"name":"Kenya",
-		"alpha-3":"KEN"
-	},{
-		"name":"Kiribati",
-		"alpha-3":"KIR"
-	},{
-		"name":"Korea, Democratic People's Republic of",
-		"alpha-3":"PRK"
-	},{
-		"name":"Korea, Republic of",
-		"alpha-3":"KOR"
-	},{
-		"name":"Kuwait",
-		"alpha-3":"KWT"
-	},{
-		"name":"Kyrgyzstan",
-		"alpha-3":"KGZ"
-	},{
-		"name":"Lao People's Democratic Republic",
-		"alpha-3":"LAO"
-	},{
-		"name":"Latvia",
-		"alpha-3":"LVA"
-	},{
-		"name":"Lebanon",
-		"alpha-3":"LBN"
-	},{
-		"name":"Lesotho",
-		"alpha-3":"LSO"
-	},{
-		"name":"Liberia",
-		"alpha-3":"LBR"
-	},{
-		"name":"Libya",
-		"alpha-3":"LBY"
-	},{
-		"name":"Liechtenstein",
-		"alpha-3":"LIE"
-	},{
-		"name":"Lithuania",
-		"alpha-3":"LTU"
-	},{
-		"name":"Luxembourg",
-		"alpha-3":"LUX"
-	},{
-		"name":"Macao",
-		"alpha-3":"MAC"
-	},{
-		"name":"Macedonia",
-		"alpha-3":"MKD"
-	},{
-		"name":"Madagascar",
-		"alpha-3":"MDG"
-	},{
-		"name":"Malawi",
-		"alpha-3":"MWI"
-	},{
-		"name":"Malaysia",
-		"alpha-3":"MYS"
-	},{
-		"name":"Maldives",
-		"alpha-3":"MDV"
-	},{
-		"name":"Mali",
-		"alpha-3":"MLI"
-	},{
-		"name":"Malta",
-		"alpha-3":"MLT"
-	},{
-		"name":"Marshall Islands",
-		"alpha-3":"MHL"
-	},{
-		"name":"Martinique",
-		"alpha-3":"MTQ"
-	},{
-		"name":"Mauritania",
-		"alpha-3":"MRT"
-	},{
-		"name":"Mauritius",
-		"alpha-3":"MUS"
-	},{
-		"name":"Mayotte",
-		"alpha-3":"MYT"
-	},{
-		"name":"Mexico",
-		"alpha-3":"MEX"
-	},{
-		"name":"Micronesia, Federated States of",
-		"alpha-3":"FSM"
-	},{
-		"name":"Moldova",
-		"alpha-3":"MDA"
-	},{
-		"name":"Monaco",
-		"alpha-3":"MCO"
-	},{
-		"name":"Mongolia",
-		"alpha-3":"MNG"
-	},{
-		"name":"Montenegro",
-		"alpha-3":"MNE"
-	},{
-		"name":"Montserrat",
-		"alpha-3":"MSR"
-	},{
-		"name":"Morocco",
-		"alpha-3":"MAR"
-	},{
-		"name":"Mozambique",
-		"alpha-3":"MOZ"
-	},{
-		"name":"Myanmar",
-		"alpha-3":"MMR"
-	},{
-		"name":"Namibia",
-		"alpha-3":"NAM"
-	},{
-		"name":"Nauru",
-		"alpha-3":"NRU"
-	},{
-		"name":"Nepal",
-		"alpha-3":"NPL"
-	},{
-		"name":"Netherlands",
-		"alpha-3":"NLD"
-	},{
-		"name":"New Caledonia",
-		"alpha-3":"NCL"
-	},{
-		"name":"New Zealand",
-		"alpha-3":"NZL"
-	},{
-		"name":"Nicaragua",
-		"alpha-3":"NIC"
-	},{
-		"name":"Niger",
-		"alpha-3":"NER"
-	},{
-		"name":"Nigeria",
-		"alpha-3":"NGA"
-	},{
-		"name":"Niue",
-		"alpha-3":"NIU"
-	},{
-		"name":"Norfolk Island",
-		"alpha-3":"NFK"
-	},{
-		"name":"Northern Mariana Islands",
-		"alpha-3":"MNP"
-	},{
-		"name":"Norway",
-		"alpha-3":"NOR"
-	},{
-		"name":"Oman",
-		"alpha-3":"OMN"
-	},{
-		"name":"Pakistan",
-		"alpha-3":"PAK"
-	},{
-		"name":"Palau",
-		"alpha-3":"PLW"
-	// },{ // Last.FM doesn't seem to accept this name :(
-	// 	"name":"Palestine, State of",
-	// 	"alpha-3":"PSE"
-	},{
-		"name":"Panama",
-		"alpha-3":"PAN"
-	},{
-		"name":"Papua New Guinea",
-		"alpha-3":"PNG"
-	},{
-		"name":"Paraguay",
-		"alpha-3":"PRY"
-	},{
-		"name":"Peru",
-		"alpha-3":"PER"
-	},{
-		"name":"Philippines",
-		"alpha-3":"PHL"
-	},{
-		"name":"Pitcairn",
-		"alpha-3":"PCN"
-	},{
-		"name":"Poland",
-		"alpha-3":"POL"
-	},{
-		"name":"Portugal",
-		"alpha-3":"PRT"
-	},{
-		"name":"Puerto Rico",
-		"alpha-3":"PRI"
-	},{
-		"name":"Qatar",
-		"alpha-3":"QAT"
-	},{
-		"name":"Réunion",
-		"alpha-3":"REU"
-	},{
-		"name":"Romania",
-		"alpha-3":"ROU"
-	},{
-		"name":"Russian Federation",
-		"alpha-3":"RUS"
-	},{
-		"name":"Rwanda",
-		"alpha-3":"RWA"
-	},{
-		"name":"Saint Barthélemy",
-		"alpha-3":"BLM"
-	},{
-		"name":"Saint Helena",
-		"alpha-3":"SHN"
-	},{
-		"name":"Saint Kitts and Nevis",
-		"alpha-3":"KNA"
-	},{
-		"name":"Saint Lucia",
-		"alpha-3":"LCA"
-	},{
-		"name":"Saint Martin (French part)",
-		"alpha-3":"MAF"
-	},{
-		"name":"Saint Pierre and Miquelon",
-		"alpha-3":"SPM"
-	},{
-		"name":"Saint Vincent and the Grenadines",
-		"alpha-3":"VCT"
-	},{
-		"name":"Samoa",
-		"alpha-3":"WSM"
-	},{
-		"name":"San Marino",
-		"alpha-3":"SMR"
-	},{
-		"name":"Sao Tome and Principe",
-		"alpha-3":"STP"
-	},{
-		"name":"Saudi Arabia",
-		"alpha-3":"SAU"
-	},{
-		"name":"Senegal",
-		"alpha-3":"SEN"
-	},{
-		"name":"Serbia",
-		"alpha-3":"SRB"
-	},{
-		"name":"Seychelles",
-		"alpha-3":"SYC"
-	},{
-		"name":"Sierra Leone",
-		"alpha-3":"SLE"
-	},{
-		"name":"Singapore",
-		"alpha-3":"SGP"
-	},{
-		"name":"Sint Maarten",
-		"alpha-3":"SXM"
-	},{
-		"name":"Slovakia",
-		"alpha-3":"SVK"
-	},{
-		"name":"Slovenia",
-		"alpha-3":"SVN"
-	},{
-		"name":"Solomon Islands",
-		"alpha-3":"SLB"
-	},{
-		"name":"Somalia",
-		"alpha-3":"SOM"
-	},{
-		"name":"South Africa",
-		"alpha-3":"ZAF"
-	},{
-		"name":"South Georgia and the South Sandwich Islands",
-		"alpha-3":"SGS"
-	},{
-		"name":"South Sudan",
-		"alpha-3":"SSD"
-	},{
-		"name":"Spain",
-		"alpha-3":"ESP"
-	},{
-		"name":"Sri Lanka",
-		"alpha-3":"LKA"
-	},{
-		"name":"Sudan",
-		"alpha-3":"SDN"
-	},{
-		"name":"Suriname",
-		"alpha-3":"SUR"
-	},{
-		"name":"Svalbard and Jan Mayen",
-		"alpha-3":"SJM"
-	},{
-		"name":"Swaziland",
-		"alpha-3":"SWZ"
-	},{
-		"name":"Sweden",
-		"alpha-3":"SWE"
-	},{
-		"name":"Switzerland",
-		"alpha-3":"CHE"
-	},{
-		"name":"Syrian Arab Republic",
-		"alpha-3":"SYR"
-	},{
-		"name":"Taiwan",
-		"alpha-3":"TWN"
-	},{
-		"name":"Tajikistan",
-		"alpha-3":"TJK"
-	},{
-		"name":"Tanzania, United Republic of",
-		"alpha-3":"TZA"
-	},{
-		"name":"Thailand",
-		"alpha-3":"THA"
-	},{
-		"name":"Timor-Leste",
-		"alpha-3":"TLS"
-	},{
-		"name":"Togo",
-		"alpha-3":"TGO"
-	},{
-		"name":"Tokelau",
-		"alpha-3":"TKL"
-	},{
-		"name":"Tonga",
-		"alpha-3":"TON"
-	},{
-		"name":"Trinidad and Tobago",
-		"alpha-3":"TTO"
-	},{
-		"name":"Tunisia",
-		"alpha-3":"TUN"
-	},{
-		"name":"Turkey",
-		"alpha-3":"TUR"
-	},{
-		"name":"Turkmenistan",
-		"alpha-3":"TKM"
-	},{
-		"name":"Turks and Caicos Islands",
-		"alpha-3":"TCA"
-	},{
-		"name":"Tuvalu",
-		"alpha-3":"TUV"
-	},{
-		"name":"Uganda",
-		"alpha-3":"UGA"
-	},{
-		"name":"Ukraine",
-		"alpha-3":"UKR"
-	},{
-		"name":"United Arab Emirates",
-		"alpha-3":"ARE"
-	},{
-		"name":"United Kingdom",
-		"alpha-3":"GBR"
-	},{
-		"name":"United States",
-		"alpha-3":"USA"
-	},{
-		"name":"United States Minor Outlying Islands",
-		"alpha-3":"UMI"
-	},{
-		"name":"Uruguay",
-		"alpha-3":"URY"
-	},{
-		"name":"Uzbekistan",
-		"alpha-3":"UZB"
-	},{
-		"name":"Vanuatu",
-		"alpha-3":"VUT"
-	},{
-		"name":"Venezuela",
-		"alpha-3":"VEN"
-	},{
-		"name":"Viet Nam",
-		"alpha-3":"VNM"
-	},{
-		"name":"Virgin Islands, British",
-		"alpha-3":"VGB"
-	},{
-		"name":"Virgin Islands, U.S.",
-		"alpha-3":"VIR"
-	},{
-		"name":"Wallis and Futuna",
-		"alpha-3":"WLF"
-	},{
-		"name":"Western Sahara",
-		"alpha-3":"ESH"
-	},{
-		"name":"Yemen",
-		"alpha-3":"YEM"
-	},{
-		"name":"Zambia",
-		"alpha-3":"ZMB"
-	},{
-		"name":"Zimbabwe",
-		"alpha-3":"ZWE"
-	}
+	new types.Country("Afghanistan","AFG"),
+	new types.Country("Åland Islands","ALA"),
+	new types.Country("Albania","ALB"),
+	new types.Country("Algeria","DZA"),
+	new types.Country("American Samoa","ASM"),
+	new types.Country("Andorra","AND"),
+	new types.Country("Angola","AGO"),
+	new types.Country("Anguilla","AIA"),
+	new types.Country("Antarctica","ATA"),
+	new types.Country("Antigua and Barbuda","ATG"),
+	new types.Country("Argentina","ARG"),
+	new types.Country("Armenia","ARM"),
+	new types.Country("Aruba","ABW"),
+	new types.Country("Australia","AUS"),
+	new types.Country("Austria","AUT"),
+	new types.Country("Azerbaijan","AZE"),
+	new types.Country("Bahamas","BHS"),
+	new types.Country("Bahrain","BHR"),
+	new types.Country("Bangladesh","BGD"),
+	new types.Country("Barbados","BRB"),
+	new types.Country("Belarus","BLR"),
+	new types.Country("Belgium","BEL"),
+	new types.Country("Belize","BLZ"),
+	new types.Country("Benin","BEN"),
+	new types.Country("Bermuda","BMU"),
+	new types.Country("Bhutan","BTN"),
+	new types.Country("Bolivia","BOL"),
+	new types.Country("Bonaire, Sint Eustatius and Saba","BES"),
+	new types.Country("Bosnia and Herzegovina","BIH"),
+	new types.Country("Botswana","BWA"),
+	new types.Country("Bouvet Island","BVT"),
+	new types.Country("Brazil","BRA"),
+	new types.Country("British Indian Ocean Territory","IOT"),
+	new types.Country("Brunei Darussalam","BRN"),
+	new types.Country("Bulgaria","BGR"),
+	new types.Country("Burkina Faso","BFA"),
+	new types.Country("Burundi","BDI"),
+	new types.Country("Cambodia","KHM"),
+	new types.Country("Cameroon","CMR"),
+	new types.Country("Canada","CAN"),
+	new types.Country("Cape Verde","CPV"),
+	new types.Country("Cayman Islands","CYM"),
+	new types.Country("Central African Republic","CAF"),
+	new types.Country("Chad","TCD"),
+	new types.Country("Chile","CHL"),
+	new types.Country("China","CHN"),
+	new types.Country("Christmas Island","CXR"),
+	new types.Country("Cocos (Keeling) Islands","CCK"),
+	new types.Country("Colombia","COL"),
+	new types.Country("Comoros","COM"),
+	new types.Country("Congo","COG"),
+	new types.Country("Congo, the Democratic Republic of the","COD"),
+	new types.Country("Cook Islands","COK"),
+	new types.Country("Costa Rica","CRI"),
+	new types.Country("Côte d'Ivoire","CIV"),
+	new types.Country("Croatia","HRV"),
+	new types.Country("Cuba","CUB"),
+	new types.Country("Curaçao","CUW"),
+	new types.Country("Cyprus","CYP"),
+	new types.Country("Czech Republic","CZE"),
+	new types.Country("Denmark","DNK"),
+	new types.Country("Djibouti","DJI"),
+	new types.Country("Dominica","DMA"),
+	new types.Country("Dominican Republic","DOM"),
+	new types.Country("Ecuador","ECU"),
+	new types.Country("Egypt","EGY"),
+	new types.Country("El Salvador","SLV"),
+	new types.Country("Equatorial Guinea","GNQ"),
+	new types.Country("Eritrea","ERI"),
+	new types.Country("Estonia","EST"),
+	new types.Country("Ethiopia","ETH"),
+	new types.Country("Falkland Islands (Malvinas)","FLK"),
+	new types.Country("Faroe Islands","FRO"),
+	new types.Country("Fiji","FJI"),
+	new types.Country("Finland","FIN"),
+	new types.Country("France","FRA"),
+	new types.Country("French Guiana","GUF"),
+	new types.Country("French Polynesia","PYF"),
+	new types.Country("French Southern Territories","ATF"),
+	new types.Country("Gabon","GAB"),
+	new types.Country("Gambia","GMB"),
+	new types.Country("Georgia","GEO"),
+	new types.Country("Germany","DEU"),
+	new types.Country("Ghana","GHA"),
+	new types.Country("Gibraltar","GIB"),
+	new types.Country("Greece","GRC"),
+	new types.Country("Greenland","GRL"),
+	new types.Country("Grenada","GRD"),
+	new types.Country("Guadeloupe","GLP"),
+	new types.Country("Guam","GUM"),
+	new types.Country("Guatemala","GTM"),
+	new types.Country("Guernsey","GGY"),
+	new types.Country("Guinea","GIN"),
+	new types.Country("Guinea-Bissau","GNB"),
+	new types.Country("Guyana","GUY"),
+	new types.Country("Haiti","HTI"),
+	new types.Country("Heard Island and McDonald Islands","HMD"),
+	new types.Country("Holy See (Vatican City State)","VAT"),
+	new types.Country("Honduras","HND"),
+	new types.Country("Hong Kong","HKG"),
+	new types.Country("Hungary","HUN"),
+	new types.Country("Iceland","ISL"),
+	new types.Country("India","IND"),
+	new types.Country("Indonesia","IDN"),
+	new types.Country("Iran, Islamic Republic of","IRN"),
+	new types.Country("Iraq","IRQ"),
+	new types.Country("Ireland","IRL"),
+	new types.Country("Isle of Man","IMN"),
+	new types.Country("Israel","ISR"),
+	new types.Country("Italy","ITA"),
+	new types.Country("Jamaica","JAM"),
+	new types.Country("Japan","JPN"),
+	new types.Country("Jersey","JEY"),
+	new types.Country("Jordan","JOR"),
+	new types.Country("Kazakhstan","KAZ"),
+	new types.Country("Kenya","KEN"),
+	new types.Country("Kiribati","KIR"),
+	new types.Country("Korea, Democratic People's Republic of","PRK"),
+	new types.Country("Korea, Republic of","KOR"),
+	new types.Country("Kuwait","KWT"),
+	new types.Country("Kyrgyzstan","KGZ"),
+	new types.Country("Lao People's Democratic Republic","LAO"),
+	new types.Country("Latvia","LVA"),
+	new types.Country("Lebanon","LBN"),
+	new types.Country("Lesotho","LSO"),
+	new types.Country("Liberia","LBR"),
+	new types.Country("Libya","LBY"),
+	new types.Country("Liechtenstein","LIE"),
+	new types.Country("Lithuania","LTU"),
+	new types.Country("Luxembourg","LUX"),
+	new types.Country("Macao","MAC"),
+	new types.Country("Macedonia","MKD"),
+	new types.Country("Madagascar","MDG"),
+	new types.Country("Malawi","MWI"),
+	new types.Country("Malaysia","MYS"),
+	new types.Country("Maldives","MDV"),
+	new types.Country("Mali","MLI"),
+	new types.Country("Malta","MLT"),
+	new types.Country("Marshall Islands","MHL"),
+	new types.Country("Martinique","MTQ"),
+	new types.Country("Mauritania","MRT"),
+	new types.Country("Mauritius","MUS"),
+	new types.Country("Mayotte","MYT"),
+	new types.Country("Mexico","MEX"),
+	new types.Country("Micronesia, Federated States of","FSM"),
+	new types.Country("Moldova","MDA"),
+	new types.Country("Monaco","MCO"),
+	new types.Country("Mongolia","MNG"),
+	new types.Country("Montenegro","MNE"),
+	new types.Country("Montserrat","MSR"),
+	new types.Country("Morocco","MAR"),
+	new types.Country("Mozambique","MOZ"),
+	new types.Country("Myanmar","MMR"),
+	new types.Country("Namibia","NAM"),
+	new types.Country("Nauru","NRU"),
+	new types.Country("Nepal","NPL"),
+	new types.Country("Netherlands","NLD"),
+	new types.Country("New Caledonia","NCL"),
+	new types.Country("New Zealand","NZL"),
+	new types.Country("Nicaragua","NIC"),
+	new types.Country("Niger","NER"),
+	new types.Country("Nigeria","NGA"),
+	new types.Country("Niue","NIU"),
+	new types.Country("Norfolk Island","NFK"),
+	new types.Country("Northern Mariana Islands","MNP"),
+	new types.Country("Norway","NOR"),
+	new types.Country("Oman","OMN"),
+	new types.Country("Pakistan","PAK"),
+	new types.Country("Palau","PLW"),
+//	new types.Country("Palestine, State of","PSE"),
+	new types.Country("Panama","PAN"),
+	new types.Country("Papua New Guinea","PNG"),
+	new types.Country("Paraguay","PRY"),
+	new types.Country("Peru","PER"),
+	new types.Country("Philippines","PHL"),
+	new types.Country("Pitcairn","PCN"),
+	new types.Country("Poland","POL"),
+	new types.Country("Portugal","PRT"),
+	new types.Country("Puerto Rico","PRI"),
+	new types.Country("Qatar","QAT"),
+	new types.Country("Réunion","REU"),
+	new types.Country("Romania","ROU"),
+	new types.Country("Russian Federation","RUS"),
+	new types.Country("Rwanda","RWA"),
+	new types.Country("Saint Barthélemy","BLM"),
+	new types.Country("Saint Helena","SHN"),
+	new types.Country("Saint Kitts and Nevis","KNA"),
+	new types.Country("Saint Lucia","LCA"),
+	new types.Country("Saint Martin (French part)","MAF"),
+	new types.Country("Saint Pierre and Miquelon","SPM"),
+	new types.Country("Saint Vincent and the Grenadines","VCT"),
+	new types.Country("Samoa","WSM"),
+	new types.Country("San Marino","SMR"),
+	new types.Country("Sao Tome and Principe","STP"),
+	new types.Country("Saudi Arabia","SAU"),
+	new types.Country("Senegal","SEN"),
+	new types.Country("Serbia","SRB"),
+	new types.Country("Seychelles","SYC"),
+	new types.Country("Sierra Leone","SLE"),
+	new types.Country("Singapore","SGP"),
+	new types.Country("Sint Maarten","SXM"),
+	new types.Country("Slovakia","SVK"),
+	new types.Country("Slovenia","SVN"),
+	new types.Country("Solomon Islands","SLB"),
+	new types.Country("Somalia","SOM"),
+	new types.Country("South Africa","ZAF"),
+	new types.Country("South Georgia and the South Sandwich Islands","SGS"),
+	new types.Country("South Sudan","SSD"),
+	new types.Country("Spain","ESP"),
+	new types.Country("Sri Lanka","LKA"),
+	new types.Country("Sudan","SDN"),
+	new types.Country("Suriname","SUR"),
+	new types.Country("Svalbard and Jan Mayen","SJM"),
+	new types.Country("Swaziland","SWZ"),
+	new types.Country("Sweden","SWE"),
+	new types.Country("Switzerland","CHE"),
+	new types.Country("Syrian Arab Republic","SYR"),
+	new types.Country("Taiwan","TWN"),
+	new types.Country("Tajikistan","TJK"),
+	new types.Country("Tanzania, United Republic of","TZA"),
+	new types.Country("Thailand","THA"),
+	new types.Country("Timor-Leste","TLS"),
+	new types.Country("Togo","TGO"),
+	new types.Country("Tokelau","TKL"),
+	new types.Country("Tonga","TON"),
+	new types.Country("Trinidad and Tobago","TTO"),
+	new types.Country("Tunisia","TUN"),
+	new types.Country("Turkey","TUR"),
+	new types.Country("Turkmenistan","TKM"),
+	new types.Country("Turks and Caicos Islands","TCA"),
+	new types.Country("Tuvalu","TUV"),
+	new types.Country("Uganda","UGA"),
+	new types.Country("Ukraine","UKR"),
+	new types.Country("United Arab Emirates","ARE"),
+	new types.Country("United Kingdom","GBR"),
+	new types.Country("United States","USA"),
+	new types.Country("United States Minor Outlying Islands","UMI"),
+	new types.Country("Uruguay","URY"),
+	new types.Country("Uzbekistan","UZB"),
+	new types.Country("Vanuatu","VUT"),
+	new types.Country("Venezuela","VEN"),
+	new types.Country("Viet Nam","VNM"),
+	new types.Country("Virgin Islands, British","VGB"),
+	new types.Country("Virgin Islands, U.S.","VIR"),
+	new types.Country("Wallis and Futuna","WLF"),
+	new types.Country("Western Sahara","ESH"),
+	new types.Country("Yemen","YEM"),
+	new types.Country("Zambia","ZMB"),
+	new types.Country("Zimbabwe","ZWE")
 ];
