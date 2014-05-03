@@ -257,3 +257,10 @@ backEnd.countryList = [
 	new types.Country("Zambia","ZMB"),
 	new types.Country("Zimbabwe","ZWE")
 ];
+
+backEnd.countryDict = {};
+
+for (var i = 0; i < backEnd.countryList.length; i++) {
+	var country = backEnd.countryList[i]
+	backEnd.countryDict[country.name] = country
+};
