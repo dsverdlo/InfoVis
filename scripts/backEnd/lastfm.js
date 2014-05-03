@@ -157,6 +157,17 @@ backEnd.lastFm.getCountryMetros = function(country) {
 }
 
 /**
+ * Get the metros of all the countries
+ * \return
+ *		An array of [country, name] objects.
+ */
+backEnd.lastFm.getAllMetros = function(country) {
+	var res = backEnd.lastFm.request("geo.getMetros", []);
+	if (res.metros == "\n") return [];
+	else return res.metros.metro;
+}
+
+/**
  * Get the top artists for a country.
  *
  * \param country 
@@ -171,7 +182,7 @@ backEnd.lastFm.getCountryTopArtists = function(country, limit) {
 		"geo.getTopArtists", 
 		[["country", country],["limit", limit]]
 	);
-	if (res.topartists == "\n") return [];
+	if ('#text' in res.topartists) return [];
 	else return res.topartists.artist;
 }
 
@@ -192,7 +203,7 @@ backEnd.lastFm.getMetroTopArtists = function(country, metro, limit) {
 		"geo.getMetroArtistChart", 
 		[["country", country], ["metro", metro]]
 	);
-	if (res.topartists == "\n") return [];
+	if ('#text' in res.topartists) return [];
 	else return res.topartists.artist;
 }
 
@@ -211,7 +222,7 @@ backEnd.lastFm.getCountryTopTracks = function(country, limit) {
 		"geo.getTopTracks", 
 		[["country", country],["limit", limit]]
 	);
-	if (res.toptracks == "\n") return [];
+	if ('#text' in res.toptracks) return [];
 	else return res.toptracks.track;
 }
 
@@ -232,6 +243,6 @@ backEnd.lastFm.getMetroTopTracks = function(country, metro, limit) {
 		"geo.getMetroTrackChart", 
 		[["country", country], ["metro", metro]]
 	);
-	if (res.toptracks == "\n") return [];
+	if ('#text' in res.toptracks) return [];
 	else return res.toptracks.track;
 }

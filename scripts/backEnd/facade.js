@@ -8,6 +8,20 @@
  * interact with the backend. 
  */
 var backEnd = backEnd || {};
+backEnd.chartLength = 50;
+
+/** 
+ * Get an array containing a 
+ * country object for every country.
+ */
+backEnd.getCountries = function() {
+	return backEnd.countryList;
+}
+
+/** Get a country object by it's name. */
+backEnd.getCountryByName = function(name) {
+	return backEnd.countryDict[name];
+}
 
 /**
  * Get the current top objects
@@ -49,6 +63,11 @@ backEnd.getTop = function(type, location){
  */
 backEnd.getPopularity = function (type, location, searchTerm){
 }
+
+// Global top
+// Local chart per metro
+
+// Popularity per country: place in top 100
 
 
 /*

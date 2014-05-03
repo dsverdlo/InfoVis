@@ -24,8 +24,37 @@ var types = {}
  *		The alpha-3 code of the country.
  */
 types.Country = function(name, alpha) {
-	this.name  = name;
-	this.alpha = alpha;
+	this.name   = name;
+	this.alpha  = alpha;
+
+	this.hasMetros = false;
+	this.metros = [];
+
+	this.trackChart = [];
+	this.artistChart = [];
+};
+
+/**
+ * Add the metro list to this country.
+ * This operation utilizes a synchronous request.
+ */
+types.Country.prototype.fetchMetros = function() {
+	if (!this.hasMetros) {
+		this.metros = backEnd.operations.metrosForCountry(this);
+		this.hasMetros = true;
+	}
+};
+
+types.Country.prototype.fetchArtistChart = function() {
+	if (this.artistChart.length == 0) {
+		this.artistChart = backEnd.operations.artistChartForCountry(this);
+	}
+};
+
+types.Country.prototype.fetchTrackChart = function() {
+	if (this.trackChart.length == 0) {
+		this.trackChart = backEnd.operations.trackChartForCountry(this);
+	}
 };
 
 /**
@@ -36,31 +65,36 @@ types.Country = function(name, alpha) {
 types.Metro = function(name, country) {
 	this.name = name;
 	this.country = country;
+
+	this.trackChart = [];
+	this.artistChart = [];
+};
+
+types.Metro.prototype.fetchArtistChart = function() {
+	if (this.artistChart.length == 0) {
+		this.artistChart = backEnd.operations.artistChartForMetro(this);
+	}
+};
+
+types.Metro.prototype.fetchTrackChart = function() {
+	if (this.trackChart.length == 0) {
+		this.trackChart = backEnd.operations.trackChartForMetro(this);
+	}
 };
 
 // ----------- //
 // Information //
 // ----------- //
 
-/**
- * Defines information.
- * An information prototype contains the required
- * data for visualizing a single point of information
- * on the map.
- */
-types.Information = function(name, type, rating, loc) {
-	this.loc = loc;       /**< A location object */
-	this.type = type;     /**< The type of the data we are showing */
-	this.name = name;     /**< The name of the data (e.g. a song title) */
-	this.rating = rating; /**< The rating of our piece of data, a float between 0 and 1 */
+types.Track = function(name, artist, position, popularity) {
+	this.name = name;
+	this.artist = artist;
+	this.chartPos = position;
+	this.popularity = popularity;
 };
 
-/**
- * Defines the different data types
- * we can get information about.
- */
-types.Information.Types = {
-	ARTIST : 0,
-	ALBUM  : 1,
-	TRACK  : 2	
-};
+types.Artist = function(name, position, popularity) {
+	this.name = name;
+	this.chartPos = position;
+	this.popularity = popularity;
+}

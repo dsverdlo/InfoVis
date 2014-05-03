@@ -1,3 +1,1 @@
-var test = getGlobalTopArtists();
-getGlobalTopArtists();
-
+b = backEnd.getCountryByName("Belgium");
