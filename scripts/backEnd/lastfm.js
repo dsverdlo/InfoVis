@@ -148,11 +148,12 @@ backEnd.lastFm.request = function(method, optionList) {
  * \param country
  *		The name of the country for which we want to receive the metros.
  * \return
- *		The last FM response to this request, in object form.
+ *		An array of metro names.
  */
 backEnd.lastFm.getCountryMetros = function(country) {
 	var res = backEnd.lastFm.request("geo.getMetros", [["country", country]]);
-	return res.metros.metro;
+	if (res.metros == "\n") return [];
+	else return res.metros.metro;
 }
 
 /**
@@ -163,14 +164,15 @@ backEnd.lastFm.getCountryMetros = function(country) {
  * \param limit
  *		The amount of artists you want to fetch.
  * \return
- *		The last FM response to this request, in object form.
+ *		An array of last fm artist objects.
  */
 backEnd.lastFm.getCountryTopArtists = function(country, limit) {
 	var res = backEnd.lastFm.request(
 		"geo.getTopArtists", 
 		[["country", country],["limit", limit]]
 	);
-	return res.topartists.artist;
+	if (res.topartists == "\n") return [];
+	else return res.topartists.artist;
 }
 
 /**
@@ -183,14 +185,15 @@ backEnd.lastFm.getCountryTopArtists = function(country, limit) {
  * \param limit
  *		The amount of artists you want to fetch.
  * \return
- *		The last FM response to this request, in object form.
+ *		An array of last fm artist objects.
  */
 backEnd.lastFm.getMetroTopArtists = function(country, metro, limit) {
 	var res = backEnd.lastFm.request(
 		"geo.getMetroArtistChart", 
 		[["country", country], ["metro", metro]]
 	);
-	return res.topartists.artist;
+	if (res.topartists == "\n") return [];
+	else return res.topartists.artist;
 }
 
 /**
@@ -201,14 +204,15 @@ backEnd.lastFm.getMetroTopArtists = function(country, metro, limit) {
  * \param limit
  *		The amount of tracks you want to fetch.
  * \return
- *		The last FM response to this request, in object form.
+ *		An array of last fm track objects.
  */
 backEnd.lastFm.getCountryTopTracks = function(country, limit) {
 	var res = backEnd.lastFm.request(
 		"geo.getTopTracks", 
 		[["country", country],["limit", limit]]
 	);
-	return res.toptracks.track;
+	if (res.toptracks == "\n") return [];
+	else return res.toptracks.track;
 }
 
 /**
@@ -221,12 +225,13 @@ backEnd.lastFm.getCountryTopTracks = function(country, limit) {
  * \param limit
  *		The amount of tracks you want to fetch.
  * \return
- *		The last FM response to this request, in object form.
+ *		An array of last fm track objects.
  */
 backEnd.lastFm.getMetroTopTracks = function(country, metro, limit) {
 	var res = backEnd.lastFm.request(
 		"geo.getMetroTrackChart", 
 		[["country", country], ["metro", metro]]
 	);
-	return res.toptracks.track;
+	if (res.toptracks == "\n") return [];
+	else return res.toptracks.track;
 }
