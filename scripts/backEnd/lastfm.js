@@ -178,7 +178,10 @@ backEnd.forAllMetros = function(proc) {
  * Create an array of track objects
  * from a chart array.
  */ 
-backEnd.createTrackChart = function(chart) {
+backEnd.createTrackChart = function(res) {
+	if ('#text' in res.toptracks) return [];
+	var chart = res.toptracks.track;
+	
 	for (var i = 0; i < chart.length; i++) {
 		var track = chart[i];
 		track = new types.Track(
@@ -197,7 +200,10 @@ backEnd.createTrackChart = function(chart) {
  * Create an array of artist objects
  * from a chart array.
  */ 
-backEnd.createArtistChart = function(chart) {
+backEnd.createArtistChart = function(res) {
+	if ('#text' in res.topartists) return [];
+	var chart = res.topartists.artist;
+
 	for (var i = 0; i < chart.length; i++) {
 		var artist = chart[i];
 		artist = new types.Artist(

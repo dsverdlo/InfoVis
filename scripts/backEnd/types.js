@@ -61,7 +61,7 @@ types.Country.prototype.fetchArtistChart = function() {
 
 		var url = backEnd.countryTopArtistUrl(this.name, backEnd.chartLength);
 		var fun = function(res) {
-			c.artistChart = backEnd.createArtistChart(res.topartists.artist);
+			c.artistChart = backEnd.createArtistChart(res);
 		}
 		backEnd.asyncGet(url, fun);
 	}
@@ -75,7 +75,7 @@ types.Country.prototype.fetchTrackChart = function() {
 
 		var url = backEnd.countryTopTrackUrl(this.name, backEnd.chartLength);
 		var fun = function(res) {
-			c.trackChart = backEnd.createTrackChart(res.toptracks.track);
+			c.trackChart = backEnd.createTrackChart(res);
 		}
 		backEnd.asyncGet(url, fun);
 	}
@@ -135,7 +135,7 @@ types.Metro.prototype.fetchArtistChart = function() {
 
 		var url = backEnd.metroTopArtistUrl(this.country.name, this.name, backEnd.chartLength);
 		var fun = function(res) {
-			m.trackChart = backEnd.createArtistChart(res.topartists.artist);
+			m.trackChart = backEnd.createArtistChart(res);
 		}
 		backEnd.asyncGet(url, fun);
 	}
@@ -149,7 +149,7 @@ types.Metro.prototype.fetchTrackChart = function() {
 
 		var url = backEnd.metroTopTrackUrl(this.country.name, this.name, backEnd.chartLength);
 		var fun = function(res) {
-			c.trackChart = backEnd.createTrackChart(res.toptracks.track);
+			c.trackChart = backEnd.createTrackChart(res);
 		}
 		backEnd.asyncGet(url, fun);
 	}
