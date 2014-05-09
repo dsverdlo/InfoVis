@@ -102,6 +102,7 @@ backEnd.operations.procTrackChart = function(chart) {
 		var track = chart[i];
 		track = new types.Track(
 			track.name,
+			track.url,
 			track.artist.name,
 			i + 1,
 			backEnd.operations.calculatePopularity(i, chart.length)
@@ -120,6 +121,7 @@ backEnd.operations.procArtistChart = function(chart) {
 		var artist = chart[i];
 		artist = new types.Artist(
 			artist.name,
+			artist.url,
 			i + 1,
 			backEnd.operations.calculatePopularity(i, chart.length)
 		);

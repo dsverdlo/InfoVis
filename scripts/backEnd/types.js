@@ -86,15 +86,17 @@ types.Metro.prototype.fetchTrackChart = function() {
 // Information //
 // ----------- //
 
-types.Track = function(name, artist, position, popularity) {
+types.Track = function(name, lastFm, artist, position, popularity) {
 	this.name = name;
+	this.lastFm = lastFm;
 	this.artist = artist;
 	this.chartPos = position;
 	this.popularity = popularity;
 };
 
-types.Artist = function(name, position, popularity) {
+types.Artist = function(name, lastFm, position, popularity) {
 	this.name = name;
+	this.lastFm = lastFm;
 	this.chartPos = position;
 	this.popularity = popularity;
 }
