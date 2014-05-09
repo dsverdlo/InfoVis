@@ -10,7 +10,7 @@
 var types = {}
 
 // --------- //
-// Locations //
+// Countries //
 // --------- //
 
 /**
@@ -27,40 +27,85 @@ types.Country = function(name, alpha) {
 	this.name   = name;
 	this.alpha  = alpha;
 
-	this.hasMetros = false;
 	this.metros = [];
 
 	this.trackChart = [];
 	this.artistChart = [];
+
+	this.hasTracks  = false;
+	this.hasArtists = false;
+
+	this.metrosComplete  = false;
+	this.metrosRequested = false;
+
 };
 
-/**
- * Add the metro list to this country.
- * This operation utilizes a synchronous request.
- */
-types.Country.prototype.fetchMetros = function() {
-	if (!this.hasMetros) {
-		this.metros = backEnd.operations.metrosForCountry(this);
-		this.hasMetros = true;
-	}
+/** See if the metros of a country have been fetched */
+types.Country.prototype.metrosReady = function() {
+	return this.metrosComplete;
+};
+/** See if the artists of a country are present */
+types.Country.prototype.artistsReady = function() {
+	return (this.hasArtists) && (this.artistChart.length > 0);
+};
+/** See if the tracks of a country are present */
+types.Country.prototype.tracksReady = function() {
+	return (this.hasTracks) && (this.trackChart.length > 0);
 };
 
+/** Fetch the top artists of a country */
 types.Country.prototype.fetchArtistChart = function() {
-	if (this.artistChart.length == 0) {
-		this.artistChart = backEnd.operations.artistChartForCountry(this);
+	if (!this.hasArtists) {
+		this.hasArtists = true;
+		var c = this;
+
+		var url = backEnd.countryTopArtistUrl(this.name, backEnd.chartLength);
+		var fun = function(res) {
+			c.artistChart = backEnd.createArtistChart(res.topartists.artist);
+		}
+		backEnd.asyncGet(url, fun);
 	}
 };
 
+/** Fetch the top tracks of a country */
 types.Country.prototype.fetchTrackChart = function() {
-	if (this.trackChart.length == 0) {
-		this.trackChart = backEnd.operations.trackChartForCountry(this);
+	if (!this.hasTracks) {
+		this.hasTracks = true;
+		var c = this;
+
+		var url = backEnd.countryTopTrackUrl(this.name, backEnd.chartLength);
+		var fun = function(res) {
+			c.trackChart = backEnd.createTrackChart(res.toptracks.track);
+		}
+		backEnd.asyncGet(url, fun);
 	}
 };
+
+/** Get the top track of a country */
+types.Country.prototype.getTopTrack = function() {
+	if (this.tracksReady()) {
+		return this.trackChart[0];
+	} else {
+		return null;
+	}
+}
+
+/** Get the top artist of a country */
+types.Country.prototype.getTopArtist = function() {
+	if (this.artistsReady()) {
+		return this.artistChart[0];
+	} else {
+		return null;
+	}
+}
+
+// ------ //
+// Metros //
+// ------ //
 
 /**
- * Define a metro.
- * A metro simply contains 
- * it's name and country.
+ * Represents a metro.
+ * A metro is part of a country.
  */
 types.Metro = function(name, country) {
 	this.name = name;
@@ -68,19 +113,65 @@ types.Metro = function(name, country) {
 
 	this.trackChart = [];
 	this.artistChart = [];
+
+	this.hasTracks  = false;
+	this.hasArtists = false;
 };
 
+/** See if the artists of a metro are present */
+types.Metro.prototype.artistsReady = function() {
+	return (this.hasArtists) && (this.artistChart.length > 0);
+};
+/** See if the tracks of a metro are present */
+types.Metro.prototype.tracksReady = function() {
+	return (this.hasTracks) && (this.trackChart.length > 0);
+};
+
+/** Fetch the top artists of a metro */
 types.Metro.prototype.fetchArtistChart = function() {
-	if (this.artistChart.length == 0) {
-		this.artistChart = backEnd.operations.artistChartForMetro(this);
+	if (!this.hasArtists) {
+		this.hasArtists = true;
+		var m = this;
+
+		var url = backEnd.metroTopArtistUrl(this.country.name, this.name, backEnd.chartLength);
+		var fun = function(res) {
+			m.trackChart = backEnd.createArtistChart(res.topartists.artist);
+		}
+		backEnd.asyncGet(url, fun);
 	}
 };
 
+/** Fetch the top tracks of a metro */
 types.Metro.prototype.fetchTrackChart = function() {
-	if (this.trackChart.length == 0) {
-		this.trackChart = backEnd.operations.trackChartForMetro(this);
+	if (!this.hasTracks) {
+		this.hasTracks = true;
+		var c = this;
+
+		var url = backEnd.metroTopTrackUrl(this.country.name, this.name, backEnd.chartLength);
+		var fun = function(res) {
+			c.trackChart = backEnd.createTrackChart(res.toptracks.track);
+		}
+		backEnd.asyncGet(url, fun);
 	}
 };
+
+/** Get the top track of a metro */
+types.Metro.prototype.getTopTrack = function() {
+	if (this.tracksReady()) {
+		return this.trackChart[0];
+	} else {
+		return null;
+	}
+}
+
+/** Get the top artist of a metro */
+types.Metro.prototype.getTopArtist = function() {
+	if (this.artistsReady()) {
+		return this.artistChart[0];
+	} else {
+		return null;
+	}
+}
 
 // ----------- //
 // Information //

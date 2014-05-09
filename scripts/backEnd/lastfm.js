@@ -3,34 +3,27 @@
  * InfoVis Project
  */
 
-/**
- * This namespace provides the various requests
- * that fetch data from the last.fm api.
- */
-
 var backEnd = backEnd || {};
-backEnd.lastFm = backEnd.lastFm || {};
 
 // --------- //
 // Constants //
 // --------- //
 
-backEnd.lastFm.URL_BASE = "http://ws.audioscrobbler.com/2.0/";
-backEnd.lastFm.URL_METHOD = "?method=";
-backEnd.lastFm.URL_FORMAT_JSON = "&format=json";
-backEnd.lastFm.URL_API_KEY = "&api_key=46d561a6de9e5daa380db343d40ffbab";
+backEnd.URL_BASE        = "http://ws.audioscrobbler.com/2.0/";
+backEnd.URL_METHOD      = "?method=";
+backEnd.URL_API_KEY     = "&api_key=46d561a6de9e5daa380db343d40ffbab";
+backEnd.URL_FORMAT_JSON = "&format=json";
 
 // -------------- //
 // Namespace Data //
 // -------------- //
 
-backEnd.lastFm.cache    = new backEnd.Cache();
-backEnd.lastFm.URL_PRE  = backEnd.lastFm.URL_BASE        + backEnd.lastFm.URL_METHOD;
-backEnd.lastFm.URL_POST = backEnd.lastFm.URL_FORMAT_JSON + backEnd.lastFm.URL_API_KEY;
+backEnd.URL_PRE  = backEnd.URL_BASE        + backEnd.URL_METHOD;
+backEnd.URL_POST = backEnd.URL_FORMAT_JSON + backEnd.URL_API_KEY;
 
-// ----------- //
-// Convenience //
-// ----------- //
+// -------- //
+// Requests //
+// -------- //
 
 /** 
  * Creates a URL for the last.fm API.
@@ -44,44 +37,15 @@ backEnd.lastFm.URL_POST = backEnd.lastFm.URL_FORMAT_JSON + backEnd.lastFm.URL_AP
  * \return
  *		The composed url for the request
  */
-backEnd.lastFm.createUrl = function(method, optionList) {
-	var ns = backEnd.lastFm;
-	var url = ns.URL_PRE + method + ns.URL_POST;
+backEnd.createUrl = function(method, optionList) {
+	var url = backEnd.URL_PRE + method + backEnd.URL_POST;
 	
 	for(var i = 0; i < optionList.length; i++) {
 		var pair = optionList[i];
 		url += "&" + pair[0] + "=" + pair[1];
 	}	
 	return url;
-}
-
-/**
- * Create a HTTP GET request, send it and return
- * the reply it contains. 
- * This doest __not__ happen asynchronously
- *
- * \param url
- *		The url to send the request to.
- * \return
- *		The http response (null if failed)
- */
-backEnd.lastFm.getHttp = function(url) {
-	var ns = backEnd.lastFm;
-	var cacheRes = ns.cache.get(url);
-	if (cacheRes) return cacheRes;
-
-    var request = new XMLHttpRequest();
-    request.open("GET", url, false);
-    request.send(null);
-	
-	try {
-		var res = request.responseText;
-		ns.cache.put(url, res);
-		return res;
-	} catch(e) {
-		return null;
-	}
-}
+};
 
 /*
  * Checks if a Last.FM object contains an error
@@ -91,10 +55,10 @@ backEnd.lastFm.getHttp = function(url) {
  *		True if the object contained an error.
  *		False otherwise.
  */
-backEnd.lastFm.containsError = function(object) {
+backEnd.containsError = function(object) {
 	return (typeof(object) === "undefined") ||
-	       (typeof(object.error) === "number");
-}	
+		   (typeof(object.error) === "number");
+};
 
 /*
  * Report an error to the user.
@@ -105,144 +69,166 @@ backEnd.lastFm.containsError = function(object) {
  *		An array containing the error number
  *		and message.
  */
-backEnd.lastFm.handleError = function(object) {
+backEnd.handleError = function(object) {
 	var errorno = object.error;
 	var errormsg = object.message;
 	
 	console.warn("Error %s: %s", errorno, errormsg);
 	return [errorno, errormsg];
-}
+};
 
 /**
- * Create a request, send it, check
- * if it returned any errors, and
- * return the data it returned.
- *
- * \param method
- *		The method to provide to createUrl
- * \param optionList
- *		The optionList to send to createUrl
- * \return
- *		A last.fm data object, or null
- *		if something went wrong.
+ * Perform an asynchronous get request.
+ * The proc operation will be called when the
+ * request is successful. It will receive the 
+ * json version of the response as argument.
  */
-backEnd.lastFm.request = function(method, optionList) {
-	var ns = backEnd.lastFm;
-	var url = ns.createUrl(method, optionList);
-	var obj = JSON.parse(ns.getHttp(url));
+backEnd.asyncGet = function(url, proc) {
+	var request = new XMLHttpRequest();
+	request.open("GET", url, true);
 
-	if(ns.containsError(obj)) {
-		ns.handleError(obj);
-		return null;
-	} else {
-		return obj;
+	request.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			try {
+				var res = request.responseText;
+				var obj = JSON.parse(res);
+
+				if (backEnd.containsError(obj)) {
+					backEnd.handleError(obj)
+				} else {
+					proc(obj);
+				}
+			} catch (e) {
+				console.log(e);
+			}
+		}
 	}
+	request.send()
+};
+
+// ----- //
+// Url's //
+// ----- //
+
+/** Url to get all the metros */
+backEnd.metrosUrl = function() {
+	return backEnd.createUrl("geo.getMetros", []);
+};
+
+/** Create an url to get the top artists of a country */
+backEnd.countryTopArtistUrl = function(country, limit) {
+	return backEnd.createUrl("geo.getTopArtists", 
+		[["country", country],["limit", limit]]);
+};
+
+/** Create an url to get the top artists of a metro */
+backEnd.metroTopArtistUrl = function(country, metro, limit) {
+	return backEnd.createUrl("geo.getMetroArtistChart", 
+		[["country", country], ["metro", metro], ["limit", limit]]);
+};
+
+/** Create an url to get the top tracks of a country */
+backEnd.countryTopTrackUrl = function(country, limit) {
+	return backEnd.createUrl("geo.getTopTracks",
+		[["country", country],["limit", limit]]);
+};
+
+/** Create an url to get the top tracks of a metro */
+backEnd.metroTopTrackUrl = function(country, metro, limit) {
+	return backEnd.createUrl("geo.getMetroTrackChart", 
+		[["country", country], ["metro", metro], ["limit", limit]]);
+};
+
+// ----------- //
+// Convenience //
+// ----------- //
+
+/** Calculate a popularity, based on a ranking in the charts. */
+backEnd.calculatePopularity = function(position, chartLength) {
+	return (chartLength - position) / chartLength;
 }
+
+/* Call a certain method on every country */
+backEnd.forEachCountry = function(proc) {
+	for (var i = 0; i < backEnd.countryList.length; i++) {
+		proc.call(backEnd.countryList[i]);
+	};	
+};
+
+/**
+ * Call a certain method on every metro of a country.
+ * This function assumes metros have already been added.
+ */
+backEnd.forEachMetro = function(country, proc) {
+	var metros = country.metros;
+	for (var i = 0; i < metros.length; i++) {
+		proc.call(metros[i]);
+	};
+};
+
+/**
+ * Call a method on every metro of every
+ * country.
+ */
+backEnd.forAllMetros = function(proc) {
+	backEnd.forEachCountry(function() {backEnd.forEachMetro(this, proc)});
+};
+
+/**
+ * Create an array of track objects
+ * from a chart array.
+ */ 
+backEnd.createTrackChart = function(chart) {
+	for (var i = 0; i < chart.length; i++) {
+		var track = chart[i];
+		track = new types.Track(
+			track.name,
+			track.url,
+			track.artist.name,
+			i + 1,
+			backEnd.calculatePopularity(i, chart.length)
+		);
+		chart[i] = track;
+	}
+	return chart;
+};
+
+/**
+ * Create an array of artist objects
+ * from a chart array.
+ */ 
+backEnd.createArtistChart = function(chart) {
+	for (var i = 0; i < chart.length; i++) {
+		var artist = chart[i];
+		artist = new types.Artist(
+			artist.name,
+			artist.url,
+			i + 1,
+			backEnd.calculatePopularity(i, chart.length)
+		);
+		chart[i] = artist;
+	}
+	return chart;
+};
 
 // -------- //
 // Requests //
 // -------- //
 
-/**
- * Get the metros of a country
- * \param country
- *		The name of the country for which we want to receive the metros.
- * \return
- *		An array of metro names.
- */
-backEnd.lastFm.getCountryMetros = function(country) {
-	var res = backEnd.lastFm.request("geo.getMetros", [["country", country]]);
-	if (res.metros == "\n") return [];
-	else return res.metros.metro;
-}
+/** Fetch all the metros and add them to the countries they belong to. */
+backEnd.loadMetros = function() {
+	backEnd.forEachCountry(function() {this.metrosRequested = true});
+	var url = backEnd.metrosUrl();
 
-/**
- * Get the metros of all the countries
- * \return
- *		An array of [country, name] objects.
- */
-backEnd.lastFm.getAllMetros = function(country) {
-	var res = backEnd.lastFm.request("geo.getMetros", []);
-	if (res.metros == "\n") return [];
-	else return res.metros.metro;
-}
-
-/**
- * Get the top artists for a country.
- *
- * \param country 
- *		The country for which we request the data
- * \param limit
- *		The amount of artists you want to fetch.
- * \return
- *		An array of last fm artist objects.
- */
-backEnd.lastFm.getCountryTopArtists = function(country, limit) {
-	var res = backEnd.lastFm.request(
-		"geo.getTopArtists", 
-		[["country", country],["limit", limit]]
-	);
-	if ('#text' in res.topartists) return [];
-	else return res.topartists.artist;
-}
-
-/**
- * Get the top artists for a metro.
- *
- * \param country
- *		The country of the metro.
- * \param metro
- *		The name of the metro.
- * \param limit
- *		The amount of artists you want to fetch.
- * \return
- *		An array of last fm artist objects.
- */
-backEnd.lastFm.getMetroTopArtists = function(country, metro, limit) {
-	var res = backEnd.lastFm.request(
-		"geo.getMetroArtistChart", 
-		[["country", country], ["metro", metro]]
-	);
-	if ('#text' in res.topartists) return [];
-	else return res.topartists.artist;
-}
-
-/**
- * Get the top tracks for a country.
- *
- * \param country 
- *		The country for which we request the data
- * \param limit
- *		The amount of tracks you want to fetch.
- * \return
- *		An array of last fm track objects.
- */
-backEnd.lastFm.getCountryTopTracks = function(country, limit) {
-	var res = backEnd.lastFm.request(
-		"geo.getTopTracks", 
-		[["country", country],["limit", limit]]
-	);
-	if ('#text' in res.toptracks) return [];
-	else return res.toptracks.track;
-}
-
-/**
- * Get the top tracks for a metro.
- *
- * \param country
- *		The country of the metro.
- * \param metro
- *		The name of the metro.
- * \param limit
- *		The amount of tracks you want to fetch.
- * \return
- *		An array of last fm track objects.
- */
-backEnd.lastFm.getMetroTopTracks = function(country, metro, limit) {
-	var res = backEnd.lastFm.request(
-		"geo.getMetroTrackChart", 
-		[["country", country], ["metro", metro]]
-	);
-	if ('#text' in res.toptracks) return [];
-	else return res.toptracks.track;
-}
+	var fun = function(res) {
+		var metros = res.metros.metro;	
+		for (var i = 0; i < metros.length; i++) {
+			var obj = metros[i];
+			var cnt = backEnd.getCountryByName(obj.country);
+			var mtr = new types.Metro(obj.name, cnt);
+			cnt.metros.push(mtr);
+		}
+		backEnd.forEachCountry(function() {this.metrosComplete = true});
+	}
+	backEnd.asyncGet(url, fun);
+};

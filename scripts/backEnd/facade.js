@@ -23,8 +23,8 @@ backEnd.getCountryByName = function(name) {
 	return backEnd.countryDict[name];
 }
 
-backEnd.loadMetros = backEnd.operations.addAllMetros;
-backEnd.addGlobalArtistCharts = backEnd.operations.addGlobalArtistCharts;
-backEnd.addGlobalTrackCharts = backEnd.operations.addGlobalTrackCharts;
-backEnd.addMetroArtistCharts = backEnd.operations.addMetroArtistCharts;
-backEnd.addMetroTrackCharts = backEnd.operations.addMetroTrackCharts;
+backEnd.fetchAllCountryData = function() {
+	backEnd.loadMetros();
+	backEnd.forEachCountry(types.Country.prototype.fetchArtistChart);
+	backEnd.forEachCountry(types.Country.prototype.fetchTrackChart);
+};
