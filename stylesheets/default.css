@@ -54,6 +54,16 @@ img#searchimage {
 	height: 30px;
 }
 
+div#container-banner {
+	float: left;
+	height: 40px;
+	width: 30%;
+	top: 0;
+	right: 0;
+	margin-top: 20px;
+	margin-right: 20px;
+}
+
 div#linechart {
 	float: left;
 	border-radius: 10px;
@@ -94,6 +104,38 @@ div#barchart {
 
 
 /* == CLASSES ================================================================== */
+.banner-element {
+	fill: /*HL*/ #FFFAF0;
+}
+
+.banner-element.highlight.text {
+	fill: /*MD*/ #FFA812;
+}
+
+.banner-element.text {
+	font-family: "Calibri", Arial, sans-serif;
+}
+
+.banner-element.icon {
+	fill: transparent;
+	stroke-width: 2px;
+	stroke: /*HL*/ #FFFAF0;
+}
+
+.banner-divider {
+	fill: /*HL*/ #FFFAF0;
+}
+
+.widget-background {
+	fill: /*LD*/ #3B3C36;
+}
+
+.map-marker {
+	fill: #ED872D; /*HL*/
+	stroke: #FFFAF0; /*HL*/
+	stroke-width: 0.75px;
+}
+
 .overlay {
 	fill: none;
 	pointer-events: all;
@@ -107,7 +149,7 @@ div#barchart {
 .feature.active {
 	fill: orange;
 	stroke: #fff;
-	stoke-width: 0.75px;
+	stroke-width: 0.75px;
 }
 
 .boundary {
@@ -118,34 +160,34 @@ div#barchart {
 }
 
 .bar {
-  fill: #ED872D;
-  width: 20px;
+	fill: #ED872D;
+	width: 20px;
 }
 
 .bar:hover {
-  fill: #FFA812;
+	fill: #FFA812;
 }
 
 .axis path,
 .axis line {
-  stroke-width: 1px;
-  fill: none;
-  stroke: #FFFAF0;
-  shape-rendering: crispEdges;
+	stroke-width: 1px;
+	fill: none;
+	stroke: #FFFAF0;
+	shape-rendering: crispEdges;
 }
 
 .axis text {
-  fill: #FFFAF0;
+	fill: #FFFAF0;
 }
 
 .line {
-  fill: none;
-  stroke: #ED872D;
-  stroke-width: 5px;
+	fill: none;
+	stroke: #ED872D;
+	stroke-width: 5px;
 }
 
-div.tooltip {   
-	position: absolute;           
+div.tooltip {
+	position: absolute;
 	text-align: center;           
 	width: 60px;                  
 	height: 28px;                 
@@ -159,11 +201,7 @@ div.tooltip {
 
 
 /* == EH.. THINGS ============================================================== */
-circle {
-	fill: /*HL*/ #ED872D;
-	stroke: /*HL*/ #FFFAF0;
-	stroke-width: 0.75px;
-}
+/* TODO Fix this: circle  */
 
 text {
 	font: 10px sans-serif;

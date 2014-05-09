@@ -64,6 +64,7 @@ function zoomLevel(jsonfile) {
         g.selectAll("circle")
          .data(data)
          .enter().append("circle")
+                    .attr("class", "map-marker")
                     .attr("cx", function (d) { return d.x_axis })
                     .attr("cy", function (d) { return d.y_axis })
                     .attr("r", function(d) { return scale(d.radius); })

@@ -6,9 +6,11 @@
 	<link rel="stylesheet" type="text/css" href="stylesheets/default.css">
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="http://d3js.org/topojson.v1.min.js"></script>
+	<script type="text/javascript" src="scripts/gui/utilities.js"></script>
 </head>
 <body id="body">
-	<script type="text/javascript" src="scripts/mapvisualizer.js"></script>
+	<script type="text/javascript" src="scripts/gui/map.js"></script>
+	
 	<div id="searchbar">
 		<div id="searchfield">
 			<!-- TODO: Change to input form -->
@@ -17,11 +19,14 @@
 		</div>
 		<img id="searchimage" src="images/magnifier.png">
 	</div>
+	<div id="container-banner">
+		<script type="text/javascript" src="scripts/gui/banner.js"></script>
+	</div>
 	<div id="barchart">
-		<script type="text/javascript" src="scripts/barchart.js"></script>
+		<script type="text/javascript" src="scripts/gui/barchart.js"></script>
 	</div>
 	<div id="linechart">
-		<script type="text/javascript" src="scripts/linechart.js"></script>
+		<script type="text/javascript" src="scripts/gui/linechart.js"></script>
 	</div>
 </body>
 </html>
