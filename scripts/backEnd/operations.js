@@ -13,8 +13,8 @@ var backEnd = backEnd || {};
 backEnd.operations = backEnd.operations || {};
 
 /** Calculate a popularity, based on a ranking in the charts. */
-backEnd.operations.calculatePopularity = function(position) {
-	return (backEnd.chartLength - position) / backEnd.chartLength;
+backEnd.operations.calculatePopularity = function(position, chartLength) {
+	return (chartLength - position) / chartLength;
 }
 
 /* Call a certain method on every country */
@@ -104,7 +104,7 @@ backEnd.operations.procTrackChart = function(chart) {
 			track.name,
 			track.artist.name,
 			i + 1,
-			backEnd.operations.calculatePopularity(i)
+			backEnd.operations.calculatePopularity(i, chart.length)
 		);
 		chart[i] = track;
 	}
@@ -121,7 +121,7 @@ backEnd.operations.procArtistChart = function(chart) {
 		artist = new types.Artist(
 			artist.name,
 			i + 1,
-			backEnd.operations.calculatePopularity(i)
+			backEnd.operations.calculatePopularity(i, chart.length)
 		);
 		chart[i] = artist;
 	}
