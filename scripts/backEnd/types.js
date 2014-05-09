@@ -6,6 +6,7 @@
 /**
  * This namespace provides a bunch of 
  * data types that are used to transport data in the program.
+ * I also can't figure out how to do js inheritance in a non-dirty way :(
  */
 var types = {}
 
@@ -173,6 +174,48 @@ types.Metro.prototype.getTopArtist = function() {
 	}
 }
 
+// ----- // 
+// World //
+// ----- //
+
+types.World = function() {
+	this.trackChart = [];
+	this.artistChart = [];
+
+	this.hasTracks  = false;
+	this.hasArtists = false;
+}
+
+/** Fetch the top artists of the world */
+types.World.prototype.fetchArtistChart = function() {
+	if (!this.hasArtists) {
+		this.hasArtists = true;
+		var w = this;
+
+		var url = backEnd.globalTopArtistUrl();
+		var fun = function(res) {
+			res.topartists = res.artists;
+			w.artistChart = backEnd.createArtistChart(res);
+		}
+		backEnd.asyncGet(url, fun);
+	}
+};
+
+/** Fetch the top tracks of the world */
+types.World.prototype.fetchTrackChart = function() {
+	if (!this.hasTracks) {
+		this.hasTracks = true;
+		var c = this;
+
+		var url = backEnd.globalTopTrackUrl();
+		var fun = function(res) {
+			res.toptracks = res.tracks;
+			c.trackChart = backEnd.createTrackChart(res);
+		}
+		backEnd.asyncGet(url, fun);
+	}
+};
+
 // ----------- //
 // Information //
 // ----------- //
@@ -190,4 +233,21 @@ types.Artist = function(name, lastFm, position, popularity) {
 	this.lastFm = lastFm;
 	this.chartPos = position;
 	this.popularity = popularity;
+
+	this.hasTracks = false;
+	this.trackChart = [];
 }
+
+types.Artist.prototype.fetchTopTracks = function() {
+	if (!this.hasTracks) {
+		this.hasTracks = true;
+		var a = this;
+
+		var url = backEnd.artistTopTracksUrl(this.name, backEnd.chartLength);
+		var fun = function(res) {
+			console.log(res);
+			a.trackChart = backEnd.createTrackChart(res);
+		}
+	backEnd.asyncGet(url, fun);
+	}
+};

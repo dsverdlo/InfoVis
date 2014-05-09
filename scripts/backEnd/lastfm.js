@@ -115,6 +115,16 @@ backEnd.metrosUrl = function() {
 	return backEnd.createUrl("geo.getMetros", []);
 };
 
+/** Create a url to get the top tracks of an artist */
+backEnd.artistTopTracksUrl = function(artist, limit) {
+	return backEnd.createUrl("artist.getTopTracks", [["artist", artist], ["limit", limit]]);
+};
+
+/** Create a url to get the global top artists */
+backEnd.globalTopArtistUrl = function() {
+	return backEnd.createUrl("chart.getTopArtists", []);
+}
+
 /** Create an url to get the top artists of a country */
 backEnd.countryTopArtistUrl = function(country, limit) {
 	return backEnd.createUrl("geo.getTopArtists", 
@@ -126,6 +136,11 @@ backEnd.metroTopArtistUrl = function(country, metro, limit) {
 	return backEnd.createUrl("geo.getMetroArtistChart", 
 		[["country", country], ["metro", metro], ["limit", limit]]);
 };
+
+/** Create a url to get the global top tracks */
+backEnd.globalTopTrackUrl = function() {
+	return backEnd.createUrl("chart.getTopTracks", []);
+}
 
 /** Create an url to get the top tracks of a country */
 backEnd.countryTopTrackUrl = function(country, limit) {
