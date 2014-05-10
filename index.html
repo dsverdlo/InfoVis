@@ -6,11 +6,19 @@
 	<link rel="stylesheet" type="text/css" href="stylesheets/default.css">
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="http://d3js.org/topojson.v1.min.js"></script>
-	<script type="text/javascript" src="scripts/gui/utilities.js"></script>
+	<script type="text/javascript" src="scripts/gui/gui.js"></script>
 </head>
 <body id="body">
+	<!-- Bootstrap map background -->
 	<script type="text/javascript" src="scripts/gui/map.js"></script>
-	
+
+	<!-- Dialogs -->
+	<div id="dialog-overlay">
+		<div id="container-dialog"></div>
+		<script type="text/javascript" src="scripts/gui/dialog.js"></script>
+	</div>
+
+	<!-- Widgets -->
 	<div id="searchbar">
 		<div id="searchfield">
 			<!-- TODO: Change to input form -->
@@ -22,10 +30,10 @@
 	<div id="container-banner">
 		<script type="text/javascript" src="scripts/gui/banner.js"></script>
 	</div>
-	<div id="barchart">
+	<div id="container-barchart">
 		<script type="text/javascript" src="scripts/gui/barchart.js"></script>
 	</div>
-	<div id="linechart">
+	<div id="container-linechart">
 		<script type="text/javascript" src="scripts/gui/linechart.js"></script>
 	</div>
 </body>

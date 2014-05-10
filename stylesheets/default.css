@@ -20,38 +20,48 @@
 body#body {
 	width: 100%;
 	height: 100%;
-	background-color: /*HL*/ #FFFAF0;
+	background-color: #FFFAF0; /*HL*/ 
 }
 
-div#searchbar {
-	float: left;
+div#dialog-overlay {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 20;
+	background-color: rgba(0,0,0,0.5); /* Dim the background */
+	display: none;
+}
+
+div#container-dialog {
+	width: 50%;
+	height: 75%;
+	position: fixed;
+	top: 15%; 
+	left: 25%;
+	background-color: #3B3C36; /*LD*/
 	border-radius: 10px;
-	height: 40px;
-	background-color: /*LD*/ #3B3C36;
-	width: 30%;
-	top: 0;
-	margin-top: 20px;
-	margin-left: 20px;
+	text-align: center;
+	z-index: 21; /* 1px higher than the overlay layer */
 }
 
-div#searchfield {
-	float: left;
-	background-color: /*HL*/ #FFFAF0;
-	border-radius: 7px;
-	margin: 5px;
-	width: 85%;
-	height: 30px;
-	top: 0;
+div#dialog-content {
+	left: 5%;
+	top: 15%;
+	width: 90%;
+	height: 80%;
+	word-wrap: break-word;
+	overflow-y: scroll;
 }
 
-img#searchimage {
-	float: right;
-	margin-top: 5px;
-	margin-right: 10px;
-	top: 0;
-	right: 0;
-	width: 30px;
-	height: 30px;
+p#dialog-title {
+	left: 5%;
+	top: 2%;
+	text-align: left;
+	font-family: "Calibri", Arial, sans-serif;
+	color: #FFFAF0; /*HL*/
+	font-size: 48px;
+	font-weight: bold;
 }
 
 div#container-banner {
@@ -64,11 +74,11 @@ div#container-banner {
 	margin-right: 20px;
 }
 
-div#linechart {
+div#container-linechart {
 	float: left;
 	border-radius: 10px;
 	height: 150px;
-	background-color: /*LD*/ #3B3C36;
+	background-color: #3B3C36; /*LD*/ 
 	width: 20%;
 	bottom: 0;
 	margin-left: 20px;
@@ -76,11 +86,11 @@ div#linechart {
 	padding: 10px;
 }
 
-div#barchart {
+div#container-barchart {
 	float: left;
 	border-radius: 10px;
 	height: 150px;
-	background-color: /*LD*/ #3B3C36;
+	background-color: #3B3C36; /*LD*/ 
 	width: 20%;
 	bottom: 0;
 	right: 0;
@@ -90,26 +100,31 @@ div#barchart {
 }
 
 #states {
-	fill: /*LL*/ #9F8170;
-	stroke: /*HL*/ #FFFAF0;
+	fill: #9F8170; /*LL*/ 
+	stroke: #FFFAF0; /*HL*/ 
 	stroke-linejoin: round;
 	stroke-linecap: round;
 }
 
 #states .active {
-	fill: /*LL*/ #9B7653;
-	stroke: /*HL*/ #FFFAF0;
+	fill: #9B7653; /*LL*/ 
+	stroke: #FFFAF0; /*HL*/ 
 	stroke-width: 0.5px;
 }
 
 
 /* == CLASSES ================================================================== */
+
+.dialog-header {
+
+}
+
 .banner-element {
-	fill: /*HL*/ #FFFAF0;
+	fill: #FFFAF0; /*HL*/ 
 }
 
 .banner-element.highlight.text {
-	fill: /*MD*/ #FFA812;
+	fill: #FFA812; /*MD*/
 }
 
 .banner-element.text {
@@ -119,15 +134,15 @@ div#barchart {
 .banner-element.icon {
 	fill: transparent;
 	stroke-width: 2px;
-	stroke: /*HL*/ #FFFAF0;
+	stroke: #FFFAF0; /*HL*/ 
 }
 
 .banner-divider {
-	fill: /*HL*/ #FFFAF0;
+	fill: #FFFAF0; /*HL*/ 
 }
 
 .widget-background {
-	fill: /*LD*/ #3B3C36;
+	fill: #3B3C36; /*LD*/
 }
 
 .map-marker {
@@ -142,7 +157,7 @@ div#barchart {
 }
 
 .feature {
-	fill: /*LL*/ #9F8170;
+	fill: #9F8170; /*LL*/ 
 	cursor: pointer;
 }
 
@@ -154,7 +169,7 @@ div#barchart {
 
 .boundary {
 	fill: none;
-	stroke: /*HL*/ #FFFAF0;
+	stroke: #FFFAF0; /*HL*/ 
 	stroke-linejoin: round;
 	stroke-linecap: round;
 }
@@ -200,13 +215,12 @@ div.tooltip {
 }
 
 
-/* == EH.. THINGS ============================================================== */
-/* TODO Fix this: circle  */
+/* == GENEREAL ELEMENT STYLING ================================================= */
 
 text {
 	font: 10px sans-serif;
 	pointer-events: none;
-	fill: /*LD*/ #3B3C36;
+	fill: #3B3C36; /*LD*/ 
 }
 
 
@@ -215,7 +229,7 @@ p#searchtext1 {
 	font-family: "Calibri", Arial, sans-serif;
 	font-weight: bold;
 	margin-left: 15px;
-	color: /*LD*/ #3B3C36;
+	color: #3B3C36; /*LD*/ 
 	margin-top: 2px;
 	font-size: 1.75em;
 }
@@ -224,8 +238,39 @@ p#searchtext2 {
 	font-family: "Calibri", Arial, sans-serif;
 	font-weight: bold;
 	font-style: italic;
-	color: /*LD*/ #3B3C36;
+	color: #3B3C36; /*LD*/ 
 	margin-left: 100px;
 	margin-top: 7px;
 	font-size: 1.25em;
+}
+
+div#searchbar {
+	float: left;
+	border-radius: 10px;
+	height: 40px;
+	background-color: #3B3C36; /*LD*/ 
+	width: 30%;
+	top: 0;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+div#searchfield {
+	float: left;
+	background-color: #FFFAF0; /*HL*/ 
+	border-radius: 7px;
+	margin: 5px;
+	width: 85%;
+	height: 30px;
+	top: 0;
+}
+
+img#searchimage {
+	float: right;
+	margin-top: 5px;
+	margin-right: 10px;
+	top: 0;
+	right: 0;
+	width: 30px;
+	height: 30px;
 }
