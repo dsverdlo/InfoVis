@@ -46,9 +46,9 @@ backEnd.fetchAllMetroData = function() {
 
 /** Fetch all the data */
 backEnd.fetchAllData = function() {
+	backEnd.fetchAllCountryData();
 	backEnd.fetchGlobalData();
 	backEnd.fetchAllMetroData();
-	backEnd.fetchAllCountryData();
 };
 
 backEnd.fetchAllData();

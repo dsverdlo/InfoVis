@@ -206,6 +206,15 @@ types.World = function() {
 	this.hasArtists = false;
 };
 
+/** See if the artists of the world are present */
+types.World.prototype.artistsReady = function() {
+	return (this.hasArtists) && (this.artistChart.length > 0);
+};
+/** See if the tracks of the world are present */
+types.World.prototype.tracksReady = function() {
+	return (this.hasTracks) && (this.trackChart.length > 0);
+};
+
 /** Fetch the top artists of the world */
 types.World.prototype.fetchArtistChart = function() {
 	if (!this.hasArtists) {
