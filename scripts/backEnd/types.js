@@ -295,6 +295,10 @@ types.Artist = function(name, lastFm, position, popularity) {
 	this.trackChart = [];
 };
 
+types.Artist.prototype.tracksReady = function() {
+	return (this.hasTracks) && (this.trackChart.length > 0);
+};
+
 types.Artist.prototype.fetchTopTracks = function() {
 	if (!this.hasTracks) {
 		this.hasTracks = true;
