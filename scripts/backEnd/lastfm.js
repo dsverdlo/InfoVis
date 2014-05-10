@@ -123,7 +123,7 @@ backEnd.artistTopTracksUrl = function(artist, limit) {
 /** Create a url to get the global top artists */
 backEnd.globalTopArtistUrl = function() {
 	return backEnd.createUrl("chart.getTopArtists", []);
-}
+};
 
 /** Create an url to get the top artists of a country */
 backEnd.countryTopArtistUrl = function(country, limit) {
@@ -140,7 +140,7 @@ backEnd.metroTopArtistUrl = function(country, metro, limit) {
 /** Create a url to get the global top tracks */
 backEnd.globalTopTrackUrl = function() {
 	return backEnd.createUrl("chart.getTopTracks", []);
-}
+};
 
 /** Create an url to get the top tracks of a country */
 backEnd.countryTopTrackUrl = function(country, limit) {
@@ -161,7 +161,7 @@ backEnd.metroTopTrackUrl = function(country, metro, limit) {
 /** Calculate a popularity, based on a ranking in the charts. */
 backEnd.calculatePopularity = function(position, chartLength) {
 	return (chartLength - position) / chartLength;
-}
+};
 
 /* Call a certain method on every country */
 backEnd.forEachCountry = function(proc) {
@@ -189,6 +189,17 @@ backEnd.forAllMetros = function(proc) {
 	backEnd.forEachCountry(function() {backEnd.forEachMetro(this, proc)});
 };
 
+/** Find an element in a chart */
+backEnd.findName = function(chart, name) {
+	for (var i = 0; i < chart.length; i++) {
+		var obj = chart[i];
+		if (obj.name == name) {
+			return obj;
+		}
+	};
+	return null;
+}
+
 /**
  * Create an array of track objects
  * from a chart array.
@@ -196,7 +207,7 @@ backEnd.forAllMetros = function(proc) {
 backEnd.createTrackChart = function(res) {
 	if ('#text' in res.toptracks) return [];
 	var chart = res.toptracks.track;
-	
+
 	for (var i = 0; i < chart.length; i++) {
 		var track = chart[i];
 		track = new types.Track(

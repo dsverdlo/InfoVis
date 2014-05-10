@@ -18,26 +18,37 @@ backEnd.world = new types.World();
  */
 backEnd.getCountries = function() {
 	return backEnd.countryList;
-}
+};
 
 /** Get a country object by it's name. */
 backEnd.getCountryByName = function(name) {
 	return backEnd.countryDict[name];
-}
+};
 
+/** Fetch all the global data */
+backEnd.fetchGlobalData = function() {
+	backEnd.world.fetchArtistChart();
+	backEnd.world.fetchTrackChart();
+};
+
+/** Fetch all the data of all the countries */
 backEnd.fetchAllCountryData = function() {
 	backEnd.loadMetros();
 	backEnd.forEachCountry(types.Country.prototype.fetchArtistChart);
 	backEnd.forEachCountry(types.Country.prototype.fetchTrackChart);
 };
 
-backEnd.fetchAllMetroDataForCountry = function(country) {
-	backEnd.forEachMetro(country, types.Metro.prototype.fetchArtistChart);
-	backEnd.forEachMetro(country, types.Metro.prototype.fetchTrackChart);
-}
-
-backEnd.fetchAllData = function() {
-	backEnd.fetchAllCountryData();
+/** Fetch the data of all the metros */
+backEnd.fetchAllMetroData = function() {
 	backEnd.forAllMetros(types.Metro.prototype.fetchTrackChart);
 	backEnd.forAllMetros(types.Metro.prototype.fetchArtistChart);
-}
+};
+
+/** Fetch all the data */
+backEnd.fetchAllData = function() {
+	backEnd.fetchGlobalData();
+	backEnd.fetchAllMetroData();
+	backEnd.fetchAllCountryData();
+};
+
+backEnd.fetchAllData();

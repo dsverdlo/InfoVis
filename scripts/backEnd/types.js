@@ -8,7 +8,7 @@
  * data types that are used to transport data in the program.
  * I also can't figure out how to do js inheritance in a non-dirty way :(
  */
-var types = {}
+var types = {};
 
 // --------- //
 // Countries //
@@ -89,7 +89,7 @@ types.Country.prototype.getTopTrack = function() {
 	} else {
 		return null;
 	}
-}
+};
 
 /** Get the top artist of a country */
 types.Country.prototype.getTopArtist = function() {
@@ -98,7 +98,17 @@ types.Country.prototype.getTopArtist = function() {
 	} else {
 		return null;
 	}
-}
+};
+
+/** Find a track with a name in the track chart of this country */
+types.Country.prototype.findTrack = function(name) {
+	return backEnd.findName(this.trackChart, name)
+};
+
+/** Find a track with a name in the artist chart of this country */
+types.Country.prototype.findArtist = function(name) {
+	return backEnd.findName(this.artistChart, name);
+};
 
 // ------ //
 // Metros //
@@ -163,7 +173,7 @@ types.Metro.prototype.getTopTrack = function() {
 	} else {
 		return null;
 	}
-}
+};
 
 /** Get the top artist of a metro */
 types.Metro.prototype.getTopArtist = function() {
@@ -172,7 +182,17 @@ types.Metro.prototype.getTopArtist = function() {
 	} else {
 		return null;
 	}
-}
+};
+
+/** Find a track with a name in the track chart of this metro */
+types.Metro.prototype.findTrack = function(name) {
+	return backEnd.findName(this.trackChart, name)
+};
+
+/** Find a track with a name in the artist chart of this metro */
+types.Metro.prototype.findArtist = function(name) {
+	return backEnd.findName(this.artistChart, name);
+};
 
 // ----- // 
 // World //
@@ -184,7 +204,7 @@ types.World = function() {
 
 	this.hasTracks  = false;
 	this.hasArtists = false;
-}
+};
 
 /** Fetch the top artists of the world */
 types.World.prototype.fetchArtistChart = function() {
@@ -216,6 +236,34 @@ types.World.prototype.fetchTrackChart = function() {
 	}
 };
 
+/** Get the global top tracks */
+types.World.prototype.getTopTrack = function() {
+	if (this.tracksReady()) {
+		return this.trackChart[0];
+	} else {
+		return null;
+	}
+};
+
+/** Get the global top artist */
+types.World.prototype.getTopArtist = function() {
+	if (this.artistsReady()) {
+		return this.artistChart[0];
+	} else {
+		return null;
+	}
+};
+
+/** Find a track with a name in the global track chart */
+types.World.prototype.findTrack = function(name) {
+	return backEnd.findName(this.trackChart, name)
+};
+
+/** Find a track with a name in the global artist chart */
+types.World.prototype.findArtist = function(name) {
+	return backEnd.findName(this.artistChart, name);
+};
+
 // ----------- //
 // Information //
 // ----------- //
@@ -236,7 +284,7 @@ types.Artist = function(name, lastFm, position, popularity) {
 
 	this.hasTracks = false;
 	this.trackChart = [];
-}
+};
 
 types.Artist.prototype.fetchTopTracks = function() {
 	if (!this.hasTracks) {
