@@ -141,7 +141,7 @@ gui.ui_state = 0; // 0 = opaque, 1 = non-opaque
  * "Minimizes" the UI, so that more of the map becomes visible. Is assigned
  * to the "toggle" element in the banner. */
 gui.toggleGui = function(d) {
-    var elements = [d3.select("#searchbar"), d3.select("#barchart"), d3.select("#linechart"),
+    var elements = [d3.select("#searchbar"), d3.select("#container-barchart"), d3.select("#container-linechart"),
         banner.about_element.container, banner.help_element.container, banner.background_expanded,
         banner.divider1, banner.divider2];
     var ui_state_inverse = Math.abs(gui.ui_state - 1);

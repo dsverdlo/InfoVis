@@ -1,4 +1,12 @@
-﻿var json_topology = "data/datamaps.world.min.json",
+﻿/* File:      gui.js              *
+ * Project:   InfoVis Project     *
+ * Author(s): Trieu Thanh Ngoan   *
+              Kenny Deschuyteneer */
+
+// This script builds the bulk of our visualization page: the map that
+// shows data about musical trends around the globe.
+
+var json_topology = "data/datamaps.world.min.json",
     json_general_circles = "data/circles.general.json",
     json_zoom_circles = "data/circles.zoom.json"
 

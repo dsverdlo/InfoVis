@@ -33,18 +33,6 @@ div#dialog-overlay {
 	display: none;
 }
 
-div#container-dialog {
-	width: 50%;
-	height: 75%;
-	position: fixed;
-	top: 15%; 
-	left: 25%;
-	background-color: #3B3C36; /*LD*/
-	border-radius: 10px;
-	text-align: center;
-	z-index: 21; /* 1px higher than the overlay layer */
-}
-
 div#dialog-content {
 	left: 5%;
 	top: 15%;
@@ -62,6 +50,17 @@ p#dialog-title {
 	color: #FFFAF0; /*HL*/
 	font-size: 48px;
 	font-weight: bold;
+}
+
+div#container-dialog {
+	width: 50%;
+	height: 75%;
+	top: 15%; 
+	left: 25%;
+	background-color: #3B3C36; /*LD*/
+	border-radius: 10px;
+	text-align: center;
+	z-index: 21; /* 1px higher than the overlay layer */
 }
 
 div#container-banner {
