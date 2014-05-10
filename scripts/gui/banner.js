@@ -10,15 +10,15 @@ var utilities = utilities || {};
 
 var container = document.getElementById("container-banner");
 
-var width = parseInt(window.getComputedStyle(container).width, 10),
-    height = parseInt(window.getComputedStyle(container).height, 10);
+var widthBanner = parseInt(window.getComputedStyle(container).width, 10),
+    heightBanner = parseInt(window.getComputedStyle(container).height, 10);
 
 
 //// SETTINGS ///////////////////////////////////////////////////////////////////
-var margin = width / 10;
+var margin = widthBanner / 10;
 
-var element_space = ((width - margin) * 3) / 10;
-var divider_space = (width - margin) / 20;
+var element_space = ((widthBanner - margin) * 3) / 10;
+var divider_space = (widthBanner - margin) / 20;
 
 var about_pos = (margin / 2);
 var div1_pos = about_pos + element_space;
@@ -27,11 +27,11 @@ var div2_pos = help_pos + element_space;
 var toggle_pos = div2_pos + divider_space;
 
 var divider_margin_top = 2;
-var divider_height = height - (2 * divider_margin_top);
+var divider_height = heightBanner - (2 * divider_margin_top);
 var divider_width = 2;
 var divider_margin_left = divider_space - (2 * divider_width);
 
-var text_size = height * (4 / 10);
+var text_size = heightBanner * (4 / 10);
 
 var icon_radius = (divider_height / 2) - 4;
 var text_offset = element_space * (2 / 10);
@@ -39,18 +39,18 @@ var icon_offset = element_space - (element_space / 4);
 
 
 //// UI SETUP ///////////////////////////////////////////////////////////////////
-var svg = d3.select("#container-banner").append("svg")
-                .attr("width", width)
-                .attr("height", height);
+var svgBanner = d3.select("#container-banner").append("svg")
+                .attr("width", widthBanner)
+                .attr("height", heightBanner);
 
-var background_expanded = utilities.createWidgetCanvas(svg);
-var background_contracted = utilities.createWidgetCanvas(svg)
+var background_expanded = utilities.createWidgetCanvas(svgBanner);
+var background_contracted = utilities.createWidgetCanvas(svgBanner)
                                 .attr("width", element_space + divider_space)
                                 .attr("x", toggle_pos)
                                 .style("opacity", 0);
 
-var group = svg.append("g")
-                    .attr("transform", "translate(" + 0 + "," + (height / 2) + ")");
+var group = svgBanner.append("g")
+                    .attr("transform", "translate(" + 0 + "," + (heightBanner / 2) + ")");
 
 function append_divider(position) {
     return group.append("rect")
@@ -69,9 +69,9 @@ function append_element(position, text, icon_text) {
     element_container.append("rect")
         .style("visibility", "hidden")
         .attr("x", position)
-        .attr("y", - (height / 2))
+        .attr("y", - (heightBanner / 2))
         .attr("width", element_space)
-        .attr("height", height);
+        .attr("height", heightBanner);
 
     // The text of the element.
     var element_text = element_container.append("text")

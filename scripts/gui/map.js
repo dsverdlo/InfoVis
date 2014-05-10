@@ -1,4 +1,4 @@
-var json_topology = "data/countries.topo.json",
+﻿var json_topology = "data/datamaps.world.min.json",
     json_general_circles = "data/circles.general.json",
     json_zoom_circles = "data/circles.zoom.json"
 
