@@ -16,7 +16,7 @@ var width = parseInt(window.getComputedStyle(body).width, 10),
 
 var scale = d3.scale.sqrt()
     .domain([0, 100])
-    .range([0, 20]);
+    .range([50, 0]);
 
 var projection = d3.geo.mercator().translate([0, 0]).scale(width / 2 / Math.PI);  
 
@@ -190,8 +190,48 @@ function reset() {
 
 };
 		
+		
 // If the drag behavior prevents the default click,
 // also stop propagation so we don’t click-to-zoom.
 function stopped() {
   if (d3.event.defaultPrevented) d3.event.stopPropagation();
+};
+
+
+function display(data) {
+        g.selectAll("circle")
+         .data([])
+         .exit().remove();
+
+        g.selectAll("text")
+         .data([])
+         .exit().remove();
+
+        g.selectAll("circle")
+         .data(data)
+         .enter().append("circle")
+                    .attr("class", "map-marker")
+                    .attr("cx", function (d) { return d.x_axis })
+                    .attr("cy", function (d) { return d.y_axis })
+                    .attr("r", function(d) { return scale(d.radius); })
+                    .on("mouseover", function(d){ 
+                div.transition()        
+                            .duration(200)      
+                            .style("opacity", .9);      
+                        div.html(d.countries.name)  
+                            .style("left", (d3.event.pageX) + "px")     
+                            .style("top", (d3.event.pageY - 28) + "px"); })
+                .on("mouseout", function(d) {       
+                    div.transition()        
+                            .duration(200)      
+                            .style("opacity", 0);   
+                    });
+
+        g.selectAll("text")
+         .data(data)
+         .enter().append("text")
+                    .text(function (d) { return d.name })
+                    .attr("x", function (d) { return (d.x_axis + scale(d.radius) + 3) })
+                    .attr("y", function (d) { return (d.y_axis + 4) });
+    
 };

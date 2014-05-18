@@ -243,6 +243,21 @@ p#searchtext2 {
 	font-size: 1.25em;
 }
 
+
+input#searchinput {
+    border-radius: 7px; //CSS3 Feature
+	margin-left: 10px;
+	font-family: "Calibri", Arial, sans-serif;
+	font-weight: bold;
+	font-style: italic;
+	color: #3B3C36; /*LD*/ 
+	font-size: 1.25em;
+	padding: 0;
+	height: 90%;
+	width: 99%;
+	padding-left: 10px;
+}
+
 div#searchbar {
 	float: left;
 	border-radius: 10px;

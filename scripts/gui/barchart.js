@@ -51,7 +51,7 @@ barchart.group = barchart.svg.append("g")
 
 d3.tsv(barchart.tsv_data, convert, function(error, data) {
     barchart.x.domain(d3.extent(data, function(d) { return d.date; }));
-    barchart.y.domain([1, 20]);
+    barchart.y.domain([20, 1]);
 
     barchart.group.append("g")
             .attr("class", "x axis")
@@ -72,7 +72,7 @@ d3.tsv(barchart.tsv_data, convert, function(error, data) {
             .attr("y", 6)
             .attr("dy", ".71em")
             .style("text-anchor", "end")
-            .text("Chart Position");
+            .text("Top tracks");
 
     barchart.group.selectAll(".bar")
             .data(data)
