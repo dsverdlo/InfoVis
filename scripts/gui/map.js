@@ -9,9 +9,9 @@ var map = map || {};
 // This script builds the bulk of our visualization page: the map that
 // shows data about musical trends around the globe.
 
-var json_topology = "data/datamaps.world.min.json",
-    json_general_circles = "data/circles.general.json",
-    json_zoom_circles = "data/circles.zoom.json"
+map.json_topology = "data/datamaps.world.min.json";
+map.json_general_circles = "data/circles.general.json";
+map.json_zoom_circles = "data/circles.zoom.json";
 
 map.width = parseInt(window.getComputedStyle(body).width, 10);
 map.height = parseInt(window.getComputedStyle(body).height, 10);
@@ -19,53 +19,53 @@ map.active = d3.select(null);
 
 map.scale = d3.scale.sqrt()
     .domain([0, 100])
-    .range([50, 0]);
+    .range([0, 50]);
 
-map.projection = d3.geo.mercator().translate([0, 0]).scale(width / 2 / Math.PI);  
+map.projection = d3.geo.mercator().translate([0, 0]).scale(map.width / 2 / Math.PI);  
 
-var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
+map.zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 
-var path = d3.geo.path().projection(map.projection);
+map.path = d3.geo.path().projection(map.projection);
 
-var svg = d3.select("body").append("svg").attr("width", width).attr(
-             "height", height).append("g").attr("transform",
-             "translate(" + width / 2 + "," + height / 2 + ")")
-             .on("click", stopped, true);
+map.svg = d3.select("body").append("svg").attr("width", map.width).attr(
+             "height", map.height).append("g").attr("transform",
+             "translate(" + map.width / 2 + "," + map.height / 2 + ")")
+             .on("click", map.stopped, true);
 
-svg.append("rect").attr("class", "overlay").attr("x", -width / 2).attr(
-   "y", -height / 2).attr("width", width).attr("height", height)
-   .on("click", reset);
+map.svg.append("rect").attr("class", "overlay").attr("x", -map.width / 2).attr(
+   "y", -map.height / 2).attr("width", map.width).attr("height", map.height)
+   .on("click", map.reset);
 
-var g = svg.append("g").style("stroke-width", 1)
+map.g = map.svg.append("g").style("stroke-width", 1)
     .attr("transform", "translate(0, 100)scale(1)");
     
-svg.call(zoom).call(zoom.event);
+map.svg.call(map.zoom).call(map.zoom.event);
 
-d3.json(json_topology, function(error, world) {
-    g.selectAll("path")
+d3.json(map.json_topology, function(error, world) {
+    map.g.selectAll("path")
         .data(topojson.feature(world, world.objects.countries).features)
         .enter().append("path")
-              .attr("d", path)
+              .attr("d", map.path)
               .attr("class", "feature")
-              .on("click", clicked);
+              .on("click", map.clicked);
 
-    g.append("path").datum(
+    map.g.append("path").datum(
             topojson.mesh(world, world.objects.countries,
                     function(a, b) {
                         return a !== b;
-                    })).attr("class", "boundary").attr("d", path);
+                    })).attr("class", "boundary").attr("d", map.path);
                     
-    // zoomLevel(json_general_circles);
+     zoomLevel(map.json_general_circles);
 });
 
-var div = d3.select("body").append("div")
+map.div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
 gui.drawBubble = function(name, cx, cy, radius) {
     console.log("Drawn bubble at " + cx + ", " + cy);
 
-    g.append("circle")
+    map.g.append("circle")
         .attr("class", "map-marker")
         .attr("cx", cx)
         .attr("cy", cy)
@@ -74,21 +74,21 @@ gui.drawBubble = function(name, cx, cy, radius) {
 
 function zoomLevel(jsonfile) {
     d3.json(jsonfile, function(data) {
-        g.selectAll("circle")
+        map.g.selectAll("circle")
          .data([])
          .exit().remove();
 
-        g.selectAll("text")
+        map.g.selectAll("text")
          .data([])
          .exit().remove();
 
-        g.selectAll("circle")
+        map.g.selectAll("circle")
          .data(data)
          .enter().append("circle")
                     .attr("class", "map-marker")
                     .attr("cx", function (d) { return d.x_axis })
                     .attr("cy", function (d) { return d.y_axis })
-                    .attr("r", function(d) { return scale(d.radius); })
+                    .attr("r", function(d) { return map.scale(d.radius); })
                     .on("mouseover", function(d){ 
                 div.transition()        
                             .duration(200)      
@@ -102,36 +102,37 @@ function zoomLevel(jsonfile) {
                             .style("opacity", 0);   
                     });
 
-        g.selectAll("text")
+        map.g.selectAll("text")
          .data(data)
          .enter().append("text")
                     .text(function (d) { return d.name })
-                    .attr("x", function (d) { return (d.x_axis + scale(d.radius) + 3) })
+                    .attr("x", function (d) { return (d.x_axis + map.scale(d.radius) + 3) })
                     .attr("y", function (d) { return (d.y_axis + 4) });
     });
 };
     
 function move() {
-    var t = d3.event.translate, s = d3.event.scale;
-    t[0] = Math.min(width / 2 * (s - 1), Math.max(width / 2 * (1 - s),
-            t[0]));
-    t[1] = Math.min(height / 2 * (s - 1) + 230 * s, Math.max(height / 2
-            * (1 - s) - 230 * s, t[1]));
-    zoom.translate(t);
-    g.style("stroke-width", 1 / s).attr("transform",
-            "translate(" + t + ")scale(" + s + ")");
+    map.t = d3.event.translate;
+	map.s = d3.event.scale;
+    map.t[0] = Math.min(map.width / 2 * (map.s - 1), Math.max(map.width / 2 * (1 - map.s),
+            map.t[0]));
+    map.t[1] = Math.min(map.height / 2 * (map.s - 1) + 230 * map.s, Math.max(map.height / 2
+            * (1 - map.s) - 230 * map.s, map.t[1]));
+    map.zoom.translate(map.t);
+    map.g.style("stroke-width", 1 / map.s).attr("transform",
+            "translate(" + map.t + ")scale(" + map.s + ")");
 
-    if (s > 3) { 
+    if (map.s > 3) { 
         stateZoomIn();
-        zoomLevel(json_zoom_circles) }
+        zoomLevel(map.json_zoom_circles) }
     else { 
         stateZoomOut();
-        zoomLevel(json_general_circles) }
+        zoomLevel(map.json_general_circles) }
 };
 
 function stateZoomIn() {
     d3.json("data/states_usa.topo.json", function(data){
-        g.append("g")
+        map.g.append("g")
          .attr("id", "states")
          .selectAll("path")
             .data(topojson.feature(data, data.objects.states).features)
@@ -139,112 +140,112 @@ function stateZoomIn() {
                .append("path")
                .attr("id", function(d) { return d.id; })
                .attr("class", "active")
-               .attr("d", path);
+               .attr("d", map.path);
     });
 };
 
 function stateZoomOut(){
-    g.selectAll("#states").remove();
+    map.g.selectAll("#states").remove();
 };
 
-function clicked(d) {
-	  if (active.node() === this) return reset();
-	  active.classed("active", false);
-	  active = d3.select(this).classed("active", true);
+map.clicked = function(d) {
+	  if (map.active.node() === this) return map.reset();
+	  map.active.classed("active", false);
+	  map.active = d3.select(this).classed("active", true);
 
-	  g.selectAll("#country").remove();
+	  map.g.selectAll("#country").remove();
 			  
 	  country = "data/" + d.id + ".json";
 
 	  d3.json(country, function(error, world) {
-		  g.append("g")
+		  map.g.append("g")
 		  	.attr("id","country")
-		  	.on("click", reset)
+		  	.on("click", map.reset)
 		  		.selectAll("path")
 				.data(topojson.feature(world, world.objects.layer1).features)
 				.enter().append("path")
-				      .attr("d", path)
+				      .attr("d", map.path)
 				      .style("fill", "orange");
 						      
-		  g.append("g")
+		  map.g.append("g")
 		  	.attr("id","country")
-		  	.on("click", reset)
+		  	.on("click", map.reset)
 		  		.append("path").datum(
 					topojson.mesh(world, world.objects.layer1,
 							function(a, b) {
 								return a !== b;
 							})).attr("class", "boundary")
-							.attr("d", path).style("fill","orange");
+							.attr("d", map.path).style("fill","orange");
 
 			}); 
 			  
-	  var bounds = path.bounds(d),
-	      dx = bounds[1][0] - bounds[0][0],
-	      dy = bounds[1][1] - bounds[0][1],
-	      x = (bounds[0][0] + bounds[1][0]) / 2,
-	      y = (bounds[0][1] + bounds[1][1]) / 2,
-	      scale = .9 / Math.max(dx / width, dy / height),
-	      translate = [width / 2 - scale * x - 500, height / 2 - scale * y - 300];
+	    map.bounds = map.path.bounds(d);
+	    map.dx = map.bounds[1][0] - map.bounds[0][0];
+	    map.dy = map.bounds[1][1] - map.bounds[0][1];
+	    map.x = (map.bounds[0][0] + map.bounds[1][0]) / 2;
+	    map.y = (map.bounds[0][1] + map.bounds[1][1]) / 2;
+	    map.scaleZoom = .9 / Math.max(map.dx / map.width, map.dy / map.height);
+	    map.translate = [map.width / 2 - map.scaleZoom * map.x - 500, map.height / 2 - map.scaleZoom * map.y - 300];
 
-	  svg.transition()
+	  map.svg.transition()
           .duration(750)
-          .call(zoom.translate(translate).scale(scale).event);
+          .call(map.zoom.translate(map.translate).scale(map.scaleZoom).event);
 };
 			
-function reset() {
-	  active.classed("active", false);
-	  active = d3.select(null);
+map.reset = function() {
+	  map.active.classed("active", false);
+	  map.active = d3.select(null);
 
-	  g.selectAll("#country").remove();
+	  map.g.selectAll("#country").remove();
 			  
-	  svg.transition()
+	  map.svg.transition()
 	      .duration(750)
-	      .call(zoom.translate([0, 0]).scale(1).event);
+	      .call(map.zoom.translate([0, 0]).scale(1).event);
 
 };
 		
 		
 // If the drag behavior prevents the default click,
 // also stop propagation so we don’t click-to-zoom.
-function stopped() {
+map.stopped = function() {
   if (d3.event.defaultPrevented) d3.event.stopPropagation();
 };
 
-
+/* 
 function display(data) {
-        g.selectAll("circle")
+        map.g.selectAll("circle")
          .data([])
          .exit().remove();
 
-        g.selectAll("text")
+        map.g.selectAll("text")
          .data([])
          .exit().remove();
 
-        g.selectAll("circle")
+        map.g.selectAll("circle")
          .data(data)
          .enter().append("circle")
                     .attr("class", "map-marker")
                     .attr("cx", function (d) { return d.x_axis })
                     .attr("cy", function (d) { return d.y_axis })
-                    .attr("r", function(d) { return scale(d.radius); })
+                    .attr("r", function(d) { return map.scale(d.radius); })
                     .on("mouseover", function(d){ 
-                div.transition()        
+                map.div.transition()        
                             .duration(200)      
                             .style("opacity", .9);      
-                        div.html(d.countries.name)  
+                        map.div.html(d.countries.name)  
                             .style("left", (d3.event.pageX) + "px")     
                             .style("top", (d3.event.pageY - 28) + "px"); })
                 .on("mouseout", function(d) {       
-                    div.transition()        
+                    map.div.transition()        
                             .duration(200)      
                             .style("opacity", 0);   
                     });
 
-        g.selectAll("text")
+        map.g.selectAll("text")
          .data(data)
          .enter().append("text")
                     .text(function (d) { return d.name })
-                    .attr("x", function (d) { return (d.x_axis + scale(d.radius) + 3) })
+                    .attr("x", function (d) { return (d.x_axis + map.scale(d.radius) + 3) })
                     .attr("y", function (d) { return (d.y_axis + 4) });
     
-};
+}; */

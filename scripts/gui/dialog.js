@@ -47,24 +47,24 @@ dialog.content_top = dialog.top_spacing + dialog.header_height + dialog.mid_spac
 
 dialog.container = d3.select("#container-dialog");
 
-function createHeader(value) {
-	var header = dialog.container.append("svg")
-		.attr("width", width)
-		.attr("height", header_height)
-		.attr("top", header_top)
-		.attr("left", left_spacing);
+dialog.createHeader = function(value) {
+	dialog.header = dialog.container.append("svg")
+		.attr("width", dialog.total_width)
+		.attr("height", dialog.header_height)
+		.attr("top", dialog.header_top)
+		.attr("left", dialog.left_spacing);
 
-	var header_text = header.append("text")
+	dialog.header_text = dialog.header.append("text")
 		.attr("dy", ".5em")
         .attr("text-anchor", "begin")
-        .style("font-size", header_height + "px")
+        .style("font-size", dialog.header_height + "px")
         .style("font-weight", "bold")
         .text(value);
 
-    return header;
+    return dialog.header;
 };
 
-var about_header = createHeader(dialog.about_title);
+dialog.about_header = dialog.createHeader(dialog.about_title);
 // var help_header = createHeader(help_title);
 
 
