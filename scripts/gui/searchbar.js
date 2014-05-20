@@ -1,3 +1,6 @@
+var backEnd = backEnd || {};
+var gui = gui || {};
+
 function search() {
 	var inputfield = document.getElementById('searchinput');
 	

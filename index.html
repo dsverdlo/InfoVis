@@ -7,6 +7,11 @@
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="http://d3js.org/topojson.v1.min.js"></script>
 	<script type="text/javascript" src="scripts/gui/gui.js"></script>
+	<script src="scripts/backEnd/types.js"></script>
+	<script src="scripts/backEnd/countries.js"></script>
+	<script src="scripts/backEnd/lastfm.js"></script>
+	<script src="scripts/backEnd/facade.js"></script>
+	<script src="scripts/backEnd/search.js"></script>
 </head>
 <body id="body">
 	<!-- Bootstrap map background -->
@@ -22,16 +27,13 @@
 	<!-- Widgets -->
 	<div id="searchbar">
 		<div id="searchfield">
-			<!-- TODO: Change to input form 
-			<p id="searchtext1">SEARCH</p>
-			<p id="searchtext2">by artist, track or album</p> -->
 			<form id="searchform" action="#" onsubmit="search();">
 				<input type="text" id="searchinput" placeholder="SEARCH by artist, track or album"><br>
 			</form>
 		</div>
 		
 		<img id="searchimage" src="images/magnifier.png" onClick="search()">
-		<script type="text/javascript" src="scripts/gui/searchbar.js"></script>
+		<!-- <script type="text/javascript" src="scripts/gui/searchbar.js"></script> -->
 	</div>
 	
 	<div id="container-banner">

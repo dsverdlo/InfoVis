@@ -3,6 +3,9 @@
  * Author(s): Trieu Thanh Ngoan   *
               Kenny Deschuyteneer */
 
+var gui = gui || {};
+var map = map || {};
+
 // This script builds the bulk of our visualization page: the map that
 // shows data about musical trends around the globe.
 
@@ -52,12 +55,22 @@ d3.json(json_topology, function(error, world) {
                         return a !== b;
                     })).attr("class", "boundary").attr("d", path);
                     
-    zoomLevel(json_general_circles);
+    // zoomLevel(json_general_circles);
 });
 
 var div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
+
+gui.drawBubble = function(name, cx, cy, radius) {
+    console.log("Drawn bubble at " + cx + ", " + cy);
+
+    g.append("circle")
+        .attr("class", "map-marker")
+        .attr("cx", cx)
+        .attr("cy", cy)
+        .attr("r", 100);
+};
 
 function zoomLevel(jsonfile) {
     d3.json(jsonfile, function(data) {

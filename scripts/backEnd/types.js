@@ -24,9 +24,11 @@ var types = {};
  * \param apha
  *		The alpha-3 code of the country.
  */
-types.Country = function(name, alpha) {
-	this.name   = name;
-	this.alpha  = alpha;
+types.Country = function(name, alpha, longitude, latitude) {
+	this.name      = name;
+	this.alpha     = alpha;
+	this.longitude = longitude;
+	this.latitude  = latitude;
 
 	this.metros = [];
 
