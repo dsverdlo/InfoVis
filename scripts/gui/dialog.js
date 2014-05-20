@@ -48,7 +48,7 @@ dialog.content_top = dialog.top_spacing + dialog.header_height + dialog.mid_spac
 dialog.container = d3.select("#container-dialog");
 
 function createHeader(value) {
-	var header = container_dialog.append("svg")
+	var header = dialog.container.append("svg")
 		.attr("width", width)
 		.attr("height", header_height)
 		.attr("top", header_top)
@@ -64,7 +64,7 @@ function createHeader(value) {
     return header;
 };
 
-// var about_header = createHeader(about_title);
+var about_header = createHeader(dialog.about_title);
 // var help_header = createHeader(help_title);
 
 

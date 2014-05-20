@@ -13,19 +13,19 @@ var json_topology = "data/datamaps.world.min.json",
     json_general_circles = "data/circles.general.json",
     json_zoom_circles = "data/circles.zoom.json"
 
-var width = parseInt(window.getComputedStyle(body).width, 10),
-    height = parseInt(window.getComputedStyle(body).height, 10),
-    active = d3.select(null);
+map.width = parseInt(window.getComputedStyle(body).width, 10);
+map.height = parseInt(window.getComputedStyle(body).height, 10);
+map.active = d3.select(null);
 
-var scale = d3.scale.sqrt()
+map.scale = d3.scale.sqrt()
     .domain([0, 100])
     .range([50, 0]);
 
-var projection = d3.geo.mercator().translate([0, 0]).scale(width / 2 / Math.PI);  
+map.projection = d3.geo.mercator().translate([0, 0]).scale(width / 2 / Math.PI);  
 
 var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 
-var path = d3.geo.path().projection(projection);
+var path = d3.geo.path().projection(map.projection);
 
 var svg = d3.select("body").append("svg").attr("width", width).attr(
              "height", height).append("g").attr("transform",
@@ -69,7 +69,7 @@ gui.drawBubble = function(name, cx, cy, radius) {
         .attr("class", "map-marker")
         .attr("cx", cx)
         .attr("cy", cy)
-        .attr("r", 100);
+        .attr("r", 10);
 };
 
 function zoomLevel(jsonfile) {
