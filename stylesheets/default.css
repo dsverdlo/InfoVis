@@ -83,6 +83,7 @@ div#container-linechart {
 	margin-left: 20px;
 	margin-bottom: 20px;
 	padding: 10px;
+	visibility: hidden;
 }
 
 div#container-barchart {
@@ -96,6 +97,17 @@ div#container-barchart {
 	margin-right: 20px;
 	margin-bottom: 20px;
 	padding: 10px;
+}
+
+div#container-selection {
+	float: left;
+	border-radius: 10px;
+	height: 40px;
+	background-color: #3B3C36; /*LD*/ 
+	width: 20%;
+	top: 0;
+	margin-top: 20px;
+	margin-left: 35%;
 }
 
 #states {
@@ -244,7 +256,6 @@ p#searchtext2 {
 	font-size: 1.25em;
 }
 
-
 input#searchinput {
     border-radius: 7px; //CSS3 Feature
 	margin-left: 10px;
@@ -275,7 +286,16 @@ div#searchfield {
 	background-color: #FFFAF0; /*HL*/ 
 	border-radius: 7px;
 	margin: 5px;
-	width: 85%;
+	width: 80%;
+	height: 30px;
+	top: 0;
+}
+
+#mode-selection {
+	float: left;
+	border-radius: 7px;
+	margin: 5px;
+	width: 95%;
 	height: 30px;
 	top: 0;
 }

@@ -26,7 +26,8 @@ barchart.maximum_bars = 5;
 barchart.x_axis_offset = 20;
 barchart.bar_width = 20;
 
-barchart.y_axis_text = "World Track Chart";
+barchart.track_text = "World Track Chart";
+barchart.artist_text = "World Artist Chart";
 
 
 //// UI SETUP ///////////////////////////////////////////////////////////////////
@@ -56,24 +57,47 @@ barchart.group.append("g")
         .call(barchart.x_axis)
 
 // Draw the y axis.
-barchart.group.append("g")
+barchart.y_axis_g = barchart.group.append("g")
         .attr("class", "y axis")
-        .call(barchart.y_axis)
-    .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text(barchart.y_axis_text);
+        .call(barchart.y_axis);
+
+barchart.axis_text = barchart.y_axis_g.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text(barchart.y_axis_text);
+
+gui.setBarchartLabel = function(txt) {
+    barchart.axis_text.text(txt);
+};
 
 gui.loadTracks = function() {
     var tracks = backEnd.world.trackChart.slice(0, barchart.maximum_bars);
 
-    barchart.x_axis.tickFormat(function(d) { return d.name; })
+    gui.setBarchartLabel(barchart.track_text);
 
     // Draw the bars.
     barchart.group.selectAll(".bar")
             .data(tracks)
+        .enter().append("rect")
+            .attr("class", "bar")
+            .attr("rx", "5")
+            .attr("ry", "5")
+            .attr("x", function(d) { return barchart.x(d.chartPos) })
+            .attr("width", barchart.offset)
+            .attr("y", function(d) { return barchart.y(d.popularity * 100); })
+            .attr("height", function(d) { return barchart.height - barchart.y(d.popularity * 100); });
+};
+
+gui.loadArtists = function() {
+    var artists = backEnd.world.artistChart.slice(0, barchart.maximum_bars);
+
+    gui.setBarchartLabel(barchart.artist_text);
+
+    // Draw the bars.
+    barchart.group.selectAll(".bar")
+            .data(artists)
         .enter().append("rect")
             .attr("class", "bar")
             .attr("rx", "5")

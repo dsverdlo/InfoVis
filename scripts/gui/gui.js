@@ -45,3 +45,17 @@ gui.hideDialog = function() {
 
 /** Toggles the window between the dimmed and undimmed states. */
 gui.toggleDialog = gui.showDialog;
+
+/** Changes between modes: artist, track or album. */
+gui.changeMode = function() {
+	var mode = document.getElementById("mode-selection").value;
+
+	switch (mode) {
+		case "track":
+			gui.loadTracks();
+			break;
+		case "artist":
+			gui.loadArtists();
+			break;
+	};
+};

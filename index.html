@@ -35,6 +35,14 @@
 		<img id="searchimage" src="images/magnifier.png" onClick="search()">
 		<!-- <script type="text/javascript" src="scripts/gui/searchbar.js"></script> -->
 	</div>
+
+	<div id="container-selection">
+		<select id="mode-selection" onchange="gui.changeMode()">
+			<option value="track">Track</option>
+			<option value="artist">Artist</option>
+			<option value="album">Album</option>
+		</select>
+	</div>
 	
 	<div id="container-banner">
 		<script type="text/javascript" src="scripts/gui/banner.js"></script>

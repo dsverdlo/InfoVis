@@ -76,8 +76,8 @@ function containCountry(tracks, artists, countries, name, typeArtist){
 		}else{
 			return -1;
 		};
-	}
-}
+	};
+};
 
 function search() {
 	map.artistOrTrack = document.getElementById("searchinput").value;
