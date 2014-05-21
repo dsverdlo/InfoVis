@@ -1,2 +1,4 @@
  [{ "x_axis": -300, "y_axis": -150, "radius": 20, "name":"Parov Stelar"},
-  { "x_axis": -360, "y_axis": -120, "radius": 15, "name":"Beyonce"}]
+  { "x_axis": -360, "y_axis": -120, "radius": 15, "name":"Beyonce"},
+  { "x_axis": 0, "y_axis": 0, "radius": 15, "name":"Beyonce"},
+  { "x_axis": 872, "y_axis": 367, "radius": 15, "name":"Beyonce"}]
