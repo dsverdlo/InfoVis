@@ -236,12 +236,12 @@ types.World.prototype.fetchArtistChart = function() {
 types.World.prototype.fetchTrackChart = function() {
 	if (!this.hasTracks) {
 		this.hasTracks = true;
-		var c = this;
+		var w = this;
 
 		var url = backEnd.globalTopTrackUrl();
 		var fun = function(res) {
 			res.toptracks = res.tracks;
-			c.trackChart = backEnd.createTrackChart(res);
+			w.trackChart = backEnd.createTrackChart(res);
 		}
 		backEnd.asyncGet(url, fun);
 	}
