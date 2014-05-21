@@ -148,7 +148,7 @@ types.Metro.prototype.fetchArtistChart = function() {
 
 		var url = backEnd.metroTopArtistUrl(this.country.name, this.name, backEnd.chartLength);
 		var fun = function(res) {
-			m.trackChart = backEnd.createArtistChart(res);
+			m.artistChart = backEnd.createArtistChart(res);
 		}
 		backEnd.asyncGet(url, fun);
 	}
