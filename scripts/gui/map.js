@@ -236,7 +236,7 @@ map.clicked = function(d) {
 				.data(topojson.feature(world, world.objects.layer1).features)
 				.enter().append("path")
 				      .attr("d", map.path)
-				      .style("fill", "orange");
+				      .style("fill", "#FF4500");
 						      
 		  map.g.append("g")
 		  	.attr("id","country")
@@ -246,7 +246,7 @@ map.clicked = function(d) {
 							function(a, b) {
 								return a !== b;
 							})).attr("class", "boundary")
-							.attr("d", map.path).style("fill","orange");
+							.attr("d", map.path).style("fill","#FF4500");
 
 			}); 
 			  

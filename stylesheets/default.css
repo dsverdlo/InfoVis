@@ -162,7 +162,7 @@ div#container-barchart {
 }
 
 .feature.active {
-	fill: orange;
+	fill: #FF4500;
 	stroke: #fff;
 	stroke-width: 0.75px;
 }
