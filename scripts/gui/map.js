@@ -2,7 +2,7 @@
  * Project:   InfoVis Project     *
  * Author(s): Trieu Thanh Ngoan   *
               Kenny Deschuyteneer */
-
+var backEnd = backEnd || {};
 var gui = gui || {};
 var map = map || {};
 
@@ -19,7 +19,12 @@ map.active = d3.select(null);
 
 map.scale = d3.scale.sqrt()
     .domain([0, 100])
-    .range([0, 50]);
+    .range([0, 30]);
+
+map.scaleColor = d3.scale.sqrt()
+    .domain([0, 1.0])
+    .range([0, 7]);
+map.colors = ["#fee6ce", "#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801", "#a63603", "#7f2704"];
 
 map.projection = d3.geo.mercator().translate([0, 0]).scale(map.width / 2 / Math.PI);  
 
@@ -56,20 +61,87 @@ d3.json(map.json_topology, function(error, world) {
                     })).attr("class", "boundary").attr("d", map.path);
                     
      zoomLevel(map.json_general_circles);
+
 });
+	
+function containCountry(tracks, artists, countries, name, typeArtist){
+	map.index = -1;
+	for (var i = 0; i < countries.length; i++) {
+		map.index = countries.indexOf(name);
+		if( map.index > -1 ){
+			if(typeArtist){
+				return Math.round(map.scaleColor(artists[map.index].popularity));
+			}else{
+				return Math.round(map.scaleColor(tracks[map.index].popularity));
+			};
+		}else{
+			return -1;
+		};
+	}
+}
+
+function search() {
+	map.artistOrTrack = document.getElementById("searchinput").value;
+	map.countries = [];
+	map.artists = [];
+	map.tracks = [];
+	map.typeArtist = true;
+	
+	backEnd.countryList.map(function(country) {
+		map.artist = country.findArtist(map.artistOrTrack);
+		if (map.artist != null){
+			map.countries.push(country.name); console.log("Artist: " + country.name);
+			map.artists.push(map.artist);
+			map.typeArtist = true;
+		};
+		
+		map.track = country.findTrack(map.artistOrTrack);
+		if (map.track != null){
+			map.countries.push(country.name); console.log("Track: " + country.name);
+			map.tracks.push(map.track);
+			map.typeArtist = false;
+		};
+	});
+	
+	//remove old paths
+	map.g.selectAll("path").remove();
+	
+	//add new paths
+	d3.json(map.json_topology, function(error, world) {
+		map.g.selectAll("path")
+			.data(topojson.feature(world, world.objects.countries).features)
+			.enter().append("path")
+				  .attr("d", map.path)
+				  .style("fill", function(d){ 
+							map.tempColorIndex = containCountry(map.tracks, map.artists, map.countries, d.properties.name, map.typeArtist);
+							if( map.tempColorIndex >= 0 && map.tempColorIndex <= 7 ){ return map.colors[map.tempColorIndex];}; 
+							if( map.tempColorIndex == -1 ){ return "#fff5eb"};
+							return "#9F8170"})
+				   .style("stroke", "#000")
+				   .style("stroke-width", "0.75")
+				  .on("click", map.clicked);
+
+		map.g.append("path").datum(
+				topojson.mesh(world, world.objects.countries,
+						function(a, b) {
+							return a !== b;
+						})).attr("class", "boundary").attr("d", map.path);
+						
+		 zoomLevel(map.json_general_circles);
+
+	});
+};
 
 map.div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
 gui.drawBubble = function(name, cx, cy, radius) {
-    console.log("Drawn bubble at " + cx + ", " + cy);
-
     map.g.append("circle")
         .attr("class", "map-marker")
         .attr("cx", cx)
         .attr("cy", cy)
-        .attr("r", 10);
+        .attr("r", map.scale(radius*30));
 };
 
 function zoomLevel(jsonfile) {
@@ -165,7 +237,7 @@ map.clicked = function(d) {
 				.data(topojson.feature(world, world.objects.layer1).features)
 				.enter().append("path")
 				      .attr("d", map.path)
-				      .style("fill", "orange");
+				      .style("fill", "#FF4500");
 						      
 		  map.g.append("g")
 		  	.attr("id","country")
@@ -175,7 +247,7 @@ map.clicked = function(d) {
 							function(a, b) {
 								return a !== b;
 							})).attr("class", "boundary")
-							.attr("d", map.path).style("fill","orange");
+							.attr("d", map.path).style("fill","#FF4500");
 
 			}); 
 			  
@@ -210,42 +282,3 @@ map.reset = function() {
 map.stopped = function() {
   if (d3.event.defaultPrevented) d3.event.stopPropagation();
 };
-
-/* 
-function display(data) {
-        map.g.selectAll("circle")
-         .data([])
-         .exit().remove();
-
-        map.g.selectAll("text")
-         .data([])
-         .exit().remove();
-
-        map.g.selectAll("circle")
-         .data(data)
-         .enter().append("circle")
-                    .attr("class", "map-marker")
-                    .attr("cx", function (d) { return d.x_axis })
-                    .attr("cy", function (d) { return d.y_axis })
-                    .attr("r", function(d) { return map.scale(d.radius); })
-                    .on("mouseover", function(d){ 
-                map.div.transition()        
-                            .duration(200)      
-                            .style("opacity", .9);      
-                        map.div.html(d.countries.name)  
-                            .style("left", (d3.event.pageX) + "px")     
-                            .style("top", (d3.event.pageY - 28) + "px"); })
-                .on("mouseout", function(d) {       
-                    map.div.transition()        
-                            .duration(200)      
-                            .style("opacity", 0);   
-                    });
-
-        map.g.selectAll("text")
-         .data(data)
-         .enter().append("text")
-                    .text(function (d) { return d.name })
-                    .attr("x", function (d) { return (d.x_axis + map.scale(d.radius) + 3) })
-                    .attr("y", function (d) { return (d.y_axis + 4) });
-    
-}; */
