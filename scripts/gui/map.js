@@ -2,6 +2,7 @@
  * Project:   InfoVis Project     *
  * Author(s): Trieu Thanh Ngoan   *
               Kenny Deschuyteneer */
+
 var backEnd = backEnd || {};
 var gui = gui || {};
 var map = map || {};
@@ -10,8 +11,9 @@ var map = map || {};
 // shows data about musical trends around the globe.
 
 map.json_topology = "data/datamaps.world.min.json";
-map.json_general_circles = "data/circles.general.json";
-map.json_zoom_circles = "data/circles.zoom.json";
+
+
+//// UI SETUP ///////////////////////////////////////////////////////////////////
 
 map.width = parseInt(window.getComputedStyle(body).width, 10);
 map.height = parseInt(window.getComputedStyle(body).height, 10);
@@ -59,9 +61,6 @@ d3.json(map.json_topology, function(error, world) {
                     function(a, b) {
                         return a !== b;
                     })).attr("class", "boundary").attr("d", map.path);
-                    
-     zoomLevel(map.json_general_circles);
-
 });
 	
 function containCountry(tracks, artists, countries, name, typeArtist){
@@ -126,9 +125,6 @@ function search() {
 						function(a, b) {
 							return a !== b;
 						})).attr("class", "boundary").attr("d", map.path);
-						
-		 zoomLevel(map.json_general_circles);
-
 	});
 };
 
@@ -195,11 +191,9 @@ function move() {
             "translate(" + map.t + ")scale(" + map.s + ")");
 
     if (map.s > 3) { 
-        stateZoomIn();
-        zoomLevel(map.json_zoom_circles) }
+        stateZoomIn(); }
     else { 
-        stateZoomOut();
-        zoomLevel(map.json_general_circles) }
+        stateZoomOut(); }
 };
 
 function stateZoomIn() {
