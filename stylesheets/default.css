@@ -169,7 +169,7 @@ div#container-barchart {
 
 .boundary {
 	fill: none;
-	stroke: #FFFAF0; /*HL*/ 
+	stroke: #FFFAF0; /*HL #FFFAF0*/ 
 	stroke-linejoin: round;
 	stroke-linecap: round;
 }

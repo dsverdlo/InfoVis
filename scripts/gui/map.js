@@ -24,7 +24,7 @@ map.scale = d3.scale.sqrt()
 map.scaleColor = d3.scale.sqrt()
     .domain([0, 1.0])
     .range([0, 7]);
-map.colors = ["#EEE8AA", "#F0E68C", "#DAA520", "#FFD700", "#FFA500", "#FF8C00", "#CD853F", "#D2691E"];
+map.colors = ["#fee6ce", "#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801", "#a63603", "#7f2704"];
 
 map.projection = d3.geo.mercator().translate([0, 0]).scale(map.width / 2 / Math.PI);  
 
@@ -115,8 +115,9 @@ function search() {
 				  .style("fill", function(d){ 
 							map.tempColorIndex = containCountry(map.tracks, map.artists, map.countries, d.properties.name, map.typeArtist);
 							if( map.tempColorIndex >= 0 && map.tempColorIndex <= 7 ){ return map.colors[map.tempColorIndex];}; 
+							if( map.tempColorIndex == -1 ){ return "#fff5eb"};
 							return "#9F8170"})
-				   .style("strike", "#fff")
+				   .style("stroke", "#000")
 				   .style("stroke-width", "0.75")
 				  .on("click", map.clicked);
 
