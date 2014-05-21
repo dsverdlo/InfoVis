@@ -62,7 +62,71 @@ d3.json(map.json_topology, function(error, world) {
                         return a !== b;
                     })).attr("class", "boundary").attr("d", map.path);
 });
-	
+
+map.bubblegroup = map.svg.append("g");
+
+gui.removeBubbles = function() {
+    map.bubblegroup.selectAll("#map-marker")
+        .remove();
+};
+
+gui.loadTrackBubbles = function() {
+    map.bubblegroup.selectAll("circle")
+        .remove();
+
+    backEnd.countryList.map(function(country) {
+        var toppesttrack = country.trackChart[0];
+
+        if (toppesttrack != undefined) {
+            var longitude  = country.longitude - 180;
+            var latitude   = country.latitude - 85.609038;
+            var popularity = toppesttrack.popularity;
+            var name       = toppesttrack.name;
+
+            console.log(name + " is most popular track in " + country.name);
+            gui.drawBubble(name, longitude, latitude, popularity);
+        };
+    });
+};
+
+gui.loadArtistBubbles = function() {
+    gui.removeBubbles();
+
+    backEnd.countryList.map(function(country) {
+        var toppestartist = country.artistChart[0];
+
+        if (toppestartist != undefined) {
+            var longitude  = country.longitude - 180;
+            var latitude   = country.latitude - 85.609038;
+            var popularity = toppestartist.popularity;
+            var name       = toppestartist.name;
+
+            console.log(name + " is most popular artist in " + country.name);
+            gui.drawBubble(name, longitude, latitude, popularity);
+        };
+    });
+};
+
+// Periodically check whether the backend has loaded yet.
+map.loading = function() {
+    if (backEnd.world.tracksReady()) {
+        console.log("Top tracks loaded!");
+        gui.loadTrackBubbles();
+    } else {
+        setTimeout(map.loading, 500);
+    };
+};
+
+// map.loading();
+
+gui.drawBubble = function(name, cx, cy, radius) {
+    map.bubblegroup.append("circle")
+        .attr("class", "map-marker")
+        .attr("cx", cx)
+        .attr("cy", cy)
+        .attr("r", map.scale(radius*30));
+};
+
 function containCountry(tracks, artists, countries, name, typeArtist){
 	map.index = -1;
 	for (var i = 0; i < countries.length; i++) {
@@ -131,14 +195,6 @@ function search() {
 map.div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
-
-gui.drawBubble = function(name, cx, cy, radius) {
-    map.g.append("circle")
-        .attr("class", "map-marker")
-        .attr("cx", cx)
-        .attr("cy", cy)
-        .attr("r", map.scale(radius*30));
-};
 
 function zoomLevel(jsonfile) {
     d3.json(jsonfile, function(data) {
