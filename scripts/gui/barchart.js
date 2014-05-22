@@ -23,8 +23,8 @@ barchart.height = barchart.total_height - barchart.margin.top - barchart.margin.
 
 barchart.maximum_bars = 5;
 
-barchart.x_axis_offset = 20;
-barchart.bar_width = 20;
+barchart.x_axis_offset = 30;
+barchart.bar_width = 40;
 
 barchart.track_text = "World Track Chart";
 barchart.artist_text = "World Artist Chart";
@@ -75,8 +75,8 @@ banner.setChartData = function(array, label, x_value, y_value) {
     barchart.axis_text.text(label);
 
     // Reset the labels.
-    barchart.x.domain(data.map(function(d) { console.log(x_value(d)); x_value(d); }));
-    barchart.x_axis_g.call(barchart.x);
+    barchart.x.domain(data.map(function(d) { return x_value(d); }));
+    barchart.x_axis_g.call(barchart.x_axis);
 
     // Draw the bars.
     barchart.group.selectAll(".bar")
@@ -85,8 +85,8 @@ banner.setChartData = function(array, label, x_value, y_value) {
             .attr("class", "bar")
             .attr("rx", "5")
             .attr("ry", "5")
-            .attr("x", function(d) { return barchart.x(x_value(d)) })
-            .attr("width", barchart.offset)
+            .attr("x", function(d) { return barchart.x(x_value(d)) + 30 })
+            .attr("width", barchart.bar_width)
             .attr("y", function(d) { return barchart.y(y_value(d)); })
             .attr("height", function(d) { return barchart.height - barchart.y(y_value(d)); });
 };

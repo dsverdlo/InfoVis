@@ -70,11 +70,12 @@ gui.changeType = function() {
 	gui.searchType = document.getElementById("type-selection").value;
 
 	var loop;
-    var x_value = function(d) { return d.name };
+    var x_value;
     var y_value = function(d) { return d.popularity * 100 };
 
 	switch (gui.searchType) {
 		case "track":
+		 	x_value = function(d) { return d.name + "\n" + d.artist };
 			loop = function() {
 				if (backEnd.world.tracksReady()) {
 					banner.setChartData(backEnd.world.trackChart, barchart.track_text, x_value, y_value);
@@ -86,6 +87,7 @@ gui.changeType = function() {
 			};
 			break;
 		case "artist":
+		 	x_value = function(d) { return d.name };
 		    loop = function() {
 				if (backEnd.world.artistsReady()) {
 					banner.setChartData(backEnd.world.artistChart, barchart.artist_text, x_value, y_value);
