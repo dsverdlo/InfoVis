@@ -347,7 +347,7 @@ map.clicked = function(d) {
 				if(gui.searchType == "artist"){
 					//metro.artistChart
 					for(var j = 0; j < metro.artistChart.length; j++){
-						if(metro.artistChart[j].name.indexOf(input) > -1   & metro.name != 'Charleroi' & metro.name != 'Ghent'){
+						if(metro.artistChart[j].name.indexOf(input) > -1 ){
 							map.metroArtists.push(metro.artistChart[j]);
 							map.metrosname.push(metro.name);
 						};
@@ -355,7 +355,7 @@ map.clicked = function(d) {
 				} else {
 					//metro.trackChart
 					for(var j = 0; j < metro.trackChart.length; j++){
-						if(metro.trackChart[j].name.indexOf(input) > -1  & metro.name != 'Charleroi' & metro.name != 'Ghent'){ 
+						if(metro.trackChart[j].name.indexOf(input) > -1 ){ 
 							map.metroTracks.push(metro.trackChart[j]);
 							map.metrosname.push(metro.name);
 						};
