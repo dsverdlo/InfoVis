@@ -147,7 +147,19 @@ gui.drawBubble = function(name, cx, cy, radius) {
         .attr("class", "map-marker")
         .attr("cx", cx)
         .attr("cy", cy)
-        .attr("r", map.scale(radius*30));
+        .attr("r", map.scale(radius*30))
+		 .on("mouseover", function(d){ 
+					   map.div.transition()        
+								   .duration(200)      
+								   .style("opacity", .9);      
+							   map.div.html(name)  
+								   .style("left", (d3.event.pageX) + "px")     
+								   .style("top", (d3.event.pageY - 28) + "px"); })
+					   .on("mouseout", function(d) {       
+						   map.div.transition()        
+								   .duration(200)      
+								   .style("opacity", 0);   
+						   });
 };
 
 function containCountry(tracks, artists, countries, name){
@@ -312,13 +324,13 @@ function move() {
 //};
 
 map.clicked = function(d) {
-		map.g.selectAll("circle")
-        .remove();
+		map.g.selectAll("circle").remove();
 		
 	  if (map.active.node() === this) {
+			
 			return map.reset();
 			
-		}; //gui.loadTrackBubbles
+		}; 
 	  map.active.classed("active", false);
 	  map.active = d3.select(this).classed("active", true);
 
@@ -352,7 +364,7 @@ map.clicked = function(d) {
 							})).attr("class", "boundary")
 							.attr("d", map.path).style("fill", countrycolor);
 
-			});
+		});
 		
 		var input = document.getElementById("searchinput").value;
 		if (input == "" | d.id != 'BEL'){
@@ -465,17 +477,19 @@ function drawCity(cityfile, color, cityname){
 }
 			
 map.reset = function() {
+		
 	  map.active.classed("active", false);
 	  map.active = d3.select(null);
 
 	  map.g.selectAll("#country").remove();
 
       gui.changeMode();
-			  
+		 
 	  map.svg.transition()
 	      .duration(750)
 	      .call(map.zoom.translate([0, 0]).scale(1).event);
 	map.g.selectAll("path").style("stroke-width", 0.75);
+	gui.loadTrackBubbles();	 
 };
 		
 		

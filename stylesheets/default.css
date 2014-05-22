@@ -171,6 +171,7 @@ div#container-selection {
 .feature {
 	fill: #9F8170; /*LL*/ 
 	cursor: pointer;
+	z-index: 9;
 }
 
 .feature.active {
