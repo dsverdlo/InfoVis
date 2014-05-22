@@ -53,20 +53,28 @@ map.g = map.svg.append("g").style("stroke-width", 1)
     
 map.svg.call(map.zoom).call(map.zoom.event);
 
-d3.json(map.json_topology, function(error, world) {
-    map.g.selectAll("path")
-        .data(topojson.feature(world, world.objects.countries).features)
-        .enter().append("path")
-              .attr("d", map.path)
-              .attr("class", "feature")
-              .on("click", map.clicked);
+gui.colorMapDefault = function() {
+    // Remove any old paths there may be.
+    map.g.selectAll("path").remove();
 
-    map.g.append("path").datum(
-            topojson.mesh(world, world.objects.countries,
-                    function(a, b) {
-                        return a !== b;
-                    })).attr("class", "boundary").attr("d", map.path);
-});
+    // Draw paths in default map color.
+    d3.json(map.json_topology, function(error, world) {
+        map.g.selectAll("path")
+            .data(topojson.feature(world, world.objects.countries).features)
+            .enter().append("path")
+                  .attr("d", map.path)
+                  .attr("class", "feature")
+                  .on("click", map.clicked);
+
+        map.g.append("path").datum(
+                topojson.mesh(world, world.objects.countries,
+                        function(a, b) {
+                            return a !== b;
+                        })).attr("class", "boundary").attr("d", map.path);
+    });
+};
+
+gui.colorMapDefault();
 
 map.bubblegroup = map.svg.append("g");
 
@@ -154,6 +162,12 @@ function search() {
 	map.artists = [];
 	map.tracks = [];
 	map.typeArtist = true;
+
+    // If the user has no input entered, revert back to default mode.
+    if (map.artistOrTrack == "") {
+        gui.colorMapDefault();
+        return;
+    };
 	
 	backEnd.countryList.map(function(country) {
 		map.artist = country.findArtist(map.artistOrTrack);
@@ -201,44 +215,44 @@ map.div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-function zoomLevel(jsonfile) {
-    d3.json(jsonfile, function(data) {
-        map.g.selectAll("circle")
-         .data([])
-         .exit().remove();
-
-        map.g.selectAll("text")
-         .data([])
-         .exit().remove();
-
-        map.g.selectAll("circle")
-         .data(data)
-         .enter().append("circle")
-                    .attr("class", "map-marker")
-                    .attr("cx", function (d) { return d.x_axis })
-                    .attr("cy", function (d) { return d.y_axis })
-                    .attr("r", function(d) { return map.scale(d.radius); })
-                    .on("mouseover", function(d){ 
-                div.transition()        
-                            .duration(200)      
-                            .style("opacity", .9);      
-                        div.html(d.name)  
-                            .style("left", (d3.event.pageX) + "px")     
-                            .style("top", (d3.event.pageY - 28) + "px"); })
-                .on("mouseout", function(d) {       
-                    div.transition()        
-                            .duration(200)      
-                            .style("opacity", 0);   
-                    });
-
-        map.g.selectAll("text")
-         .data(data)
-         .enter().append("text")
-                    .text(function (d) { return d.name })
-                    .attr("x", function (d) { return (d.x_axis + map.scale(d.radius) + 3) })
-                    .attr("y", function (d) { return (d.y_axis + 4) });
-    });
-};
+//function zoomLevel(jsonfile) {
+//    d3.json(jsonfile, function(data) {
+//        map.g.selectAll("circle")
+//         .data([])
+//         .exit().remove();
+//
+//        map.g.selectAll("text")
+//         .data([])
+//         .exit().remove();
+//
+//        map.g.selectAll("circle")
+//         .data(data)
+//         .enter().append("circle")
+//                    .attr("class", "map-marker")
+//                    .attr("cx", function (d) { return d.x_axis })
+//                    .attr("cy", function (d) { return d.y_axis })
+//                    .attr("r", function(d) { return map.scale(d.radius); })
+//                    .on("mouseover", function(d){ 
+//                div.transition()        
+//                            .duration(200)      
+//                            .style("opacity", .9);      
+//                        div.html(d.name)  
+//                            .style("left", (d3.event.pageX) + "px")     
+//                            .style("top", (d3.event.pageY - 28) + "px"); })
+//                .on("mouseout", function(d) {       
+//                    div.transition()        
+//                            .duration(200)      
+//                            .style("opacity", 0);   
+//                    });
+//
+//        map.g.selectAll("text")
+//         .data(data)
+//         .enter().append("text")
+//                    .text(function (d) { return d.name })
+//                    .attr("x", function (d) { return (d.x_axis + map.scale(d.radius) + 3) })
+//                    .attr("y", function (d) { return (d.y_axis + 4) });
+//    });
+//};
     
 function move() {
     map.t = d3.event.translate;
@@ -251,29 +265,29 @@ function move() {
     map.g.style("stroke-width", 1 / map.s).attr("transform",
             "translate(" + map.t + ")scale(" + map.s + ")");
 
-    if (map.s > 3) { 
-        stateZoomIn(); }
-    else { 
-        stateZoomOut(); }
+    //if (map.s > 3) { 
+    //    stateZoomIn(); }
+    //else { 
+    //    stateZoomOut(); }
 };
 
-function stateZoomIn() {
-    d3.json("data/states_usa.topo.json", function(data){
-        map.g.append("g")
-         .attr("id", "states")
-         .selectAll("path")
-            .data(topojson.feature(data, data.objects.states).features)
-            .enter()
-               .append("path")
-               .attr("id", function(d) { return d.id; })
-               .attr("class", "active")
-               .attr("d", map.path);
-    });
-};
-
-function stateZoomOut(){
-    map.g.selectAll("#states").remove();
-};
+//function stateZoomIn() {
+//    d3.json("data/states_usa.topo.json", function(data){
+//        map.g.append("g")
+//         .attr("id", "states")
+//         .selectAll("path")
+//            .data(topojson.feature(data, data.objects.states).features)
+//            .enter()
+//               .append("path")
+//               .attr("id", function(d) { return d.id; })
+//               .attr("class", "active")
+//               .attr("d", map.path);
+//    });
+//};
+//
+//function stateZoomOut(){
+//    map.g.selectAll("#states").remove();
+//};
 
 map.clicked = function(d) {
 	  if (map.active.node() === this) return map.reset();
