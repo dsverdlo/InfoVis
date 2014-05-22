@@ -66,7 +66,7 @@ backEnd.findTopCountriesForTrack = function(name) {
 	}
 	itemArr.sort(sortFunc);
 	return itemArr.slice(0,5);
-}
+};
 
 backEnd.findTopCountriesForArtist = function(name) {
 	var itemArr = [];
@@ -81,4 +81,4 @@ backEnd.findTopCountriesForArtist = function(name) {
 	}
 	itemArr.sort(sortFunc);
 	return itemArr.slice(0,5);
-}
+};
