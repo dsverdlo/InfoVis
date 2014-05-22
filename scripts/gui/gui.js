@@ -3,6 +3,7 @@
  * Author(s): Kenny Deschuyteneer */
 
 var gui = gui || {};
+var backend = backend || {};
 
 // This namespace contains the general utilities to make it easier to build
 // the pretty UI we want.
@@ -68,12 +69,34 @@ gui.searchType = "track";
 gui.changeType = function() {
 	gui.searchType = document.getElementById("type-selection").value;
 
+	var loop;
+    var x_value = function(d) { return d.name };
+    var y_value = function(d) { return d.popularity * 100 };
+
 	switch (gui.searchType) {
 		case "track":
-			gui.loadTracks();
+			loop = function() {
+				if (backEnd.world.tracksReady()) {
+					banner.setChartData(backEnd.world.trackChart, barchart.track_text, x_value, y_value);
+					console.log("Chart loaded.");
+				} else {
+					console.log("Loading..");
+					setTimeout(loop, 500);
+				};
+			};
 			break;
 		case "artist":
-			gui.loadArtists();
+		    loop = function() {
+				if (backEnd.world.artistsReady()) {
+					banner.setChartData(backEnd.world.artistChart, barchart.artist_text, x_value, y_value);
+					console.log("Chart loaded.");
+				} else {
+					console.log("Loading..");
+					setTimeout(loop, 500);
+				};
+			};
 			break;
 	};
+
+	loop();
 };

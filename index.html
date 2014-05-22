@@ -7,11 +7,10 @@
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="http://d3js.org/topojson.v1.min.js"></script>
 	<script type="text/javascript" src="scripts/gui/gui.js"></script>
-	<script src="scripts/backEnd/types.js"></script>
-	<script src="scripts/backEnd/countries.js"></script>
-	<script src="scripts/backEnd/lastfm.js"></script>
-	<script src="scripts/backEnd/facade.js"></script>
-	<script src="scripts/backEnd/search.js"></script>
+	<script type="text/javascript" src="scripts/backEnd/types.js"></script>
+	<script type="text/javascript" src="scripts/backEnd/countries.js"></script>
+	<script type="text/javascript" src="scripts/backEnd/lastfm.js"></script>
+	<script type="text/javascript" src="scripts/backEnd/facade.js"></script>
 </head>
 <body id="body">
 	<!-- Bootstrap map background -->
@@ -53,12 +52,10 @@
 	<div id="container-linechart">
 		<script type="text/javascript" src="scripts/gui/linechart.js"></script>
 	</div>
-</body>
 
-	<!-- add at end for fluid ui, remove or move later 
-	<script src="scripts/backEnd/types.js"></script>
-	<script src="scripts/backEnd/countries.js"></script>
-	<script src="scripts/backEnd/lastfm.js"></script>
-	<script src="scripts/backEnd/facade.js"></script> -->
-	
+	<script type="text/javascript">
+		gui.changeMode();
+		gui.changeType();
+	</script>
+</body>
 </html>

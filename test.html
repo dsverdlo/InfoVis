@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.x.axis path {
+  display: none;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+//Width and height
+var margin = {top: 20, right: 20, bottom: 30, left: 40};           
+var width = 600 - margin.left - margin.right;
+var height= 500-margin.top -margin.bottom;
+var w = width;
+var h = height;
+
+var dataset = [
+    {"val":5,"key":"a"},
+    {"val":10,"key":"b"},
+    {"val":13,"key":"c"},
+    {"val":19,"key":"d"},
+    {"val":21,"key":"e"},
+    {"val":25,"key":"f"},
+    {"val":22,"key":"g"},
+    {"val":18,"key":"h"},
+    {"val":15,"key":"i"},
+    {"val":13,"key":"j"},
+    {"val":11,"key":"k"},
+    {"val":12,"key":"l"},
+    {"val":15,"key":"m"},
+    {"val":20,"key":"n"},
+    {"val":18,"key":"o"},
+    {"val":17,"key":"p"},
+    {"val":16,"key":"q"},
+    {"val":18,"key":"r"},
+    {"val":23,"key":"s"},
+    {"val":25,"key":"t"}
+];
+
+var alternate_dataset = [
+    {"val":5,"key":"c"},
+    {"val":10,"key":"d"},
+    {"val":13,"key":"e"},
+    {"val":19,"key":"f"},
+    {"val":21,"key":"g"},
+    {"val":25,"key":"h"},
+    {"val":22,"key":"i"},
+    {"val":18,"key":"j"},
+    {"val":15,"key":"k"},
+    {"val":13,"key":"l"},
+    {"val":11,"key":"m"},
+    {"val":12,"key":"n"},
+    {"val":15,"key":"o"},
+    {"val":20,"key":"p"},
+    {"val":18,"key":"q"},
+    {"val":17,"key":"r"},
+    {"val":16,"key":"s"},
+    {"val":18,"key":"t"},
+    {"val":23,"key":"u"},
+    {"val":25,"key":"v"}
+];
+
+var xScale = d3.scale.ordinal()
+    .domain(dataset.map(function (d) {return d.key; }))
+    .rangeRoundBands([margin.left, width], 0.05);
+
+var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+
+var yScale = d3.scale.linear()
+    .domain([0, d3.max(dataset, function(d) {return d.val; })])
+    .range([h,0]);
+
+
+//Create SVG element
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
+
+//Create bars
+svg.selectAll("rect")
+    .data(dataset)
+.enter().append("rect")
+    .attr("x", function(d, i) {
+        return xScale(d.key);
+    })
+    .attr("y", function(d) {
+        return yScale(d.val);
+    })
+    .attr("width", xScale.rangeBand())
+    .attr("height", function(d) {
+        return h - yScale(d.val);
+    })
+    .attr("fill", function(d) {
+        return "rgb(0, 0, " + (d.val * 10) + ")";
+    });
+
+var the_x_axis = svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + 0 + ")")
+    .call(xAxis);
+
+function changeset(data) {
+  xScale.domain(data.map(function (d) {return d.key; }));
+  the_x_axis.call(xAxis);
+};
+</script>

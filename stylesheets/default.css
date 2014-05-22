@@ -89,12 +89,12 @@ div#container-linechart {
 div#container-barchart {
 	float: left;
 	border-radius: 10px;
-	height: 150px;
+	height: 40%;
+	width: 35%;
 	background-color: #3B3C36; /*LD*/ 
-	width: 20%;
 	bottom: 0;
-	right: 0;
-	margin-right: 20px;
+	left: 0;
+	margin-left: 20px;
 	margin-bottom: 20px;
 	padding: 10px;
 }

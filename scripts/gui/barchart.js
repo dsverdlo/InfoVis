@@ -36,11 +36,12 @@ barchart.container = d3.select("#container-barchart");
 
 // The x scalar maps the scales linearly over the top X (top 5, top 20, ...). The y scales
 // linearly over the popularity.
-barchart.x = d3.scale.linear().range([barchart.x_axis_offset, barchart.width]).domain([1, barchart.maximum_bars]);
+barchart.x = d3.scale.ordinal().domain(["a", "b", "c", "d", "e"])
+    .rangeRoundBands([barchart.margin.left, barchart.width], 0.05);
 barchart.y = d3.scale.linear().range([0, barchart.height]).domain([100, 0]);
 
 // Initialize axes with our previously creates scalars.
-barchart.x_axis = d3.svg.axis().scale(barchart.x).tickValues([1, 2, 3, 4, 5]).orient("bottom");
+barchart.x_axis = d3.svg.axis().scale(barchart.x).orient("bottom");
 barchart.y_axis = d3.svg.axis().scale(barchart.y).orient("left");
 
 barchart.svg = barchart.container.append("svg")
@@ -51,7 +52,7 @@ barchart.group = barchart.svg.append("g")
     .attr("transform", "translate(" + barchart.margin.left + "," + barchart.margin.top + ")");
 
 // Draw the x axis.
-barchart.group.append("g")
+barchart.x_axis_g = barchart.group.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(" + barchart.offset / 2 + "," + barchart.height + ")")
         .call(barchart.x_axis)
@@ -59,6 +60,7 @@ barchart.group.append("g")
 // Draw the y axis.
 barchart.y_axis_g = barchart.group.append("g")
         .attr("class", "y axis")
+        .attr("transform", "translate(" + 10 + "," + 0 + ")")
         .call(barchart.y_axis);
 
 barchart.axis_text = barchart.y_axis_g.append("text")
@@ -68,54 +70,23 @@ barchart.axis_text = barchart.y_axis_g.append("text")
     .style("text-anchor", "end")
     .text(barchart.y_axis_text);
 
-gui.setBarchartLabel = function(txt) {
-    barchart.axis_text.text(txt);
-};
+banner.setChartData = function(array, label, x_value, y_value) {
+    var data = array.slice(0, barchart.maximum_bars);
+    barchart.axis_text.text(label);
 
-gui.loadTracks = function() {
-    var tracks = backEnd.world.trackChart.slice(0, barchart.maximum_bars);
-
-    gui.setBarchartLabel(barchart.track_text);
+    // Reset the labels.
+    barchart.x.domain(data.map(function(d) { console.log(x_value(d)); x_value(d); }));
+    barchart.x_axis_g.call(barchart.x);
 
     // Draw the bars.
     barchart.group.selectAll(".bar")
-            .data(tracks)
+            .data(data)
         .enter().append("rect")
             .attr("class", "bar")
             .attr("rx", "5")
             .attr("ry", "5")
-            .attr("x", function(d) { return barchart.x(d.chartPos) })
+            .attr("x", function(d) { return barchart.x(x_value(d)) })
             .attr("width", barchart.offset)
-            .attr("y", function(d) { return barchart.y(d.popularity * 100); })
-            .attr("height", function(d) { return barchart.height - barchart.y(d.popularity * 100); });
+            .attr("y", function(d) { return barchart.y(y_value(d)); })
+            .attr("height", function(d) { return barchart.height - barchart.y(y_value(d)); });
 };
-
-gui.loadArtists = function() {
-    var artists = backEnd.world.artistChart.slice(0, barchart.maximum_bars);
-
-    gui.setBarchartLabel(barchart.artist_text);
-
-    // Draw the bars.
-    barchart.group.selectAll(".bar")
-            .data(artists)
-        .enter().append("rect")
-            .attr("class", "bar")
-            .attr("rx", "5")
-            .attr("ry", "5")
-            .attr("x", function(d) { return barchart.x(d.chartPos) })
-            .attr("width", barchart.offset)
-            .attr("y", function(d) { return barchart.y(d.popularity * 100); })
-            .attr("height", function(d) { return barchart.height - barchart.y(d.popularity * 100); });
-};
-
-// Periodically check whether the backend has loaded yet.
-barchart.loading = function() {
-    if (backEnd.world.tracksReady()) {
-        console.log("Top tracks loaded!");
-        gui.loadTracks();
-    } else {
-        setTimeout(barchart.loading, 500);
-    };
-};
-
-barchart.loading();
