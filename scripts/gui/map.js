@@ -62,9 +62,9 @@ gui.colorMapDefault = function() {
         map.g.selectAll("path")
             .data(topojson.feature(world, world.objects.countries).features)
             .enter().append("path")
-                  .attr("d", map.path)
-                  .attr("class", "feature")
-                  .on("click", map.clicked);
+                .attr("d", map.path)
+                .attr("class", "feature")
+                .on("click", map.clicked);
 
         map.g.append("path").datum(
                 topojson.mesh(world, world.objects.countries,
@@ -177,6 +177,7 @@ map.search = function(input) {
             });
             break;
 
+        // Find each instance of artist and push on stack if found.
         case "artist":
             backEnd.countryList.map(function(country) {
                 var artist = country.findArtist(input);
@@ -298,6 +299,9 @@ map.clicked = function(d) {
 	  map.active = d3.select(this).classed("active", true);
 
 	  map.g.selectAll("#country").remove();
+
+      // Get default coloring for rest of map.
+      gui.colorMapDefault();
 			  
 	  country = "data/" + d.id + ".json";
 		//create map for country
@@ -309,7 +313,7 @@ map.clicked = function(d) {
 				.data(topojson.feature(country, country.objects.layer1).features)
 				.enter().append("path")
 				      .attr("d", map.path)
-				      .style("fill", "#FF4500");
+				      .style("fill", "#684F38");
 						      
 		  map.g.append("g")
 		  	.attr("id","country")
@@ -319,14 +323,14 @@ map.clicked = function(d) {
 							function(a, b) {
 								return a !== b;
 							})).attr("class", "boundary")
-							.attr("d", map.path).style("fill","#FF4500");
+							.attr("d", map.path).style("fill","#684F38");
 
 			});
 		
 		map.artistOrTrack = document.getElementById("searchinput").value;
 		if (map.artistOrTrack == "" | d.id != 'BEL'){
 			console.log("No search input or not belgium");
-		}else{
+		} else {
 			map.metrosname = [];
 			map.artists = [];
 			map.tracks = [];
@@ -345,7 +349,7 @@ map.clicked = function(d) {
 							map.metrosname.push(metro.name);
 						};
 					};
-				}else{
+				} else {
 					//metro.trackChart
 					for(var j = 0; j < metro.trackChart.length; j++){
 						if(metro.trackChart[j].name.indexOf(map.artistOrTrack) > -1  & metro.name != 'Charleroi' & metro.name != 'Ghent'){ 
@@ -368,7 +372,7 @@ map.clicked = function(d) {
 						//create map for city
 						drawCity(cityfile, tempColor);
 					};
-				}else{
+				} else {
 					for(var i = 0; i < map.tracks.length; i++){
 						console.log(map.metrosname[i] + " " +map.tracks[i].name + map.tracks[i].popularity);
 						var tempColorIndex1 = Math.round(map.scaleColor(map.tracks[i].popularity));
@@ -426,6 +430,8 @@ map.reset = function() {
 	  map.active = d3.select(null);
 
 	  map.g.selectAll("#country").remove();
+
+      gui.changeMode();
 			  
 	  map.svg.transition()
 	      .duration(750)
