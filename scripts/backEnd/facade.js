@@ -52,3 +52,33 @@ backEnd.fetchAllData = function() {
 };
 
 backEnd.fetchAllData();
+
+backEnd.findTopCountriesForTrack = function(name) {
+	var itemArr = [];
+	for (var i = 0; i < backEnd.countryList.length; i++) {
+		var country = backEnd.countryList[i];
+		var res = backEnd.findName(country.trackChart, name);
+		if (res) itemArr.push({item : res, country: country});
+	};
+
+	var sortFunc = function(l,r) {
+		return r.item.popularity - l.item.popularity;
+	}
+	itemArr.sort(sortFunc);
+	return itemArr.slice(0,5);
+}
+
+backEnd.findTopCountriesForArtist = function(name) {
+	var itemArr = [];
+	for (var i = 0; i < backEnd.countryList.length; i++) {
+		var country = backEnd.countryList[i];
+		var res = backEnd.findName(country.artistChart, name);
+		if (res) itemArr.push({item : res, country: country});
+	};
+
+	var sortFunc = function(l,r) {
+		return r.item.popularity - l.item.popularity;
+	}
+	itemArr.sort(sortFunc);
+	return itemArr.slice(0,5);
+}
