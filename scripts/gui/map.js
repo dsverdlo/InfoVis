@@ -27,6 +27,7 @@ map.scaleColor = d3.scale.sqrt()
     .domain([0, 1.0])
     .range([0, 7]);
 map.colors = ["#fee6ce", "#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801", "#a63603", "#7f2704"];
+map.colorsCity = ["#deebf7", "#c6dbef", "#9ecae1", "#6baed6", "#4292c6", "#2171b5", "#08519c", "#08306b"];
 
 map.projection = d3.geo.mercator().translate([0, 0]).scale(map.width / 2 / Math.PI);  
 
@@ -153,14 +154,14 @@ function search() {
 	backEnd.countryList.map(function(country) {
 		map.artist = country.findArtist(map.artistOrTrack);
 		if (map.artist != null){
-			map.countries.push(country.name); console.log("Artist: " + country.name);
+			map.countries.push(country.name); 
 			map.artists.push(map.artist);
 			map.typeArtist = true;
 		};
 		
 		map.track = country.findTrack(map.artistOrTrack);
 		if (map.track != null){
-			map.countries.push(country.name); console.log("Track: " + country.name);
+			map.countries.push(country.name); 
 			map.tracks.push(map.track);
 			map.typeArtist = false;
 		};
@@ -278,13 +279,13 @@ map.clicked = function(d) {
 	  map.g.selectAll("#country").remove();
 			  
 	  country = "data/" + d.id + ".json";
-
-	  d3.json(country, function(error, world) {
+		//create map for country
+	  d3.json(country, function(error, country) {
 		  map.g.append("g")
 		  	.attr("id","country")
 		  	.on("click", map.reset)
 		  		.selectAll("path")
-				.data(topojson.feature(world, world.objects.layer1).features)
+				.data(topojson.feature(country, country.objects.layer1).features)
 				.enter().append("path")
 				      .attr("d", map.path)
 				      .style("fill", "#FF4500");
@@ -293,14 +294,74 @@ map.clicked = function(d) {
 		  	.attr("id","country")
 		  	.on("click", map.reset)
 		  		.append("path").datum(
-					topojson.mesh(world, world.objects.layer1,
+					topojson.mesh(country, country.objects.layer1,
 							function(a, b) {
 								return a !== b;
 							})).attr("class", "boundary")
 							.attr("d", map.path).style("fill","#FF4500");
 
-			}); 
-			  
+			});
+		
+		map.artistOrTrack = document.getElementById("searchinput").value;
+		if (map.artistOrTrack == "" | d.id != 'BEL'){
+			console.log("No search input or not belgium");
+		}else{
+			map.metrosname = [];
+			map.artists = [];
+			map.tracks = [];
+			
+			var belgium = backEnd.getCountryByName('Belgium');
+			for(var i = 0; i< belgium.metros.length; i++){
+				var metro = belgium.metros[i];
+				metro.fetchArtistChart();
+				metro.fetchTrackChart();
+				
+				if(map.typeArtist){
+					//metro.artistChart
+					for(var j = 0; j < metro.artistChart.length; j++){
+						if(metro.artistChart[j].name.indexOf(map.artistOrTrack) > -1   & metro.name != 'Charleroi' & metro.name != 'Ghent'){
+							map.artists.push(metro.artistChart[j]);
+							map.metrosname.push(metro.name);
+						};
+					};
+				}else{
+					//metro.trackChart
+					for(var j = 0; j < metro.trackChart.length; j++){
+						if(metro.trackChart[j].name.indexOf(map.artistOrTrack) > -1  & metro.name != 'Charleroi' & metro.name != 'Ghent'){ 
+							map.tracks.push(metro.trackChart[j]);
+							map.metrosname.push(metro.name);
+						};
+					};
+				};
+			};
+			
+			if(map.metrosname.length > 0 ){
+				if(map.typeArtist){
+					for(var i = 0; i < map.artists.length; i++){
+						console.log(map.metrosname[i] + " " +map.artists[i].name + map.artists[i].popularity);
+						var tempColorIndex1 = Math.round(map.scaleColor(map.artists[i].popularity));
+						var tempColor = map.colorsCity[tempColorIndex1];
+										
+						var cityname = map.metrosname[i];
+						var cityfile = "data/" + cityname + ".json";
+						//create map for city
+						drawCity(cityfile, tempColor);
+					};
+				}else{
+					for(var i = 0; i < map.tracks.length; i++){
+						console.log(map.metrosname[i] + " " +map.tracks[i].name + map.tracks[i].popularity);
+						var tempColorIndex1 = Math.round(map.scaleColor(map.tracks[i].popularity));
+						var tempColor = map.colorsCity[tempColorIndex1];
+										
+						var cityname = map.metrosname[i];
+						var cityfile = "data/" + cityname + ".json";
+						//create map for city
+						drawCity(cityfile, tempColor);
+					};
+				};
+			};
+		};
+		
 	    map.bounds = map.path.bounds(d);
 	    map.dx = map.bounds[1][0] - map.bounds[0][0];
 	    map.dy = map.bounds[1][1] - map.bounds[0][1];
@@ -309,10 +370,35 @@ map.clicked = function(d) {
 	    map.scaleZoom = .9 / Math.max(map.dx / map.width, map.dy / map.height);
 	    map.translate = [map.width / 2 - map.scaleZoom * map.x - 500, map.height / 2 - map.scaleZoom * map.y - 300];
 
-	  map.svg.transition()
+		map.g.selectAll("path").style("stroke-width", 0.1);
+		map.svg.transition()
           .duration(750)
           .call(map.zoom.translate(map.translate).scale(map.scaleZoom).event);
 };
+
+function drawCity(cityfile, color){
+	d3.json(cityfile, function(error, city) {
+		map.g.append("g")
+			.attr("id", "country")
+			.on("click", map.reset)
+			.selectAll("path")
+			.data(topojson.feature(city, city.objects.layer1).features)
+			.enter().append("path")
+				  .attr("d", map.path)
+				  .style("fill", color);
+								  
+			map.g.append("g")
+			.attr("id", "country")
+			.on("click", map.reset)
+			.append("path").datum(
+			topojson.mesh(city, city.objects.layer1,
+				function(a, b) {
+					return a !== b;
+				})).attr("class", "boundary")
+				.attr("d", map.path)
+				.style("fill", color);
+	}); 
+}
 			
 map.reset = function() {
 	  map.active.classed("active", false);
@@ -323,7 +409,7 @@ map.reset = function() {
 	  map.svg.transition()
 	      .duration(750)
 	      .call(map.zoom.translate([0, 0]).scale(1).event);
-
+	map.g.selectAll("path").style("stroke-width", 0.75);
 };
 		
 		
