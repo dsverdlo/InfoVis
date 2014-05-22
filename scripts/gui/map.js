@@ -30,7 +30,7 @@ map.scaleColor = d3.scale.sqrt()
 map.basecolor = "#FFE8CC";
 map.colors = ["#FFDDB2", "#FFD699", "#FFC97F", "#FFBC66", "#FFAE4C", "#FF9F32", "#FF9019", "#FF8300"];
 map.colorsCity = ["#deebf7", "#c6dbef", "#9ecae1", "#6baed6", "#4292c6", "#2171b5", "#08519c", "#08306b"];
-
+	
 map.projection = d3.geo.mercator().translate([0, 0]).scale(map.width / 2 / Math.PI);  
 
 map.zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
@@ -53,6 +53,10 @@ map.g = map.svg.append("g").style("stroke-width", 1)
     
 map.svg.call(map.zoom).call(map.zoom.event);
 
+map.div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+	
 gui.colorMapDefault = function() {
     // Remove any old paths there may be.
     map.g.selectAll("path").remove();
@@ -205,7 +209,19 @@ map.search = function(input) {
 							return "#9F8170"})
 				   .style("stroke", "#FFF")
 				   .style("stroke-width", "0.75")
-				  .on("click", map.clicked);
+				  .on("click", map.clicked)
+				  .on("mouseover", function(d){ 
+					   map.div.transition()        
+								   .duration(200)      
+								   .style("opacity", .9);      
+							   map.div.html(d.properties.name)  
+								   .style("left", (d3.event.pageX) + "px")     
+								   .style("top", (d3.event.pageY - 28) + "px"); })
+					   .on("mouseout", function(d) {       
+						   map.div.transition()        
+								   .duration(200)      
+								   .style("opacity", 0);   
+						   });
 
 		map.g.append("path").datum(
 				topojson.mesh(world, world.objects.countries,
@@ -214,10 +230,6 @@ map.search = function(input) {
 						})).attr("class", "boundary").attr("d", map.path);
 	});
 };
-
-map.div = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
 
 //function zoomLevel(jsonfile) {
 //    d3.json(jsonfile, function(data) {
@@ -373,7 +385,7 @@ map.clicked = function(d) {
 						var cityname = map.metrosname[i];
 						var cityfile = "data/" + cityname + ".json";
 						//create map for city
-						drawCity(cityfile, tempColor);
+						drawCity(cityfile, tempColor, cityname);
 					};
 				} else {
 					for(var i = 0; i < map.metroTracks.length; i++){
@@ -384,7 +396,7 @@ map.clicked = function(d) {
 						var cityname = map.metrosname[i];
 						var cityfile = "data/" + cityname + ".json";
 						//create map for city
-						drawCity(cityfile, tempColor);
+						drawCity(cityfile, tempColor, cityname);
 					};
 				};
 			};
@@ -404,7 +416,7 @@ map.clicked = function(d) {
           .call(map.zoom.translate(map.translate).scale(map.scaleZoom).event);
 };
 
-function drawCity(cityfile, color){
+function drawCity(cityfile, color, cityname){
 	d3.json(cityfile, function(error, city) {
 		map.g.append("g")
 			.attr("id", "country")
@@ -413,7 +425,19 @@ function drawCity(cityfile, color){
 			.data(topojson.feature(city, city.objects.layer1).features)
 			.enter().append("path")
 				  .attr("d", map.path)
-				  .style("fill", color);
+				  .style("fill", color)
+				  .on("mouseover", function(d){ 
+					   map.div.transition()        
+								   .duration(200)      
+								   .style("opacity", .9);      
+							   map.div.html(cityname)  
+								   .style("left", (d3.event.pageX) + "px")     
+								   .style("top", (d3.event.pageY - 28) + "px"); })
+					   .on("mouseout", function(d) {       
+						   map.div.transition()        
+								   .duration(200)      
+								   .style("opacity", 0);   
+						   });
 								  
 			map.g.append("g")
 			.attr("id", "country")
