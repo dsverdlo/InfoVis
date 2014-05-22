@@ -81,15 +81,15 @@ gui.colorMapDefault = function() {
 
 gui.colorMapDefault();
 
-map.bubblegroup = map.svg.append("g");
+//map.bubblegroup = map.svg.append("g");
 
 gui.removeBubbles = function() {
-    map.bubblegroup.selectAll("#map-marker")
+    map.g.selectAll("#map-marker")
         .remove();
 };
 
 gui.loadTrackBubbles = function() {
-    map.bubblegroup.selectAll("circle")
+    map.g.selectAll("circle")
         .remove();
 
     backEnd.countryList.map(function(country) {
@@ -143,7 +143,7 @@ map.loading = function() {
  map.loading();
 
 gui.drawBubble = function(name, cx, cy, radius) {
-    map.bubblegroup.append("circle")
+    map.g.append("circle")
         .attr("class", "map-marker")
         .attr("cx", cx)
         .attr("cy", cy)
@@ -312,7 +312,13 @@ function move() {
 //};
 
 map.clicked = function(d) {
-	  if (map.active.node() === this) return map.reset();
+		map.g.selectAll("circle")
+        .remove();
+		
+	  if (map.active.node() === this) {
+			return map.reset();
+			
+		}; //gui.loadTrackBubbles
 	  map.active.classed("active", false);
 	  map.active = d3.select(this).classed("active", true);
 
