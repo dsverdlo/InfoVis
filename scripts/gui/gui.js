@@ -59,6 +59,18 @@ gui.changeMode = function() {
 	} else {
 		gui.mapMode = "single";
 		map.search(input);
+
+		if (gui.searchType == "artist") {
+			var data = backEnd.findTopCountriesForArtist(input);
+			var x_getter = function(d) { return d.country.name };
+			var y_getter = function(d) { return d.item.popularity * 100};
+			banner.setChartData(data, "Top Countries for " + input, x_getter, y_getter);
+		} else {
+			var data = backEnd.findTopCountriesForTrack(input);
+			var x_getter = function(d) { return d.country.name };
+			var y_getter = function(d) { return d.item.popularity * 100};
+			banner.setChartData(data, "Top Countries for " + input, x_getter, y_getter);
+		}
 	};
 };
 
