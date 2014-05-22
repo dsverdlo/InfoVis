@@ -302,7 +302,10 @@ map.clicked = function(d) {
 
       // Get default coloring for rest of map.
       gui.colorMapDefault();
-			  
+	   
+      var countrycolor = map.basecolor;
+      if (gui.mapMode == "all") { countrycolor = "#684F38"; };
+
 	  country = "data/" + d.id + ".json";
 		//create map for country
 	  d3.json(country, function(error, country) {
@@ -313,7 +316,7 @@ map.clicked = function(d) {
 				.data(topojson.feature(country, country.objects.layer1).features)
 				.enter().append("path")
 				      .attr("d", map.path)
-				      .style("fill", "#684F38");
+				      .style("fill", countrycolor);
 						      
 		  map.g.append("g")
 		  	.attr("id","country")
@@ -323,7 +326,7 @@ map.clicked = function(d) {
 							function(a, b) {
 								return a !== b;
 							})).attr("class", "boundary")
-							.attr("d", map.path).style("fill","#684F38");
+							.attr("d", map.path).style("fill", countrycolor);
 
 			});
 		
