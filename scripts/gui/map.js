@@ -14,7 +14,6 @@ map.json_topology = "data/datamaps.world.min.json";
 
 
 //// UI SETUP ///////////////////////////////////////////////////////////////////
-
 map.width = parseInt(window.getComputedStyle(body).width, 10);
 map.height = parseInt(window.getComputedStyle(body).height, 10);
 map.active = d3.select(null);
@@ -60,7 +59,7 @@ map.div = d3.select("body").append("div")
 gui.colorMapDefault = function() {
     // Remove any old paths there may be.
     map.g.selectAll("path").remove();
-
+	
     // Draw paths in default map color.
     d3.json(map.json_topology, function(error, world) {
         map.g.selectAll("path")
@@ -75,33 +74,40 @@ gui.colorMapDefault = function() {
                         function(a, b) {
                             return a !== b;
                         })).attr("class", "boundary").attr("d", map.path);
+						
+		//zoomLevel("data/circles.general.json");
     });
 };
 
 gui.colorMapDefault();
 
-map.bubblegroup = map.svg.append("g");
+//map.bubblegroup = map.svg.append("g");
 
 gui.removeBubbles = function() {
-    map.bubblegroup.selectAll("#map-marker")
+    map.g.selectAll("#map-marker")
         .remove();
 };
 
 gui.loadTrackBubbles = function() {
-    map.bubblegroup.selectAll("circle")
+    map.g.selectAll("circle")
         .remove();
 
     backEnd.countryList.map(function(country) {
         var toppesttrack = country.trackChart[0];
 
         if (toppesttrack != undefined) {
-            var longitude  = country.longitude - 180;
-            var latitude   = country.latitude - 85.609038;
+            var longitude  = country.longitude ;
+            var latitude   = country.latitude ;
             var popularity = toppesttrack.popularity;
             var name       = toppesttrack.name;
 
             console.log(name + " is most popular track in " + country.name);
-            gui.drawBubble(name, longitude, latitude, popularity);
+			var countriesName = ["United States", "Belgium", "Austalia", "China", "France", "Italy", "Canada", "Sweden", "Finland"];
+			for(var i = 0; i<10; i++){
+				if(countriesName[i] == country.name){
+					gui.drawBubble(name, longitude, latitude, popularity);
+				}
+			}
         };
     });
 };
@@ -134,10 +140,10 @@ map.loading = function() {
     };
 };
 
-// map.loading();
+ map.loading();
 
 gui.drawBubble = function(name, cx, cy, radius) {
-    map.bubblegroup.append("circle")
+    map.g.append("circle")
         .attr("class", "map-marker")
         .attr("cx", cx)
         .attr("cy", cy)
@@ -231,44 +237,44 @@ map.search = function(input) {
 	});
 };
 
-//function zoomLevel(jsonfile) {
-//    d3.json(jsonfile, function(data) {
-//        map.g.selectAll("circle")
-//         .data([])
-//         .exit().remove();
-//
-//        map.g.selectAll("text")
-//         .data([])
-//         .exit().remove();
-//
-//        map.g.selectAll("circle")
-//         .data(data)
-//         .enter().append("circle")
-//                    .attr("class", "map-marker")
-//                    .attr("cx", function (d) { return d.x_axis })
-//                    .attr("cy", function (d) { return d.y_axis })
-//                    .attr("r", function(d) { return map.scale(d.radius); })
-//                    .on("mouseover", function(d){ 
-//                div.transition()        
-//                            .duration(200)      
-//                            .style("opacity", .9);      
-//                        div.html(d.name)  
-//                            .style("left", (d3.event.pageX) + "px")     
-//                            .style("top", (d3.event.pageY - 28) + "px"); })
-//                .on("mouseout", function(d) {       
-//                    div.transition()        
-//                            .duration(200)      
-//                            .style("opacity", 0);   
-//                    });
-//
-//        map.g.selectAll("text")
-//         .data(data)
-//         .enter().append("text")
-//                    .text(function (d) { return d.name })
-//                    .attr("x", function (d) { return (d.x_axis + map.scale(d.radius) + 3) })
-//                    .attr("y", function (d) { return (d.y_axis + 4) });
-//    });
-//};
+// function zoomLevel(jsonfile) {
+   // d3.json(jsonfile, function(data) {
+       // map.g.selectAll("circle")
+        // .data([])
+        // .exit().remove();
+
+       // map.g.selectAll("text")
+        // .data([])
+        // .exit().remove();
+
+       // map.g.selectAll("circle")
+        // .data(data)
+        // .enter().append("circle")
+                   // .attr("class", "map-marker")
+                   // .attr("cx", function (d) { return d.x_axis })
+                   // .attr("cy", function (d) { return d.y_axis })
+                   // .attr("r", function(d) { return map.scale(d.radius); })
+                   // .on("mouseover", function(d){ 
+               // div.transition()        
+                           // .duration(200)      
+                           // .style("opacity", .9);      
+                       // div.html(d.name)  
+                           // .style("left", (d3.event.pageX) + "px")     
+                           // .style("top", (d3.event.pageY - 28) + "px"); })
+               // .on("mouseout", function(d) {       
+                   // div.transition()        
+                           // .duration(200)      
+                           // .style("opacity", 0);   
+                   // });
+
+       // map.g.selectAll("text")
+        // .data(data)
+        // .enter().append("text")
+                   // .text(function (d) { return d.name })
+                   // .attr("x", function (d) { return (d.x_axis + map.scale(d.radius) + 3) })
+                   // .attr("y", function (d) { return (d.y_axis + 4) });
+   // });
+// };
     
 function move() {
     map.t = d3.event.translate;
@@ -306,7 +312,13 @@ function move() {
 //};
 
 map.clicked = function(d) {
-	  if (map.active.node() === this) return map.reset();
+		map.g.selectAll("circle")
+        .remove();
+		
+	  if (map.active.node() === this) {
+			return map.reset();
+			
+		}; //gui.loadTrackBubbles
 	  map.active.classed("active", false);
 	  map.active = d3.select(this).classed("active", true);
 
