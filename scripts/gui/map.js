@@ -164,7 +164,7 @@ map.search = function(input) {
     var country_stack = [];
     var artist_stack  = [];
     var track_stack   = [];
-
+	
     switch (gui.searchType) {
         // Find each instance of track and push on stack if found.
         case "track":
@@ -330,8 +330,8 @@ map.clicked = function(d) {
 
 			});
 		
-		map.artistOrTrack = document.getElementById("searchinput").value;
-		if (map.artistOrTrack == "" | d.id != 'BEL'){
+		var input = document.getElementById("searchinput").value;
+		if (input == "" | d.id != 'BEL'){
 			console.log("No search input or not belgium");
 		} else {
 			map.metrosname = [];
@@ -344,10 +344,10 @@ map.clicked = function(d) {
 				metro.fetchArtistChart();
 				metro.fetchTrackChart();
 				
-				if(map.typeArtist){
+				if(gui.searchType == "artist"){
 					//metro.artistChart
 					for(var j = 0; j < metro.artistChart.length; j++){
-						if(metro.artistChart[j].name.indexOf(map.artistOrTrack) > -1   & metro.name != 'Charleroi' & metro.name != 'Ghent'){
+						if(metro.artistChart[j].name.indexOf(input) > -1   & metro.name != 'Charleroi' & metro.name != 'Ghent'){
 							map.metroArtists.push(metro.artistChart[j]);
 							map.metrosname.push(metro.name);
 						};
@@ -355,7 +355,7 @@ map.clicked = function(d) {
 				} else {
 					//metro.trackChart
 					for(var j = 0; j < metro.trackChart.length; j++){
-						if(metro.trackChart[j].name.indexOf(map.artistOrTrack) > -1  & metro.name != 'Charleroi' & metro.name != 'Ghent'){ 
+						if(metro.trackChart[j].name.indexOf(input) > -1  & metro.name != 'Charleroi' & metro.name != 'Ghent'){ 
 							map.metroTracks.push(metro.trackChart[j]);
 							map.metrosname.push(metro.name);
 						};
@@ -364,7 +364,7 @@ map.clicked = function(d) {
 			};
 			
 			if(map.metrosname.length > 0 ){
-				if(map.typeArtist){
+				if(gui.searchType == "artist"){
 					for(var i = 0; i < map.metroArtists.length; i++){
 						console.log(map.metrosname[i] + " " +map.metroArtists[i].name + map.metroArtists[i].popularity);
 						var tempColorIndex1 = Math.round(map.scaleColor(map.metroArtists[i].popularity));
