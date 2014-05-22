@@ -143,7 +143,7 @@ gui.ui_state = 0; // 0 = opaque, 1 = non-opaque
 gui.toggleGui = function(d) {
     var elements = [d3.select("#searchbar"), d3.select("#container-barchart"), d3.select("#container-linechart"),
         banner.about_element.container, banner.help_element.container, banner.background_expanded,
-        banner.divider1, banner.divider2];
+        banner.divider1, banner.divider2, d3.select("#container-selection")];
     var ui_state_inverse = Math.abs(gui.ui_state - 1);
 
     gui.gradualOpacity(elements, gui.ui_state);

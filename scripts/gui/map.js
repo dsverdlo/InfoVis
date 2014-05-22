@@ -26,7 +26,9 @@ map.scale = d3.scale.sqrt()
 map.scaleColor = d3.scale.sqrt()
     .domain([0, 1.0])
     .range([0, 7]);
-map.colors = ["#fee6ce", "#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801", "#a63603", "#7f2704"];
+
+map.basecolor = "#FFE8CC";
+map.colors = ["#FFDDB2", "#FFD699", "#FFC97F", "#FFBC66", "#FFAE4C", "#FF9F32", "#FF9019", "#FF8300"];
 map.colorsCity = ["#deebf7", "#c6dbef", "#9ecae1", "#6baed6", "#4292c6", "#2171b5", "#08519c", "#08306b"];
 
 map.projection = d3.geo.mercator().translate([0, 0]).scale(map.width / 2 / Math.PI);  
@@ -35,14 +37,16 @@ map.zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", move);
 
 map.path = d3.geo.path().projection(map.projection);
 
-map.svg = d3.select("body").append("svg").attr("width", map.width).attr(
-             "height", map.height).append("g").attr("transform",
-             "translate(" + map.width / 2 + "," + map.height / 2 + ")")
-             .on("click", map.stopped, true);
+map.svg = d3.select("body").append("svg")
+        .attr("width", map.width).attr("height", map.height)
+    .append("g")
+        .attr("transform", "translate(" + map.width / 2 + "," + map.height / 2 + ")")
+        .on("click", map.stopped, true);
 
-map.svg.append("rect").attr("class", "overlay").attr("x", -map.width / 2).attr(
-   "y", -map.height / 2).attr("width", map.width).attr("height", map.height)
-   .on("click", map.reset);
+map.svg.append("rect").attr("class", "overlay")
+    .attr("x", -map.width / 2).attr("y", -map.height / 2)
+    .attr("width", map.width).attr("height", map.height)
+    .on("click", map.reset);
 
 map.g = map.svg.append("g").style("stroke-width", 1)
     .attr("transform", "translate(0, 100)scale(1)");
@@ -179,9 +183,9 @@ function search() {
 				  .style("fill", function(d){ 
 							map.tempColorIndex = containCountry(map.tracks, map.artists, map.countries, d.properties.name, map.typeArtist);
 							if( map.tempColorIndex >= 0 && map.tempColorIndex <= 7 ){ return map.colors[map.tempColorIndex];}; 
-							if( map.tempColorIndex == -1 ){ return "#fff5eb"};
+							if( map.tempColorIndex == -1 ){ return "#FFD38E"};
 							return "#9F8170"})
-				   .style("stroke", "#000")
+				   .style("stroke", "#FFF")
 				   .style("stroke-width", "0.75")
 				  .on("click", map.clicked);
 
