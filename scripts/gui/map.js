@@ -328,8 +328,8 @@ map.clicked = function(d) {
 			console.log("No search input or not belgium");
 		}else{
 			map.metrosname = [];
-			map.artists = [];
-			map.tracks = [];
+			map.metroArtists = [];
+			map.metroTracks = [];
 			
 			var belgium = backEnd.getCountryByName('Belgium');
 			for(var i = 0; i< belgium.metros.length; i++){
@@ -341,7 +341,7 @@ map.clicked = function(d) {
 					//metro.artistChart
 					for(var j = 0; j < metro.artistChart.length; j++){
 						if(metro.artistChart[j].name.indexOf(map.artistOrTrack) > -1   & metro.name != 'Charleroi' & metro.name != 'Ghent'){
-							map.artists.push(metro.artistChart[j]);
+							map.metroArtists.push(metro.artistChart[j]);
 							map.metrosname.push(metro.name);
 						};
 					};
@@ -349,7 +349,7 @@ map.clicked = function(d) {
 					//metro.trackChart
 					for(var j = 0; j < metro.trackChart.length; j++){
 						if(metro.trackChart[j].name.indexOf(map.artistOrTrack) > -1  & metro.name != 'Charleroi' & metro.name != 'Ghent'){ 
-							map.tracks.push(metro.trackChart[j]);
+							map.metroTracks.push(metro.trackChart[j]);
 							map.metrosname.push(metro.name);
 						};
 					};
@@ -358,9 +358,9 @@ map.clicked = function(d) {
 			
 			if(map.metrosname.length > 0 ){
 				if(map.typeArtist){
-					for(var i = 0; i < map.artists.length; i++){
-						console.log(map.metrosname[i] + " " +map.artists[i].name + map.artists[i].popularity);
-						var tempColorIndex1 = Math.round(map.scaleColor(map.artists[i].popularity));
+					for(var i = 0; i < map.metroArtists.length; i++){
+						console.log(map.metrosname[i] + " " +map.metroArtists[i].name + map.metroArtists[i].popularity);
+						var tempColorIndex1 = Math.round(map.scaleColor(map.metroArtists[i].popularity));
 						var tempColor = map.colorsCity[tempColorIndex1];
 										
 						var cityname = map.metrosname[i];
@@ -369,9 +369,9 @@ map.clicked = function(d) {
 						drawCity(cityfile, tempColor);
 					};
 				}else{
-					for(var i = 0; i < map.tracks.length; i++){
-						console.log(map.metrosname[i] + " " +map.tracks[i].name + map.tracks[i].popularity);
-						var tempColorIndex1 = Math.round(map.scaleColor(map.tracks[i].popularity));
+					for(var i = 0; i < map.metroTracks.length; i++){
+						console.log(map.metrosname[i] + " " +map.metroTracks[i].name + map.metroTracks[i].popularity);
+						var tempColorIndex1 = Math.round(map.scaleColor(map.metroTracks[i].popularity));
 						var tempColor = map.colorsCity[tempColorIndex1];
 										
 						var cityname = map.metrosname[i];
