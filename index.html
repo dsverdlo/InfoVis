@@ -27,7 +27,7 @@
 	<!-- Widgets -->
 	<div id="searchbar">
 		<div id="searchfield">
-			<form id="searchform" action="#" onsubmit="search();">
+			<form id="searchform" action="#" onsubmit="gui.changeMode()">
 				<input type="text" id="searchinput" placeholder="SEARCH by artist, track or album"><br>
 			</form>
 		</div>
@@ -37,7 +37,7 @@
 	</div>
 
 	<div id="container-selection">
-		<select id="mode-selection" onchange="gui.changeMode()">
+		<select id="type-selection" onchange="gui.changeType()">
 			<option value="track">Track</option>
 			<option value="artist">Artist</option>
 			<option value="album">Album</option>

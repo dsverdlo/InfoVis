@@ -140,50 +140,53 @@ gui.drawBubble = function(name, cx, cy, radius) {
         .attr("r", map.scale(radius*30));
 };
 
-function containCountry(tracks, artists, countries, name, typeArtist){
+function containCountry(tracks, artists, countries, name){
 	map.index = -1;
 	for (var i = 0; i < countries.length; i++) {
 		map.index = countries.indexOf(name);
 		if( map.index > -1 ){
-			if(typeArtist){
-				return Math.round(map.scaleColor(artists[map.index].popularity));
-			}else{
-				return Math.round(map.scaleColor(tracks[map.index].popularity));
-			};
+            switch (gui.searchType) {
+                case "track":
+                    return Math.round(map.scaleColor(tracks[map.index].popularity));
+                case "artist":
+                    return Math.round(map.scaleColor(artists[map.index].popularity));
+                default:
+                    return -1;
+            };
 		}else{
 			return -1;
 		};
 	};
 };
 
-function search() {
-	map.artistOrTrack = document.getElementById("searchinput").value;
-	map.countries = [];
-	map.artists = [];
-	map.tracks = [];
-	map.typeArtist = true;
+map.search = function(input) {
+    // Stacks to draw appropriate heatmap later.
+    var country_stack = [];
+    var artist_stack  = [];
+    var track_stack   = [];
 
-    // If the user has no input entered, revert back to default mode.
-    if (map.artistOrTrack == "") {
-        gui.colorMapDefault();
-        return;
+    switch (gui.searchType) {
+        // Find each instance of track and push on stack if found.
+        case "track":
+            backEnd.countryList.map(function(country) {
+                var track = country.findTrack(input);
+                if (track != null) {
+                    country_stack.push(country.name); 
+                    track_stack.push(track);
+                };
+            });
+            break;
+
+        case "artist":
+            backEnd.countryList.map(function(country) {
+                var artist = country.findArtist(input);
+                if (artist != null) {
+                    country_stack.push(country.name); 
+                    artist_stack.push(artist);
+                };
+            });
+            break;
     };
-	
-	backEnd.countryList.map(function(country) {
-		map.artist = country.findArtist(map.artistOrTrack);
-		if (map.artist != null){
-			map.countries.push(country.name); 
-			map.artists.push(map.artist);
-			map.typeArtist = true;
-		};
-		
-		map.track = country.findTrack(map.artistOrTrack);
-		if (map.track != null){
-			map.countries.push(country.name); 
-			map.tracks.push(map.track);
-			map.typeArtist = false;
-		};
-	});
 	
 	//remove old paths
 	map.g.selectAll("path").remove();
@@ -195,9 +198,9 @@ function search() {
 			.enter().append("path")
 				  .attr("d", map.path)
 				  .style("fill", function(d){ 
-							map.tempColorIndex = containCountry(map.tracks, map.artists, map.countries, d.properties.name, map.typeArtist);
-							if( map.tempColorIndex >= 0 && map.tempColorIndex <= 7 ){ return map.colors[map.tempColorIndex];}; 
-							if( map.tempColorIndex == -1 ){ return "#FFD38E"};
+							var tempColorIndex = containCountry(track_stack, artist_stack, country_stack, d.properties.name);
+							if( tempColorIndex >= 0 && tempColorIndex <= 7 ) { return map.colors[tempColorIndex];}; 
+							if( tempColorIndex == -1 ) { return map.basecolor; };
 							return "#9F8170"})
 				   .style("stroke", "#FFF")
 				   .style("stroke-width", "0.75")

@@ -46,11 +46,29 @@ gui.hideDialog = function() {
 /** Toggles the window between the dimmed and undimmed states. */
 gui.toggleDialog = gui.showDialog;
 
-/** Changes between modes: artist, track or album. */
-gui.changeMode = function() {
-	var mode = document.getElementById("mode-selection").value;
+/** The map mode. All by default. */
+gui.mapMode = "all";
 
-	switch (mode) {
+/** Change between modes: all or single. */
+gui.changeMode = function() {
+	var input = document.getElementById("searchinput").value;
+	if (input == "") {
+		gui.mapMode = "all";
+		gui.colorMapDefault();
+	} else {
+		gui.mapMode = "single";
+		map.search(input);
+	};
+};
+
+/** The search type. Track by default. */
+gui.searchType = "track";
+
+/** Changes between types: artist, track or album. */
+gui.changeType = function() {
+	gui.searchType = document.getElementById("type-selection").value;
+
+	switch (gui.searchType) {
 		case "track":
 			gui.loadTracks();
 			break;
