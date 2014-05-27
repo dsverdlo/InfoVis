@@ -56,6 +56,7 @@ gui.changeMode = function() {
 	if (input == "") {
 		gui.mapMode = "all";
 		gui.colorMapDefault();
+		map.searchFound = false;
 	} else {
 		gui.mapMode = "single";
 		map.search(input);

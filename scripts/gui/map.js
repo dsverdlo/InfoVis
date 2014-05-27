@@ -11,9 +11,8 @@ var map = map || {};
 // shows data about musical trends around the globe.
 
 map.json_topology = "data/datamaps.world.min.json";
+map.searchFound = false;
 
-
-//// UI SETUP ///////////////////////////////////////////////////////////////////
 map.width = parseInt(window.getComputedStyle(body).width, 10);
 map.height = parseInt(window.getComputedStyle(body).height, 10);
 map.active = d3.select(null);
@@ -74,19 +73,16 @@ gui.colorMapDefault = function() {
                         function(a, b) {
                             return a !== b;
                         })).attr("class", "boundary").attr("d", map.path);
-						
-		//zoomLevel("data/circles.general.json");
+		
+		if (map.searchFound){
+			map.g.selectAll("circle").remove();
+		}else{
+			gui.loadTrackBubbles();
+		}
     });
 };
 
 gui.colorMapDefault();
-
-//map.bubblegroup = map.svg.append("g");
-
-gui.removeBubbles = function() {
-    map.g.selectAll("#map-marker")
-        .remove();
-};
 
 gui.loadTrackBubbles = function() {
     map.g.selectAll("circle")
@@ -101,7 +97,6 @@ gui.loadTrackBubbles = function() {
             var popularity = toppesttrack.popularity;
             var name       = toppesttrack.name;
 
-            console.log(name + " is most popular track in " + country.name);
 			var countriesName = ["United States", "Belgium", "Austalia", "China", "France", "Italy", "Canada", "Sweden", "Finland"];
 			for(var i = 0; i<10; i++){
 				if(countriesName[i] == country.name){
@@ -112,28 +107,9 @@ gui.loadTrackBubbles = function() {
     });
 };
 
-gui.loadArtistBubbles = function() {
-    gui.removeBubbles();
-
-    backEnd.countryList.map(function(country) {
-        var toppestartist = country.artistChart[0];
-
-        if (toppestartist != undefined) {
-            var longitude  = country.longitude - 180;
-            var latitude   = country.latitude - 85.609038;
-            var popularity = toppestartist.popularity;
-            var name       = toppestartist.name;
-
-            console.log(name + " is most popular artist in " + country.name);
-            gui.drawBubble(name, longitude, latitude, popularity);
-        };
-    });
-};
-
 // Periodically check whether the backend has loaded yet.
 map.loading = function() {
     if (backEnd.world.tracksReady()) {
-        console.log("Top tracks loaded!");
         gui.loadTrackBubbles();
     } else {
         setTimeout(map.loading, 500);
@@ -193,6 +169,7 @@ map.search = function(input) {
             backEnd.countryList.map(function(country) {
                 var track = country.findTrack(input);
                 if (track != null) {
+					map.searchFound = true;
                     country_stack.push(country.name); 
                     track_stack.push(track);
                 };
@@ -204,12 +181,17 @@ map.search = function(input) {
             backEnd.countryList.map(function(country) {
                 var artist = country.findArtist(input);
                 if (artist != null) {
+					map.searchFound = true;
                     country_stack.push(country.name); 
                     artist_stack.push(artist);
                 };
             });
             break;
     };
+	
+	if(country_stack.length == 0){
+		map.searchFound = false;
+	};
 	
 	//remove old paths
 	map.g.selectAll("path").remove();
@@ -246,47 +228,15 @@ map.search = function(input) {
 						function(a, b) {
 							return a !== b;
 						})).attr("class", "boundary").attr("d", map.path);
+						
+		if (map.searchFound){
+			map.g.selectAll("circle").remove();
+		}else{
+			gui.loadTrackBubbles();
+		}
 	});
+	
 };
-
-// function zoomLevel(jsonfile) {
-   // d3.json(jsonfile, function(data) {
-       // map.g.selectAll("circle")
-        // .data([])
-        // .exit().remove();
-
-       // map.g.selectAll("text")
-        // .data([])
-        // .exit().remove();
-
-       // map.g.selectAll("circle")
-        // .data(data)
-        // .enter().append("circle")
-                   // .attr("class", "map-marker")
-                   // .attr("cx", function (d) { return d.x_axis })
-                   // .attr("cy", function (d) { return d.y_axis })
-                   // .attr("r", function(d) { return map.scale(d.radius); })
-                   // .on("mouseover", function(d){ 
-               // div.transition()        
-                           // .duration(200)      
-                           // .style("opacity", .9);      
-                       // div.html(d.name)  
-                           // .style("left", (d3.event.pageX) + "px")     
-                           // .style("top", (d3.event.pageY - 28) + "px"); })
-               // .on("mouseout", function(d) {       
-                   // div.transition()        
-                           // .duration(200)      
-                           // .style("opacity", 0);   
-                   // });
-
-       // map.g.selectAll("text")
-        // .data(data)
-        // .enter().append("text")
-                   // .text(function (d) { return d.name })
-                   // .attr("x", function (d) { return (d.x_axis + map.scale(d.radius) + 3) })
-                   // .attr("y", function (d) { return (d.y_axis + 4) });
-   // });
-// };
     
 function move() {
     map.t = d3.event.translate;
@@ -298,39 +248,12 @@ function move() {
     map.zoom.translate(map.t);
     map.g.style("stroke-width", 1 / map.s).attr("transform",
             "translate(" + map.t + ")scale(" + map.s + ")");
-
-    //if (map.s > 3) { 
-    //    stateZoomIn(); }
-    //else { 
-    //    stateZoomOut(); }
 };
 
-//function stateZoomIn() {
-//    d3.json("data/states_usa.topo.json", function(data){
-//        map.g.append("g")
-//         .attr("id", "states")
-//         .selectAll("path")
-//            .data(topojson.feature(data, data.objects.states).features)
-//            .enter()
-//               .append("path")
-//               .attr("id", function(d) { return d.id; })
-//               .attr("class", "active")
-//               .attr("d", map.path);
-//    });
-//};
-//
-//function stateZoomOut(){
-//    map.g.selectAll("#states").remove();
-//};
-
 map.clicked = function(d) {
-		map.g.selectAll("circle").remove();
-		
-	  if (map.active.node() === this) {
-			
-			return map.reset();
-			
-		}; 
+	if (map.active.node() === this) {
+		return map.reset();
+	}; 
 	  map.active.classed("active", false);
 	  map.active = d3.select(this).classed("active", true);
 
@@ -368,7 +291,6 @@ map.clicked = function(d) {
 		
 		var input = document.getElementById("searchinput").value;
 		if (input == "" | d.id != 'BEL'){
-			console.log("No search input or not belgium");
 		} else {
 			map.metrosname = [];
 			map.metroArtists = [];
@@ -402,7 +324,6 @@ map.clicked = function(d) {
 			if(map.metrosname.length > 0 ){
 				if(gui.searchType == "artist"){
 					for(var i = 0; i < map.metroArtists.length; i++){
-						console.log(map.metrosname[i] + " " +map.metroArtists[i].name + map.metroArtists[i].popularity);
 						var tempColorIndex1 = Math.round(map.scaleColor(map.metroArtists[i].popularity));
 						var tempColor = map.colorsCity[tempColorIndex1];
 										
@@ -413,7 +334,6 @@ map.clicked = function(d) {
 					};
 				} else {
 					for(var i = 0; i < map.metroTracks.length; i++){
-						console.log(map.metrosname[i] + " " +map.metroTracks[i].name + map.metroTracks[i].popularity);
 						var tempColorIndex1 = Math.round(map.scaleColor(map.metroTracks[i].popularity));
 						var tempColor = map.colorsCity[tempColorIndex1];
 										
@@ -489,7 +409,6 @@ map.reset = function() {
 	      .duration(750)
 	      .call(map.zoom.translate([0, 0]).scale(1).event);
 	map.g.selectAll("path").style("stroke-width", 0.75);
-	gui.loadTrackBubbles();	 
 };
 		
 		
